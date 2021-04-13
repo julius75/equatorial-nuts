@@ -52,7 +52,7 @@
                     <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
                 </li>
                 <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
-                    <a href="{{route('admin.vendor-user-management')}}" class="menu-link menu-toggle">
+                    <a href="{{route('admin.app-users.index')}}" class="menu-link menu-toggle">
                         <span class="svg-icon menu-icon"><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-02-01-052524/theme/html/demo1/dist/../src/media/svg/icons/Communication/Add-user.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                     <polygon points="0 0 24 0 24 24 0 24"/>
@@ -61,7 +61,7 @@
                                 </g>
                             </svg><!--end::Svg Icon-->
                         </span>
-                        <span class="menu-text">Add Users</span>
+                        <span class="menu-text">All Users</span>
                     </a>
                 </li>
                 <!---Vendors---->

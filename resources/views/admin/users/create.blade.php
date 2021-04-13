@@ -66,26 +66,6 @@
                                                 </div>
                                                 <!--end::Group-->
                                                 <!--begin::Group-->
-                                                <div class="form-group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label">Contact Phone</label>
-                                                    <div class="col-lg-9 col-xl-9">
-                                                        <div class="input-group input-group-solid input-group-lg">
-                                                            <div class="input-group-prepend">
-																<span class="input-group-text">
-																	<i class="la la-phone"></i>
-																</span>
-                                                            </div>
-                                                            <input type="text" class="form-control form-control-solid form-control-lg  @error('phone_number') is-invalid @enderror" value="{{ old('phone_number') }}"
-                                                                   id="phone_number" name="phone_number" placeholder="Phone" required autocomplete="off"/>
-                                                            @error('phone_number')
-                                                            <span class="invalid-feedback" role="alert">
-                                                     <strong>{{ $message }}</strong>
-                                                          </span>
-                                                            @enderror
-                                                        </div>
-                                                        <span class="form-text text-muted">Enter valid phone number(076789674).</span>
-                                                    </div>
-                                                </div>
                                                 <!--end::Group-->
                                                 <div class="form-group row">
                                                     <label class="col-xl-3 col-lg-3 col-form-label">Password</label>
@@ -101,15 +81,6 @@
 
                                                 <!--end::Group-->
                                                 <!--begin::Group-->
-                                                <div class="form-group row">
-                                                    <label class="col-form-label col-xl-3 col-lg-3">Status</label>
-                                                    <div class="col-xl-9 col-lg-9">
-                                                        <select class="form-control form-control-lg form-control-solid" name="is_active">
-                                                            <option  value="true">Active</option>
-                                                            <option  value="false">InActive</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
                                                 <!--end::Group-->
                                                 <!--begin::Group-->
                                                 <!--end::Group-->

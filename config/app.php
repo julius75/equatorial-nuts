@@ -12,8 +12,12 @@ return [
     | any other location as required by the application or its packages.
     |
     */
+    'token_url' => env('TOKEN_URL', 'http://localhost:8001/oauth/token'),
+    'passport_client_id' => env('PASSPORT_CLIENT_ID', ''),
+    'passport_client_secret' => env('PASSPORT_CLIENT_SECRET', ''),
 
-    'name' => env('APP_NAME', 'Laravel'),
+
+    'name' => env('APP_NAME', 'Equitorial Nuts'),
 
     /*
     |--------------------------------------------------------------------------
@@ -174,6 +178,10 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        Laravel\Passport\PassportServiceProvider::class,
+        Yajra\DataTables\DataTablesServiceProvider::class,
+        Spatie\Permission\PermissionServiceProvider::class,
+
 
     ],
 
