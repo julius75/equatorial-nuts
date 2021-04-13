@@ -24,7 +24,7 @@ Route::get('/', function () {
 });
 //homepage
 Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
-//app-users
+//buyers
 Route::resource('app-users', UserController::class);
 
 Route::get('/test', [UserController::class, 'test'])->name('test');

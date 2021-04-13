@@ -16,12 +16,18 @@ class Admin extends Authenticatable
      *
      * @var array
      */
+
     protected $fillable = [
-        'name',
-        'username',
+        'first_name',
+        'last_name',
         'email',
         'phone_number',
+        'status',
+        'phone_verified_at',
+        'email_verified_at',
         'password',
+        'created_at',
+        'updated_at',
     ];
 
     /**
@@ -32,6 +38,8 @@ class Admin extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'phone_verified_at',
+        'email_verified_at',
     ];
 
     /**
@@ -41,5 +49,8 @@ class Admin extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'phone_verified_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 }

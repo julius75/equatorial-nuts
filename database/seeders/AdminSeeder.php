@@ -19,8 +19,8 @@ class AdminSeeder extends Seeder
         $exists = Admin::where('email', '=', 'admin@deveint.com')->exists();
         if (!$exists){
             $admin = Admin::create([
-                'name'=>'Deveint Admin',
-                'username'=>'deveint',
+                'first_name'=>'Deveint',
+                'last_name'=>'Admin',
                 'email'=>'admin@deveint.com',
                 'phone_number'=>'254725730055',
                 'password'=>Hash::make('secretpassword'),

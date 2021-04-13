@@ -17,17 +17,18 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $exists = User::where('email', '=', 'admin@deveint.com')->exists();
-        if (!$exists){
-            $admin = User::create([
+        $buyer = User::where('email', '=', 'buyer@deveint.com')->exists();
+        if (!$buyer){
+            $buyer = User::create([
                 'first_name'=>'Nuts',
                 'last_name'=>'Buyer',
                 'email'=>'buyers@deveint.com',
+                'phone_number'=>'254725730055',
                 'password'=>Hash::make('secretpassword'),
                 'created_at'=>Carbon::now(),
                 'updated_at'=>Carbon::now(),
             ]);
-            $admin->assignRole('buyer');
+            $buyer->assignRole('buyer');
         }
     }
 }

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
@@ -47,7 +48,6 @@ class UserController extends Controller
      */
     public function getUsers()
     {
-
         $users = User::role('buyer')->get();
         return Datatables::of($users)
             ->addColumn('action', function ($users) {
@@ -93,6 +93,7 @@ class UserController extends Controller
             'first_name' =>  'required|regex:/^[a-zA-Z]+$/u|min:4|max:12',
             'last_name' =>  'required|regex:/^[a-zA-Z]+$/u|min:4|max:12',
             'email' => 'required|email|unique:users',
+            'phone_number' => 'required|unique:users',
             'password' => 'required',
         ]);
 
@@ -100,10 +101,13 @@ class UserController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
         $input = $request->only(
-            'first_name', 'last_name', 'email', 'password'
+            'first_name', 'last_name', 'email', 'password', 'phone_number'
         );
-
         $input['password'] = Hash::make($input['password']);
+        $check_phone_number = User::where('phone_number', '=', '254'.substr($input['phone_number'], -9))->exists();
+        if ($check_phone_number){
+            return Redirect::back()->withInput()->with('error', 'Phone Number already exists');
+        }
         // remove non digits including spaces, - and +
         try {
             //$passcode = $this->passcode();
@@ -111,16 +115,15 @@ class UserController extends Controller
                 'first_name' => $input['first_name'],
                 'last_name' => $input['last_name'],
                 'email' => $input['email'],
+                'phone_number' => '254'.substr($input['phone_number'], -9),
                 'password' => $input['password'],
                 'is_active' => true,
                 'passcode' => mt_rand(1000,9999)
             ]);
-
             $user->assignRole('buyer');
-
-            return redirect()->route('admin.app-users.index')->with('flash_success', 'User created successfully');
+            return Redirect::route('admin.app-users.index')->with('flash_success', 'User created successfully');
         } catch (\Exception $exception) {
-            return redirect()->route('admin.app-users.create')->with('error', 'Something went wrong');
+            return Redirect::route('admin.app-users.create')->with('error', 'Something went wrong');
         }
     }
 
