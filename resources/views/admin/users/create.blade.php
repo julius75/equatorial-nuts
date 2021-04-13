@@ -66,6 +66,25 @@
                                                 </div>
                                                 <!--end::Group-->
                                                 <!--begin::Group-->
+                                                <div class="form-group row">
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">Phone Number</label>
+                                                    <div class="col-lg-9 col-xl-9">
+                                                        <div class="input-group input-group-solid input-group-lg">
+                                                            <div class="input-group-prepend">
+																<span class="input-group-text">
+																<i class="">+254</i>
+																</span>
+                                                            </div>
+                                                            <input type="number" class="form-control form-control-solid form-control-lg is-invalid  @error('phone_number') is-invalid @enderror" value="{{ old('phone_number') }}"
+                                                                   name="phone_number"  id="phone_number" required autofocus/>
+                                                            @error('phone_number')
+                                                            <span class="invalid-feedback" role="alert">
+                                                     <strong>{{ $message }}</strong>
+                                                          </span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <!--end::Group-->
                                                 <div class="form-group row">
                                                     <label class="col-xl-3 col-lg-3 col-form-label">Password</label>

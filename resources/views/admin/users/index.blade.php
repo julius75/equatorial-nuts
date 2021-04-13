@@ -37,6 +37,7 @@
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email</th>
+                    <th>Phone Number</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
@@ -72,7 +73,8 @@
                         {data: 'first_name', name: 'first_name'},
                         {data: 'last_name', name: 'last_name'},
                         {data: 'email', name: 'email'},
-                        {data: 'is_active', name: 'is_active'},
+                        {data: 'phone_number', name: 'phone_number'},
+                        {data: 'status', name: 'status'},
                         {data: 'action', name: 'action'},
                     ],
                     columnDefs: [
