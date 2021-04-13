@@ -26,6 +26,10 @@ Route::get('/', function () {
 Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 //app-users
 Route::resource('app-users', UserController::class);
+
+Route::get('/test', [UserController::class, 'test'])->name('test');
+
+
 //app-admins
 Route::resource('app-admins', AdminController::class);
 //vendors
@@ -79,6 +83,6 @@ Route::get('vendors/transaction-chart-vendors/{month}/{year}/{id}', [VendorContr
 Route::get('vendor-user-management/transaction-chart-vendors/{month}/{year}/{id}', [VendorController::class, 'getMonthlyTransactionsVendorUser']);
 
 //test
-Route::get('/test', [HomeController::class, 'getAllMonthsUsers'])->name('test');
+//Route::get('/test', [HomeController::class, 'getAllMonthsUsers'])->name('test');
 
 require __DIR__.'/admin_auth.php';
