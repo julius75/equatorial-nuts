@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\RawMaterialRequirement;
-use App\Models\Region;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -21,7 +19,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             CountySeeder::class,
             RawMaterialSeeder::class,
-            RawMaterialRequirement::class,
+            RawMaterialRequirementSeeder::class,
             RegionSeeder::class,
             FarmerSeeder::class
         ]);
