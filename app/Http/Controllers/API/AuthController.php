@@ -22,21 +22,6 @@ use Symfony\Component\HttpFoundation\Response;
 class AuthController extends Controller
 {
     /**
-     * Register User
-     *
-     * Registers user to the system.
-     * A bearer token is provided after successful registration which you can store and use for authentication while
-     * presenting the OTP Passcode in the next stage before user login.
-     * @bodyParam first_name string required First Name.
-     * @bodyParam last_name string required Last Name.
-     * @bodyParam email string required Email Address.
-     * @bodyParam phone string required Phone Number, prefixed.
-     * @bodyParam provider_id string required Teleco Provider ID.
-     * @bodyParam password string required Password min 8 characters.
-     * @bodyParam password_confirm string required Password, must match password.
-     */
-
-    /**
      * Login
      *
      * Log a user into the system. After successful login, a bearer token is returned which you may store and use for
@@ -119,26 +104,6 @@ class AuthController extends Controller
         );
         return json_decode((string)$response->getBody(), true);
     }
-
-    /**
-     * Email Unique Check
-     *
-     * Check whether the provided email in user registration form is unique.
-     * @bodyParam email string required Email address.
-     */
-    public function emailUnique(Request $request)
-    {
-        $unique = !User::where('email', $request->email)->exists();
-
-        return response()->json(['message' => $unique], Response::HTTP_OK);
-    }
-
-    /**
-     * Phone Number Unique Check
-     *
-     * Check whether the provided phone number in user registration form is unique
-     * @bodyParam phone_number string required Phone number.
-     */
 
     /**
      * Verify Passcode (OTP)
