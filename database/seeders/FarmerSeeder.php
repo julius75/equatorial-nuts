@@ -20,9 +20,10 @@ class FarmerSeeder extends Seeder
         if (!$exists){
             Farmer::create([
                 'full_name'=>'DEVEINT FARMER',
-                'gender'=>'Male',
+                'gender'=>'MALE',
                 'id_number'=>'10000000',
                 'phone_number'=>'254725730055',
+                'status'=>true,
                 'date_of_birth'=>Carbon::now()->subYears(30),
                 'region_id'=>Region::first()->id
             ]);

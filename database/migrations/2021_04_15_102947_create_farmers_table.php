@@ -18,12 +18,13 @@ class CreateFarmersTable extends Migration
             $table->string('full_name');
             $table->string('phone_number')->unique();
             $table->string('id_number')->unique()->nullable();
-            $table->enum('gender',['Male', 'Female', null])->nullable();
+            $table->enum('gender',['MALE', 'FEMALE', null])->nullable();
             $table->date('date_of_birth')->nullable();
             $table->foreignId('region_id')->nullable()
                 ->references('id')
                 ->on('regions')
                 ->onDelete('set null');
+            $table->boolean('status')->default(true)->index();
             $table->timestamp('created_at')->nullable()->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrentOnUpdate();
         });
