@@ -4,6 +4,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application Tools
+    |--------------------------------------------------------------------------
+    |
+    | Resources used within the appplication
+    |
+    */
+
+    'token_url' => env('TOKEN_URL', 'http://localhost:8001/oauth/token'),
+    'passport_client_id' => env('PASSPORT_CLIENT_ID', ''),
+    'passport_client_secret' => env('PASSPORT_CLIENT_SECRET', ''),
+    'africastalking_username' => env('AFRICASTALKING_USERNAME', ''),
+    'africastalking_api_key' => env('AFRICASTALKING_API_KEY', ''),
+    /*
+    |--------------------------------------------------------------------------
     | Application Name
     |--------------------------------------------------------------------------
     |
@@ -12,10 +26,6 @@ return [
     | any other location as required by the application or its packages.
     |
     */
-    'token_url' => env('TOKEN_URL', 'http://localhost:8001/oauth/token'),
-    'passport_client_id' => env('PASSPORT_CLIENT_ID', ''),
-    'passport_client_secret' => env('PASSPORT_CLIENT_SECRET', ''),
-
 
     'name' => env('APP_NAME', 'Equitorial Nuts'),
 

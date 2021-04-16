@@ -19,5 +19,20 @@ class Farmer extends Model
         'updated_at',
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d h:i',
+        'updated_at' => 'datetime:Y-m-d h:i',
+    ];
+
+
+    public function region()
+    {
+        return $this->belongsTo(Region::class);
+    }
+
+    public function raw_materials()
+    {
+        return $this->belongsToMany(RawMaterial::class, 'farmer_raw_materials');
+    }
 
 }

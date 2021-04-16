@@ -19,4 +19,8 @@ class RawMaterial extends Model
     {
         return $this->hasMany(RawMaterialRequirement::class);
     }
+    public function farmers()
+    {
+        return $this->belongsToMany(Farmer::class, 'farmer_raw_materials');
+    }
 }

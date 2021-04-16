@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PasswordResetController;
+use App\Http\Controllers\Api\FarmerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,12 +26,14 @@ Route::prefix('v1')->group(function () {
         //login, forgot and update passwords
         Route::prefix('login')->group(function (){
             Route::post('/', [AuthController::class, 'login']);
-
-            Route::prefix('password')->group(function () {
-                Route::post('forgot', [PasswordResetController::class, 'forgotPassword']);
-                Route::get('find/{token}', [PasswordResetController::class, 'find']);
-                Route::post('update', [PasswordResetController::class, 'updatePassword']);
-            });
         });
+        //password
+        Route::prefix('password')->group(function () {
+            Route::post('forgot', [PasswordResetController::class, 'forgotPassword']);
+            Route::post('update', [PasswordResetController::class, 'updatePassword']);
+        });
+    });
+    Route::middleware('auth:api')->group(function (){
+        Route::resource('farmers', FarmerController::class)->except(['create', 'edit', 'update', 'destroy']);
     });
 });
