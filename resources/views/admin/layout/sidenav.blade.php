@@ -61,12 +61,12 @@
                                 </g>
                             </svg><!--end::Svg Icon-->
                         </span>
-                        <span class="menu-text">All Users</span>
+                        <span class="menu-text">All Buyers</span>
                     </a>
                 </li>
                 <!---Vendors---->
                 <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
-                    <a href="{{route('admin.vendors.index')}}" class="menu-link menu-toggle">
+                    <a href="" class="menu-link menu-toggle">
                         <span class="svg-icon menu-icon"><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-02-01-052524/theme/html/demo1/dist/../src/media/svg/icons/Communication/Add-user.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                     <polygon points="0 0 24 0 24 24 0 24"/>
@@ -80,11 +80,11 @@
                 </li>
                 <!---Teleco Providers---->
                 <li class="menu-section mt-0 mb-0">
-                    <h4 class="menu-text">Providers</h4>
+                    <h4 class="menu-text">Management’s</h4>
                     <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
                 </li>
                 <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
-                    <a href="{{route('admin.providers.index')}}" class="menu-link menu-toggle">
+                    <a href="" class="menu-link menu-toggle">
                         <span class="svg-icon menu-icon">
                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-02-01-052524/theme/html/demo1/dist/../src/media/svg/icons/Devices/iPhone-X.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -95,16 +95,16 @@
                         </svg><!--end::Svg Icon-->
                         </span>
                         <span class="menu-text">
-                            Teleco Providers </span>
+                            Inventory </span>
                     </a>
                 </li>
                 <li class="menu-section mt-0 mb-0">
-                    <h4 class="menu-text">Transactions</h4>
+                    <h4 class="menu-text">Billings</h4>
                     <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
                 </li>
                 <!---Transactions---->
                 <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
-                    <a href="{{route('admin.transactions.index')}}" class="menu-link menu-toggle">
+                    <a href="" class="menu-link menu-toggle">
 										<span class="svg-icon menu-icon">
 											<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->
 											<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -116,7 +116,7 @@
 											</svg>
                                             <!--end::Svg Icon-->
 										</span>
-                        <span class="menu-text">Transactions </span>
+                        <span class="menu-text">Billings </span>
                     </a>
                 </li>
             </ul>

@@ -22,6 +22,7 @@
     <link href="{{asset('assets/plugins/custom/prismjs/prismjs.bundle.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/css/style.bundle.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/css/styles.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('assets/css/toastr.min.css')}}" rel="stylesheet" type="text/css" />
 
     <!--end::Global Theme Styles-->
     <!--begin::Layout Themes(used by all pages)-->
@@ -968,6 +969,11 @@
 <script src="{{asset('assets/plugins/global/plugins.bundle.js')}}"></script>
 <script src="{{asset('assets/plugins/custom/prismjs/prismjs.bundle.js')}}"></script>
 <script src="{{asset('assets/js/scripts.bundle.js')}}"></script>
+<script src="{{asset('assets/js/pages/features/miscellaneous/toastr.js')}}"></script>
+<script src="{{asset('assets/js/jquery.min.js')}}"></script>
+
+<script src="{{asset('assets/js/toastr.min.js')}}"></script>
+
 <!--end::Global Theme Bundle-->
 <!--begin::Page Vendors(used by this page)-->
 <script src="{{asset('assets/plugins/custom/fullcalendar/fullcalendar.bundle.js')}}"></script>
@@ -978,6 +984,43 @@
 {{--<script src="{{asset('assets/js/pages/widgets.js')}}"></script>--}}
 <script src="{{asset('assets/js/pages/custom/profile/profile.js')}}"></script>
 <script src="{{asset('assets/js/pages/chart.js')}}"></script>
+<script>
+    @if(Session::has('message'))
+        toastr.options =
+        {
+            "closeButton" : false,
+            "progressBar" : true
+        }
+    toastr.success("{{ session('message') }}");
+    @endif
+
+        @if(Session::has('error'))
+        toastr.options =
+        {
+            "closeButton" : false,
+            "progressBar" : true
+        }
+    toastr.error("{{ session('error') }}");
+    @endif
+
+        @if(Session::has('info'))
+        toastr.options =
+        {
+            "closeButton" : false,
+            "progressBar" : true
+        }
+    toastr.info("{{ session('info') }}");
+    @endif
+
+        @if(Session::has('warning'))
+        toastr.options =
+        {
+            "closeButton" : false,
+            "progressBar" : true
+        }
+    toastr.warning("{{ session('warning') }}");
+    @endif
+</script>
 
 @yield('scripts')
 <!--end::Page Scripts-->

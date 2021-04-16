@@ -59,8 +59,7 @@ class UserController extends Controller
 									<ul class="nav nav-hoverable flex-column">
 							    		<li class="nav-item"><a class="nav-link" href="'.route('admin.app-users.show',Crypt::encrypt($users->id)).'"><i class="nav-icon la la-user"></i><span class="nav-text">View User Details</span></a></li>
 							    		<li class="nav-item"><a class="nav-link" href="'.route('admin.app-users.edit',Crypt::encrypt($users->id)).'"><i class="nav-icon la la-edit"></i><span class="nav-text">Edit Details</span></a></li>
-							    		<li class="nav-item"><a class="nav-link" href="update/'.$users->id.'"><i class="nav-icon la la-leaf"></i><span class="nav-text">Update Status</span></a></li>
-							    		<li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-stop-circle"></i><span class="nav-text">Block User</span></a></li>
+							    		<li class="btn btn-light font-size-sm mr-5"data-toggle="modal"data-target="#smallModal" id="smallButton"><i class="nav-icon la la-sync-alt"></i><span class="nav-text">Update Status</span></li>
 							    	</ul>
 							  	</div>
 							</div>
@@ -120,8 +119,9 @@ class UserController extends Controller
                 'is_active' => true,
                 'passcode' => mt_rand(1000,9999)
             ]);
-            $user->assignRole('buyer');
-            return Redirect::route('admin.app-users.index')->with('flash_success', 'User created successfully');
+
+            return Redirect::route('admin.app-users.index')->with('message','User created added Successfully');
+
         } catch (\Exception $exception) {
             return Redirect::route('admin.app-users.create')->with('error', 'Something went wrong');
         }
@@ -138,23 +138,11 @@ class UserController extends Controller
         try {
             $id = Crypt::decrypt($id);
             $user = User::findOrFail($id);
-            $phones = $user->phone_numbers()->where('user_id','=', $id)->get();
-            $totalTransaction = $this->getUserTotalTransaction($user->id);
-            $transactionCount = $this->transactionCount($user->id);
-            return view('admin.users.show',compact('user','phones','totalTransaction','transactionCount'));
+            return view('admin.users.show',compact('user'));
         } catch (ModelNotFoundException $e) {
             return $e;
         }
 
-    }
-    function getUserTotalTransaction($id) {
-        $transaction = Transaction ::where( 'user_id', $id)
-            ->get();
-        return $transaction->sum('amount');
-    }
-    function transactionCount($id) {
-        return Transaction ::where( 'user_id', $id)
-            ->count();
     }
 
     /**
@@ -168,8 +156,7 @@ class UserController extends Controller
         try {
             $id = Crypt::decrypt($id);
             $user = User::findOrFail($id);
-            $phones = $user->phone_numbers()->where('user_id','=', $id)->get();
-            return view('admin.users.edit',compact('user','phones'));
+            return view('admin.users.edit',compact('user'));
         } catch (ModelNotFoundException $e) {
             return $e;
         }
@@ -188,12 +175,10 @@ class UserController extends Controller
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required',
-            'phone_number'=> 'required',
         ]);
 
         if ($validator->fails()) {
-            return back()->with('flash_error', 'User Not Found');
-//            return redirect()->route('admin.app-users.edit')->withErrors($validator)->withInput();
+            return back()->with('error', 'User Not Found');
         }
 
         try {
@@ -203,15 +188,31 @@ class UserController extends Controller
             $user->email = $request->email;
             $user->save();
 
-            PhoneNumber::where('user_id', $id)
-                ->update(['phone_number' => $request->phone_number]);
-            return redirect()->route('admin.app-users.index')->with('flash_success', 'User Updated successfully');
+            return redirect()->route('admin.app-users.index')->with('message', 'User Updated successfully');
         }
         catch (ModelNotFoundException $e) {
-            return back()->with('flash_error', 'User Not Found');
+            return back()->with('error', 'User Not Found');
         }
     }
+    public function statusUpdate(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'status' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return back()->with('error', 'User Not Found');
+        }
 
+        try {
+            $user = User::findOrFail($id);
+            $user->status = $request->status;
+            $user->save();
+            return redirect()->route('admin.app-users.index')->with('message', 'User Status Updated successfully');
+        }
+        catch (ModelNotFoundException $e) {
+            return back()->with('error', 'Error Try Again...');
+        }
+    }
     /**
      * Remove the specified resource from storage.
      *
