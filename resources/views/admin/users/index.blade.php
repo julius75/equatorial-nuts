@@ -4,10 +4,10 @@
 @section('content')
     <!--end::Notice-->
     <!--begin::Card-->
-    <div class="card card-custom">
+    <div class="card card-custom" style="margin-top: -5%;">
         <div class="card-header flex-wrap border-0 pt-6 pb-0">
             <div class="card-title">
-                <h3 class="card-label">Registered Equitorial Nuts Users
+                <h3 class="card-label">Registered Equitorial Nuts Buyers
                 </h3>
             </div>
             <div class="card-toolbar">
@@ -23,14 +23,14 @@
                             </g>
                         </svg>
                         <!--end::Svg Icon-->
-                    </span>Register New User
+                    </span>Register New Buyer
                 </a>
                 <!--end::Button-->
             </div>
         </div>
         <div class="card-body">
             <!--begin: Datatable-->
-            <table class="table table-bordered table-hover table-checkable mt-10" id="kt_datatable" style="margin-top: 13px !important">
+            <table class="table table-bordered table-hover table-checkable mt-10 datatable" id="kt_datatable" style="margin-top: 13px !important">
                 <thead>
                 <tr>
                     <th>#</th>
@@ -44,6 +44,59 @@
                 </thead>
             </table>
             <!--end: Datatable-->
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="smallModal" role="dialog">
+        <div class="modal-dialog" style="min-height: 800px">
+            <div class="modal-content">
+                <form method="POST" action="" id="editStatus">
+                    {{csrf_field()}}
+                    <input type="hidden" name="_method" value="POST">
+                    <div class="modal-header">
+                        <div class="modal-title h4">Status update for selected Buyer</div>
+                    </div>
+
+                    <div class="modal-body overlay overlay-block cursor-default">
+                        <div class="table-responsive">
+                            <!--Table-->
+                            <table class="table table-head-custom table-vertical-center overflow-hidden">
+                                <thead>
+                                <tr>
+                                    <th>FIRSTNAME</th>
+                                    <th>LASTNAME</th>
+                                    <th>STATUS</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+{{--                                @foreach ($users as $user)--}}
+                                    <tr>
+                                        <td id="fname"></td>
+                                        <td id="lname">Morris</td>
+                                        <td id="status">
+                                            <span class="label label-lg label-inline label-light-danger"></span>
+                                        </td>
+                                    </tr>
+{{--                                @endforeach--}}
+                                </tbody>
+                                <!--Table body-->
+                            </table>
+                            </div>
+                    </div>
+                    <div class="form modal-footer">
+                        <div class="form-group mr-2">
+                            <select class="form-control" name="status" id="statusValue">
+                                <option value="true">Active</option>
+                                <option value="false">Suspended</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-light btn-elevate mr-3" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary btn-elevate">Update Status</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
     <!--end::Card-->
@@ -83,7 +136,7 @@
                             targets: -2,
                             render: function(data, type, full, meta) {
                                 var is_active = {
-                                    false: {'title': 'Online', 'state': 'danger'},
+                                    false: {'title': 'Suspended', 'state': 'danger'},
                                     true: {'title': 'Active', 'state': 'primary'},
                                     3: {'title': 'Direct', 'state': 'success'},
                                 };
@@ -115,5 +168,49 @@
         });
 
     </script>
+    <script>
+        $(document).ready(function(event){
+            var table = $( "#kt_datatable" ).DataTable();
+            table.on('click','#smallButton', function() {
+                $tr = $(this).closest('tr');
+                if ($($tr).hasClass('child')){
+                        $tr = $tr.prev('.parent');
+                            }
+                        var data = table.row($tr).data();
+                        console.log(data)
+                $('#fname').html(data['first_name'])
+                $('#lname').html(data['last_name'])
+                if (data['status'] === true) {
+                    $('#status').html('<span class="label label-lg label-inline label-light-primary">Active</span>')
+                }
+                else  $('#status').html('<span class="label label-lg label-inline label-light-primary">Suspended</span>')
+
+                var statusValue = document.getElementById("statusValue").value;
+                console.log(statusValue);
+                jQuery.noConflict();
+                $('#editStatus').attr('action','update-status/'+data['id']);
+                $('#smallModal').modal('show');
+
+            });
+        });
+    </script>
+    <script>
+        // display a modal (small modal)
+        // $(document).ready(function () {
+        //     var table = $('datatable').DataTable;
+        //     table.on('click', '#smallButton', function(event) {
+        //         alert();
+        //         //event.preventDefault();
+        //         $tr = $(this).closest('tr');
+        //         if ($($tr).hasClass('child')){
+        //             $tr = $tr.prev('.parent');
+        //         }
+        //         var data = table.row($tr).data();
+        //
+        //     });
+        // });
+
+    </script>
+
 @endsection
 

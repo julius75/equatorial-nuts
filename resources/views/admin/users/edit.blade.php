@@ -1,7 +1,7 @@
 @extends('admin.layout.master')
 @section('content')
     <!--begin::Card-->
-    <div class="card card-custom card-transparent">
+    <div class="card card-custom card-transparent"  style="margin-top: -5%;">
         <div class="card-body p-0">
             <!--begin::Wizard-->
             <div class="wizard wizard-4" id="kt_wizard" data-wizard-state="step-first" data-wizard-clickable="true">
@@ -49,44 +49,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <!--end::Group-->
-                                                <!--begin::Group-->
-                                                @foreach ($phones as $phone)
-                                                    <div class="form-group row">
-                                                        <label class="col-xl-3 col-lg-3 col-form-label">{{$phone->provider->name}} Phone</label>
-                                                        <div class="col-lg-9 col-xl-9">
-                                                            <div class="input-group input-group-solid input-group-lg">
-                                                                <div class="input-group-prepend">
-																<span class="input-group-text">
-																	<i class="la la-phone"></i>
-																</span>
-                                                                </div>
-                                                                <input type="text" class="form-control form-control-solid form-control-lg  @error('phone_number') is-invalid @enderror" value="{{ $phone->phone_number }}"
-                                                                       id="phone_number" name="phone_number" placeholder="Phone" required autocomplete="off"/>
-                                                                @error('phone_number')
-                                                                <span class="invalid-feedback" role="alert">
-                                                     <strong>{{ $message }}</strong>
-                                                          </span>
-                                                                @enderror
-                                                            </div>
-                                                            <span class="form-text text-muted">Enter valid phone number(076789674).</span>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-{{--                                                <div class="form-group row">--}}
-{{--                                                    <label class="col-xl-3 col-lg-3 col-form-label">Contact Phone</label>--}}
-{{--                                                    <div class="col-lg-9 col-xl-9">--}}
-{{--                                                        <div class="input-group input-group-solid input-group-lg">--}}
-{{--                                                            <div class="input-group-prepend">--}}
-{{--																<span class="input-group-text">--}}
-{{--																	<i class="la la-phone"></i>--}}
-{{--																</span>--}}
-{{--                                                            </div>--}}
-{{--                                                            <input type="text" class="form-control form-control-solid form-control-lg" value="{{ $phone }}" name="phone_number" placeholder="Phone" required autocomplete="off"/>--}}
-{{--                                                        </div>--}}
-{{--                                                        <span class="form-text text-muted">Enter valid phone number(076789674).</span>--}}
-{{--                                                    </div>--}}
-{{--                                                </div>--}}
                                                 <!--end::Group-->
                                             </div>
                                                     <input class="btn btn-success font-weight-bolder border-top px-9 py-4" type="submit" value="Update Details"/>

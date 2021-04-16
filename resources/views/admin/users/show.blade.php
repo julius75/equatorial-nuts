@@ -63,8 +63,7 @@
                             <!--begin::User-->
                             <!--begin::Actions-->
                             <div class="my-lg-0 my-1">
-                                <a href="#" class="btn btn-sm btn-light-primary font-weight-bolder text-uppercase mr-2">Ask</a>
-                                <a href="#" class="btn btn-sm btn-primary font-weight-bolder text-uppercase">Hire</a>
+                                <a href="#" class="btn btn-sm btn-primary font-weight-bolder text-uppercase">Suspend</a>
                             </div>
                             <!--end::Actions-->
                         </div>
@@ -73,23 +72,6 @@
                         <div class="d-flex align-items-center flex-wrap justify-content-between">
                             <!--begin::Description-->
                             <div class="flex-grow-1 font-weight-bold text-dark-50 py-2 py-lg-2">
-                                @foreach ($phones as $phone)
-{{--                                    <i class="la la-phone">{{$phone->phone_number}}</i>--}}
-                                    <span class="text-muted text-hover-primary font-weight-bold mr-lg-8 mb-lg-0 mb-2">
-															<span class="svg-icon svg-icon-md svg-icon-gray-500 mr-1">
-																<!--begin::Svg Icon | path:assets/media/svg/icons/General/Lock.svg-->
-																<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-																	<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-																		<mask fill="white">
-																			<use xlink:href="#path-1" />
-																		</mask>
-																		<g />
-																		<path d="M7,10 L7,8 C7,5.23857625 9.23857625,3 12,3 C14.7614237,3 17,5.23857625 17,8 L17,10 L18,10 C19.1045695,10 20,10.8954305 20,12 L20,18 C20,19.1045695 19.1045695,20 18,20 L6,20 C4.8954305,20 4,19.1045695 4,18 L4,12 C4,10.8954305 4.8954305,10 6,10 L7,10 Z M12,5 C10.3431458,5 9,6.34314575 9,8 L9,10 L15,10 L15,8 C15,6.34314575 13.6568542,5 12,5 Z" fill="#000000" />
-																	</g>
-																</svg>
-                                                                <!--end::Svg Icon-->
-															</span>{{$phone->phone_number}}</span>
-                                @endforeach
                             </div>
                             <!--end::Description-->
                         </div>
@@ -109,9 +91,9 @@
 													<i class="flaticon-confetti icon-2x text-muted font-weight-bold"></i>
 												</span>
                         <div class="d-flex flex-column text-dark-75">
-                            <span class="font-weight-bolder font-size-sm">Transactions</span>
+                            <span class="font-weight-bolder font-size-sm">Daily Billing</span>
                             <span class="font-weight-bolder font-size-h5">
-													<span class="text-dark-50 font-weight-bold">{{$transactionCount}}
+													<span class="text-dark-50 font-weight-bold">67
                         </div>
                     </div>
                     <!--end: Item-->
@@ -121,9 +103,9 @@
 													<i class="flaticon-piggy-bank icon-2x text-muted font-weight-bold"></i>
 												</span>
                         <div class="d-flex flex-column text-dark-75">
-                            <span class="font-weight-bolder font-size-sm">Total Transactions</span>
+                            <span class="font-weight-bolder font-size-sm">Total Billing</span>
                             <span class="font-weight-bolder font-size-h5">
-													<span class="text-dark-50 font-weight-bold">$</span>{{$totalTransaction}}</span>
+													<span class="text-dark-50 font-weight-bold">$</span>998</span>
                         </div>
                     </div>
                     <!--end: Item-->
@@ -145,7 +127,7 @@
 													<i class="flaticon-file-2 icon-2x text-muted font-weight-bold"></i>
 												</span>
                         <div class="d-flex flex-column flex-lg-fill">
-                            <span class="text-dark-75 font-weight-bolder font-size-sm">45 Tasks</span>
+                            <span class="text-dark-75 font-weight-bolder font-size-sm">45 Nuts</span>
                             <a href="#" class="text-primary font-weight-bolder">View</a>
                         </div>
                     </div>
@@ -165,118 +147,9 @@
                 <!--end::Bottom-->
             </div>
         </div>
-        <div class="card card-custom  gutter-b">
-            <div class="card-header flex-wrap border-0 pt-6 pb-0">
-                <div class="card-title">
-                    <h3 class="card-label">User Transactions</h3>
-                </div>
-                <div class="card-toolbar">
-                    <!--begin::Button-->
-                    <span type="button" class="btn btn-primary font-weight-bolder">
-                        <span class="svg-icon svg-icon-md">
-                            <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
-                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                    <rect x="0" y="0" width="24" height="24" />
-                                    <circle fill="#000000" cx="9" cy="15" r="6" />
-                                    <path d="M8.8012943,7.00241953 C9.83837775,5.20768121 11.7781543,4 14,4 C17.3137085,4 20,6.6862915 20,10 C20,12.2218457 18.7923188,14.1616223 16.9975805,15.1987057 C16.9991904,15.1326658 17,15.0664274 17,15 C17,10.581722 13.418278,7 9,7 C8.93357256,7 8.86733422,7.00080962 8.8012943,7.00241953 Z" fill="#000000" opacity="0.3" />
-                                </g>
-                            </svg>
-                            <!--end::Svg Icon-->
-                        </span>Transaction
-                    </span>
-                    <!--end::Button-->
-                </div>
-            </div>
-            <div class="card-body">
-                <!--begin: Datatable-->
-                <table class="table table-bordered table-hover table-checkable mt-10" id="kt_datatable" style="margin-top: 13px !important">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Amount</th>
-                        <th>Date Payed</th>
-                        <th>Phone Numbers</th>
-                        <th>Transactions</th>
-                        <th>Status</th>
-                        <th>Vendor</th>
-                    </tr>
-                    </thead>
-                </table>
-                <!--end: Datatable-->
-            </div>
-        </div>
     <!--end::Education-->
 @endsection
 @section('scripts')
-    <script>
-        // $.get('charts/analytics-area/', function(data) {
-        //     $('#week-total').html(data.total_weekly_amount);
-        //     $('#week-total_users').html(data.total_new_users);
-        //     $('.card-rounded-bottom .loading-spinner').remove();
-        //     drawEngagementGraphAreaUsers(data);
-        //     drawEngagementGraphAreaTransactions(data);
-        // });
-        'use strict';
-        function userTransaction() {
-            var initTable1 = function() {
-                var table = $('#kt_datatable');
-                // begin first table
-                table.DataTable({
-                    responsive: true,
-                    ajax: {
-                        url: '{{route('admin.get-transactions',$user->id)}}',
-                        type: 'GET',
-                        data: {
-                            pagination: {
-                                perpage: 1000,
-                            },
-                        },
-                    },
-                    columns: [
-                        {data: 'id', name: 'id'},
-                        {data: 'amount', name: 'amount'},
-                        {data: 'date', name: 'date'},
-                        {data: 'phone_number', name: 'phone_number'},
-                        {data: 'transaction', name: 'transaction'},
-                        {data: 'transaction_status', name: 'transaction_status'},
-                        {data: 'vendors', name: 'vendors'},
-                    ],
-                    columnDefs: [
-                        {
-                            width: '75px',
-                            targets: -2,
-                            render: function(data, type, full, meta) {
-                                var is_active = {
-                                    false: {'title': 'Pending', 'state': 'danger'},
-                                    true: {'title': 'Complete', 'state': 'primary'},
-                                    3: {'title': 'Direct', 'state': 'success'},
-                                };
-
-                                if (typeof is_active[data] === 'undefined') {
-                                    return data;
-                                }
-                                return '<span class="label label-' + is_active[data].state + ' label-dot mr-2"></span>' +
-                                    '<span class="font-weight-bold text-' + is_active[data].state + '">' + is_active[data].title + '</span>';
-                            },
-                        },
-                    ],
-                });
-            };
-            return {
-                //main function to initiate the module
-                init: function() {
-                    initTable1();
-                },
-            };
-        }userTransaction();
-        jQuery(document).ready(function() {
-            // let user_id = $("#user_id").val();
-            userTransaction().init();
-        });
-    </script>
 @endsection
-{{--@section('scripts')--}}
-{{--    <script src="{{asset('assets/js/pages/custom/education/student/profile.js')}}"></script>--}}
-{{--@endsection--}}
+
 
