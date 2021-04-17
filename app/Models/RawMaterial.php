@@ -15,6 +15,8 @@ class RawMaterial extends Model
         'updated_at',
     ];
 
+    protected $hidden = ['pivot'];
+
     public function raw_material_requirements()
     {
         return $this->hasMany(RawMaterialRequirement::class);
@@ -22,5 +24,9 @@ class RawMaterial extends Model
     public function farmers()
     {
         return $this->belongsToMany(Farmer::class, 'farmer_raw_materials');
+    }
+    public function buying_centers()
+    {
+        return $this->belongsToMany(BuyingCenter::class, 'buying_center_raw_materials');
     }
 }

@@ -24,6 +24,7 @@ class Farmer extends Model
         'updated_at' => 'datetime:Y-m-d h:i',
     ];
 
+    protected $hidden = ['pivot', 'date_of_birth'];
 
     public function region()
     {
