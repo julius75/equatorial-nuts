@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PasswordResetController;
 use App\Http\Controllers\Api\FarmerController;
+use App\Http\Controllers\Api\RegionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,5 +36,6 @@ Route::prefix('v1')->group(function () {
     });
     Route::middleware('auth:api')->group(function (){
         Route::resource('farmers', FarmerController::class)->except(['create', 'edit', 'update', 'destroy']);
+        Route::post('/regions', RegionController::class);
     });
 });

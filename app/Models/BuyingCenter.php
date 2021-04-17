@@ -15,8 +15,14 @@ class BuyingCenter extends Model
         'updated_at',
     ];
 
+    protected $hidden = ['pivot'];
+
     public function region()
     {
         return $this->belongsTo(Region::class);
+    }
+    public function raw_materials()
+    {
+        return $this->belongsToMany(RawMaterial::class, 'buying_center_raw_materials');
     }
 }

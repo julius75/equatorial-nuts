@@ -21,4 +21,13 @@ class Region extends Model
     {
         return $this->hasMany(BuyingCenter::class);
     }
+    public function county()
+    {
+        return $this->belongsTo(County::class);
+    }
+    public function sub_county()
+    {
+        return $this->belongsTo(SubCounty::class);
+    }
+
 }

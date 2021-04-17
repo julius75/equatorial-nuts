@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\County;
+use App\Models\RawMaterial;
 use App\Models\Region;
 use App\Models\SubCounty;
 use Illuminate\Database\Seeder;
@@ -19,6 +20,7 @@ class RegionSeeder extends Seeder
     {
 
         $regions = Region::all();
+        $raw_material = RawMaterial::where('name', '=', 'MACADAMIA NUTS')->firstOrFail();
         if (isEmpty($regions))
         {
             $county = SubCounty::where('name', '=', 'Thika town')->first();
@@ -29,9 +31,10 @@ class RegionSeeder extends Seeder
                 'sub_county_id'=>$county->id,
             ]);
             foreach ($centers as $center){
-               $region->buying_centers()->create([
+              $buying_center = $region->buying_centers()->create([
                    'name'=>$center
                ]);
+              $buying_center->raw_materials()->attach($raw_material->id);
             }
         }
     }

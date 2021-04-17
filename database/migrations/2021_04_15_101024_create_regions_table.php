@@ -34,7 +34,7 @@ class CreateRegionsTable extends Migration
             $table->foreignId('region_id')->nullable()
                 ->references('id')
                 ->on('regions')
-                ->onDelete('set null');
+                ->onDelete('cascade');
             $table->string('name');
             $table->timestamp('created_at')->nullable()->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrentOnUpdate();
