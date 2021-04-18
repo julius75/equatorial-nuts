@@ -108,4 +108,69 @@ class FarmerController extends Controller
             return response()->json(['message' => "Farmer Not Found"], Response::HTTP_NOT_FOUND);
     }
 
+    /**
+     * Search For a Farmer
+     *
+     * Query can be: Phone Number, Full Name or Id Number
+     *
+     * @authenticated
+     *
+     * @bodyParam search_query string required Search Query.
+     *
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     *
+     */
+    public function search(Request $request){
+        $validator = Validator::make($request->all(),
+            [
+                'search_query'=>'required',
+            ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first()], Response::HTTP_BAD_REQUEST);
+        }
+
+        $farmers = Farmer::query()
+            ->where('status','=',true)
+            ->where('full_name', 'ILIKE', "%{$request->search_query}%")
+            ->orWhere('id_number', 'LIKE', "%{$request->search_query}%")
+            ->orWhere('phone_number', 'LIKE', "%{$request->search_query}%")
+            ->with(['region:id,name','raw_materials:id,name'])
+            ->orderByDesc('created_at')
+            ->get();
+
+        return FarmerResource::collection($farmers);
+    }
+
+    /**
+     * Filter Farmers by region
+     *
+     * Gets Farmers within a specified region
+     *
+     * @authenticated
+     *
+     * @bodyParam region_id integer required Search Query.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function filter(Request $request){
+        $validator = Validator::make($request->all(),
+            [
+                'region_id'=>'required|exists:regions,id',
+            ]);
+        if($validator->fails())
+            return response()->json(['message' => $validator->errors()->first()], Response::HTTP_BAD_REQUEST);
+
+        $farmers = Farmer::query()
+            ->where('status','=',true)
+            ->where('region_id', '=', $request->region_id)
+            ->with(['region:id,name','raw_materials:id,name'])
+            ->orderByDesc('created_at')
+            ->get();
+
+        return FarmerResource::collection($farmers);
+    }
+
+
+
 }
