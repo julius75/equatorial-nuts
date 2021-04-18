@@ -125,7 +125,7 @@ fetch(url, {
     "http://localhost/api/v1/farmers" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"full_name":"praesentium","phone_number":"animi","id_number":"quae","gender":"excepturi","date_of_birth":"rerum","region_id":9,"raw_material_ids":[]}'
+    -d '{"full_name":"doloremque","phone_number":"aut","id_number":"et","gender":"voluptas","date_of_birth":"ut","region_id":1,"raw_material_ids":[]}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/farmers"
@@ -137,12 +137,12 @@ let headers = {
 };
 
 let body = {
-    "full_name": "praesentium",
-    "phone_number": "animi",
-    "id_number": "quae",
-    "gender": "excepturi",
-    "date_of_birth": "rerum",
-    "region_id": 9,
+    "full_name": "doloremque",
+    "phone_number": "aut",
+    "id_number": "et",
+    "gender": "voluptas",
+    "date_of_birth": "ut",
+    "region_id": 1,
     "raw_material_ids": []
 }
 
@@ -224,11 +224,11 @@ Array of Raw Material IDs.
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost/api/v1/farmers/11" \
+    -G "http://localhost/api/v1/farmers/13" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/farmers/11"
+    "http://localhost/api/v1/farmers/13"
 );
 
 let headers = {
@@ -275,6 +275,128 @@ fetch(url, {
 <br>
 Farmer Id
 </p>
+</form>
+<h2>Search For a Farmer</h2>
+<p><small class="badge badge-darkred">requires authentication</small></p>
+<p>Query can be: Phone Number, Full Name or Id Number</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://localhost/api/v1/farmers-search" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"search_query":"est"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/v1/farmers-search"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "search_query": "est"
+}
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre>
+<div id="execution-results-POSTapi-v1-farmers-search" hidden>
+    <blockquote>Received response<span id="execution-response-status-POSTapi-v1-farmers-search"></span>:</blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-farmers-search"></code></pre>
+</div>
+<div id="execution-error-POSTapi-v1-farmers-search" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-v1-farmers-search"></code></pre>
+</div>
+<form id="form-POSTapi-v1-farmers-search" data-method="POST" data-path="api/v1/farmers-search" data-authed="1" data-hasfiles="0" data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}' onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-farmers-search', this);">
+<h3>
+    Request&nbsp;&nbsp;&nbsp;
+        <button type="button" style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-tryout-POSTapi-v1-farmers-search" onclick="tryItOut('POSTapi-v1-farmers-search');">Try it out ⚡</button>
+    <button type="button" style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-canceltryout-POSTapi-v1-farmers-search" onclick="cancelTryOut('POSTapi-v1-farmers-search');" hidden>Cancel</button>&nbsp;&nbsp;
+    <button type="submit" style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-executetryout-POSTapi-v1-farmers-search" hidden>Send Request 💥</button>
+    </h3>
+<p>
+<small class="badge badge-black">POST</small>
+ <b><code>api/v1/farmers-search</code></b>
+</p>
+<p>
+<label id="auth-POSTapi-v1-farmers-search" hidden>Authorization header: <b><code>Bearer </code></b><input type="text" name="Authorization" data-prefix="Bearer " data-endpoint="POSTapi-v1-farmers-search" data-component="header"></label>
+</p>
+<h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+<p>
+<b><code>search_query</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+<input type="text" name="search_query" data-endpoint="POSTapi-v1-farmers-search" data-component="body" required  hidden>
+<br>
+Search Query.
+</p>
+
+</form>
+<h2>Filter Farmers by region</h2>
+<p><small class="badge badge-darkred">requires authentication</small></p>
+<p>Gets Farmers within a specified region</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://localhost/api/v1/farmers-region-filter" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"region_id":6}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/v1/farmers-region-filter"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "region_id": 6
+}
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre>
+<div id="execution-results-POSTapi-v1-farmers-region-filter" hidden>
+    <blockquote>Received response<span id="execution-response-status-POSTapi-v1-farmers-region-filter"></span>:</blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-farmers-region-filter"></code></pre>
+</div>
+<div id="execution-error-POSTapi-v1-farmers-region-filter" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-v1-farmers-region-filter"></code></pre>
+</div>
+<form id="form-POSTapi-v1-farmers-region-filter" data-method="POST" data-path="api/v1/farmers-region-filter" data-authed="1" data-hasfiles="0" data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}' onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-farmers-region-filter', this);">
+<h3>
+    Request&nbsp;&nbsp;&nbsp;
+        <button type="button" style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-tryout-POSTapi-v1-farmers-region-filter" onclick="tryItOut('POSTapi-v1-farmers-region-filter');">Try it out ⚡</button>
+    <button type="button" style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-canceltryout-POSTapi-v1-farmers-region-filter" onclick="cancelTryOut('POSTapi-v1-farmers-region-filter');" hidden>Cancel</button>&nbsp;&nbsp;
+    <button type="submit" style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-executetryout-POSTapi-v1-farmers-region-filter" hidden>Send Request 💥</button>
+    </h3>
+<p>
+<small class="badge badge-black">POST</small>
+ <b><code>api/v1/farmers-region-filter</code></b>
+</p>
+<p>
+<label id="auth-POSTapi-v1-farmers-region-filter" hidden>Authorization header: <b><code>Bearer </code></b><input type="text" name="Authorization" data-prefix="Bearer " data-endpoint="POSTapi-v1-farmers-region-filter" data-component="header"></label>
+</p>
+<h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+<p>
+<b><code>region_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+<input type="number" name="region_id" data-endpoint="POSTapi-v1-farmers-region-filter" data-component="body" required  hidden>
+<br>
+Search Query.
+</p>
+
 </form><h1>Login</h1>
 <p>APIs for user authentication</p>
 <h2>Login</h2>

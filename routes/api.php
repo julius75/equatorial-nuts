@@ -35,7 +35,12 @@ Route::prefix('v1')->group(function () {
         });
     });
     Route::middleware('auth:api')->group(function (){
+        //farmers
         Route::resource('farmers', FarmerController::class)->except(['create', 'edit', 'update', 'destroy']);
+        Route::post('farmers-search', [FarmerController::class, 'search']);
+        Route::post('farmers-region-filter', [FarmerController::class, 'filter']);
+
         Route::post('/regions', RegionController::class);
+
     });
 });
