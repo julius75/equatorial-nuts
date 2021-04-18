@@ -30,7 +30,10 @@ class Farmer extends Model
     {
         return $this->belongsTo(Region::class);
     }
-
+    public function verification_codes()
+    {
+        return $this->hasMany(FarmerVerificationCode::class);
+    }
     public function raw_materials()
     {
         return $this->belongsToMany(RawMaterial::class, 'farmer_raw_materials');

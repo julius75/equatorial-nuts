@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\FarmerResource;
+use App\Jobs\SendSMS;
 use App\Models\Farmer;
+use App\Models\FarmerVerificationCode;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
@@ -42,7 +45,7 @@ class FarmerController extends Controller
      * @bodyParam id_number string required ID Number.
      * @bodyParam gender string required MALE/FEMALE.
      * @bodyParam date_of_birth date required Date of Birth.
-     * @bodyParam region_id integer required Date of Birth.
+     * @bodyParam region_id integer required Region ID.
      * @bodyParam raw_material_ids object required Array of Raw Material IDs.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -78,9 +81,97 @@ class FarmerController extends Controller
 
             $farmer->raw_materials()->sync($request->raw_material_ids, true);
 
-            return response()->json(['message'=> "$farmer->full_name registered successfully", Response::HTTP_OK]);
+            $code = $farmer->verification_codes()->create([
+                'passcode'=>$this->generate_OTP(),
+                'issued'=>true,
+                'expires_at'=>Carbon::now()->addMinutes(10),
+            ]);
+
+            //send otp
+            SendSMS::dispatch($farmer->phone_number, "Your Equatorial Nut Farmer Verification Token is: $code->passcode");
+            $farmer_details = [
+                'id'=>$farmer->id,
+                'full_name'=>$farmer->full_name,
+                'id_number'=>$farmer->id_number,
+                'phone_number'=>$farmer->phone_number
+            ];
+            return response()->json(['message'=> "$farmer->full_name registered successfully", compact('farmer_details')],Response::HTTP_OK);
         }catch (\Exception $e){
-            return response()->json(['message'=> "Failed to Register Farmer, Refresh page and try again", Response::HTTP_BAD_REQUEST]);
+            return response()->json(['message'=> "Failed to Register Farmer, Refresh page and try again"], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    /**
+     * Verify Farmer's Phone Number
+     *
+     * @authenticated
+     *
+     * @bodyParam farmer_id integer required Farmer's id received after successful registration.
+     * @bodyParam passcode integer required OTP.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function verify_OTP(Request $request)
+    {
+        $validator = Validator::make($request->all(),
+            [
+                'farmer_id' => 'required|exists:farmers,id',
+                'passcode' => 'required|exists:farmer_verification_codes,id',
+            ]);
+        if ($validator->fails())
+            return response()->json(['message' => $validator->errors()->first()], Response::HTTP_BAD_REQUEST);
+
+        $farmer = Farmer::find($request->farmer_id);
+        $code = $farmer->verification_codes()->where('passcode', '=', $request->passcode)->first();
+        if (!$code){
+            return response()->json(['message' => 'Invalid OTP'], Response::HTTP_NOT_FOUND);
+        }
+        else if ($code->verified == true) {
+            return response()->json(['message' => 'Phone Number Already Verified'], Response::HTTP_OK);
+        }
+        else if (Carbon::now() > Carbon::parse($code->expires_at)){
+            return response()->json(['message' => 'OTP has expired, resend OTP'], Response::HTTP_NOT_FOUND);
+        }
+        else if ($code->verified == false){
+            $code->update([
+                'verified'=>true,
+                'updated_at'=>now()
+            ]);
+            return response()->json(['message' => 'Phone Number Verified Successfully'], Response::HTTP_OK);
+        }
+        else{
+            return response()->json(['message'=> "Failed to Verify OTP, Refresh page and try again"], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Resend OTP
+     *
+     * @authenticated
+     *
+     * @bodyParam farmer_id integer required Farmer's id received after successful registration.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function resend_OTP(Request $request){
+        $validator = Validator::make($request->all(),
+            [
+                'farmer_id' => 'required|exists:farmers,id'
+            ]);
+        if ($validator->fails())
+            return response()->json(['message' => $validator->errors()->first()], Response::HTTP_BAD_REQUEST);
+
+        $farmer = Farmer::find($request->farmer_id);
+        $code = $farmer->verification_codes()->where('verified', '=', false)->first();
+        if (!$code){
+            return response()->json(['message' => 'Farmer Does Not have an unverified OTP'], Response::HTTP_NOT_FOUND);
+        }else{
+            //send otp
+            SendSMS::dispatch($farmer->phone_number, "Your Equatorial Nut Farmer Verification Token is: $code->passcode");
+            return response()->json(['message' => 'OTP Resent'], Response::HTTP_OK);
         }
 
     }
@@ -171,6 +262,26 @@ class FarmerController extends Controller
         return FarmerResource::collection($farmers);
     }
 
+    /**
+     * @return integer
+     */
+    protected function generate_OTP()
+    {
+        $otp = mt_rand(1000, 9999);
+        while ($this->check_OTP_exists($otp)) {
+            $otp = mt_rand(1000, 9999);
+        }
+        return $otp;
+    }
+
+    /**
+     * @param int $otp
+     * @return mixed
+     */
+    protected function check_OTP_exists(int $otp)
+    {
+        return FarmerVerificationCode::query()->where('passcode','=',$otp)->exists();
+    }
 
 
 }
