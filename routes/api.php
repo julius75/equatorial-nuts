@@ -39,6 +39,8 @@ Route::prefix('v1')->group(function () {
         Route::resource('farmers', FarmerController::class)->except(['create', 'edit', 'update', 'destroy']);
         Route::post('farmers-search', [FarmerController::class, 'search']);
         Route::post('farmers-region-filter', [FarmerController::class, 'filter']);
+        Route::post('farmers-verify-phone-number', [FarmerController::class, 'verify_OTP']);
+        Route::post('farmers-resend-otp', [FarmerController::class, 'resend_OTP']);
 
         Route::post('/regions', RegionController::class);
 
