@@ -125,7 +125,7 @@ fetch(url, {
     "http://localhost/api/v1/farmers" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"full_name":"et","phone_number":"natus","id_number":"dolorem","gender":"libero","date_of_birth":"cum","region_id":13,"raw_material_ids":[]}'
+    -d '{"full_name":"voluptas","phone_number":"rem","id_number":"sit","gender":"iste","date_of_birth":"vitae","region_id":1,"raw_material_ids":[]}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/farmers"
@@ -137,12 +137,12 @@ let headers = {
 };
 
 let body = {
-    "full_name": "et",
-    "phone_number": "natus",
-    "id_number": "dolorem",
-    "gender": "libero",
-    "date_of_birth": "cum",
-    "region_id": 13,
+    "full_name": "voluptas",
+    "phone_number": "rem",
+    "id_number": "sit",
+    "gender": "iste",
+    "date_of_birth": "vitae",
+    "region_id": 1,
     "raw_material_ids": []
 }
 
@@ -224,11 +224,11 @@ Array of Raw Material IDs.
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost/api/v1/farmers/18" \
+    -G "http://localhost/api/v1/farmers/12" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/farmers/18"
+    "http://localhost/api/v1/farmers/12"
 );
 
 let headers = {
@@ -286,7 +286,7 @@ Farmer Id
     "http://localhost/api/v1/farmers-search" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"search_query":"unde"}'
+    -d '{"search_query":"ad"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/farmers-search"
@@ -298,7 +298,7 @@ let headers = {
 };
 
 let body = {
-    "search_query": "unde"
+    "search_query": "ad"
 }
 
 fetch(url, {
@@ -347,7 +347,7 @@ Search Query.
     "http://localhost/api/v1/farmers-region-filter" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"region_id":1}'
+    -d '{"region_id":17}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/farmers-region-filter"
@@ -359,7 +359,7 @@ let headers = {
 };
 
 let body = {
-    "region_id": 1
+    "region_id": 17
 }
 
 fetch(url, {
@@ -407,7 +407,7 @@ Search Query.
     "http://localhost/api/v1/farmers-verify-phone-number" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"farmer_id":9,"passcode":5}'
+    -d '{"farmer_id":7,"passcode":9}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/farmers-verify-phone-number"
@@ -419,8 +419,8 @@ let headers = {
 };
 
 let body = {
-    "farmer_id": 9,
-    "passcode": 5
+    "farmer_id": 7,
+    "passcode": 9
 }
 
 fetch(url, {
@@ -474,7 +474,7 @@ OTP.
     "http://localhost/api/v1/farmers-resend-otp" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"farmer_id":11}'
+    -d '{"farmer_id":4}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/farmers-resend-otp"
@@ -486,7 +486,7 @@ let headers = {
 };
 
 let body = {
-    "farmer_id": 11
+    "farmer_id": 4
 }
 
 fetch(url, {
@@ -729,7 +729,7 @@ Password, must match password.
 
 </form><h1>Raw Materials</h1>
 <p>API for Raw Material Products</p>
-<h2>List Raw Materials</h2>
+<h2>List all Raw Materials</h2>
 <p><small class="badge badge-darkred">requires authentication</small></p>
 <blockquote>
 <p>Example request:</p>
@@ -772,6 +772,52 @@ fetch(url, {
 </p>
 <p>
 <label id="auth-POSTapi-v1-raw-materials" hidden>Authorization header: <b><code>Bearer </code></b><input type="text" name="Authorization" data-prefix="Bearer " data-endpoint="POSTapi-v1-raw-materials" data-component="header"></label>
+</p>
+</form>
+<h2>Fetch Raw Materials Current Price</h2>
+<p><small class="badge badge-darkred">requires authentication</small></p>
+<p>Returns Prices of all raw materials within the buyers specified region</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://localhost/api/v1/raw-materials-prices" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/v1/raw-materials-prices"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+}).then(response =&gt; response.json());</code></pre>
+<div id="execution-results-POSTapi-v1-raw-materials-prices" hidden>
+    <blockquote>Received response<span id="execution-response-status-POSTapi-v1-raw-materials-prices"></span>:</blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-raw-materials-prices"></code></pre>
+</div>
+<div id="execution-error-POSTapi-v1-raw-materials-prices" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-v1-raw-materials-prices"></code></pre>
+</div>
+<form id="form-POSTapi-v1-raw-materials-prices" data-method="POST" data-path="api/v1/raw-materials-prices" data-authed="1" data-hasfiles="0" data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}' onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-raw-materials-prices', this);">
+<h3>
+    Request&nbsp;&nbsp;&nbsp;
+        <button type="button" style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-tryout-POSTapi-v1-raw-materials-prices" onclick="tryItOut('POSTapi-v1-raw-materials-prices');">Try it out ⚡</button>
+    <button type="button" style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-canceltryout-POSTapi-v1-raw-materials-prices" onclick="cancelTryOut('POSTapi-v1-raw-materials-prices');" hidden>Cancel</button>&nbsp;&nbsp;
+    <button type="submit" style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-executetryout-POSTapi-v1-raw-materials-prices" hidden>Send Request 💥</button>
+    </h3>
+<p>
+<small class="badge badge-black">POST</small>
+ <b><code>api/v1/raw-materials-prices</code></b>
+</p>
+<p>
+<label id="auth-POSTapi-v1-raw-materials-prices" hidden>Authorization header: <b><code>Bearer </code></b><input type="text" name="Authorization" data-prefix="Bearer " data-endpoint="POSTapi-v1-raw-materials-prices" data-component="header"></label>
 </p>
 </form><h1>Regions</h1>
 <p>API for fetching Equatorial Nut Regions</p>

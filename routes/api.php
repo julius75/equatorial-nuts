@@ -46,6 +46,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/regions', RegionController::class);
 
         Route::post('/raw-materials', [RawMaterialController::class, 'index']);
+        Route::post('/raw-materials-prices', [RawMaterialController::class, 'fetch_price']);
 
     });
 });

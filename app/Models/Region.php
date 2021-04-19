@@ -16,7 +16,9 @@ class Region extends Model
         'created_at',
         'updated_at',
     ];
-
+    protected $hidden = [
+        'pivot'
+    ];
     public function buying_centers()
     {
         return $this->hasMany(BuyingCenter::class);

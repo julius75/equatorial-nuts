@@ -43,7 +43,8 @@ class User extends Authenticatable
         'remember_token',
         'email_verified_at',
         'phone_verified_at',
-        'passcode'
+        'passcode',
+        'pivot'
     ];
 
     /**
@@ -57,6 +58,7 @@ class User extends Authenticatable
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
 
     public function regions(){
         return $this->belongsToMany(Region::class, 'region_users')

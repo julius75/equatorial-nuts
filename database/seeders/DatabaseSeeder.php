@@ -21,7 +21,8 @@ class DatabaseSeeder extends Seeder
             RawMaterialSeeder::class,
             RawMaterialRequirementSeeder::class,
             RegionSeeder::class,
-            FarmerSeeder::class
+            FarmerSeeder::class,
+            PriceListSeeder::class
         ]);
     }
 }

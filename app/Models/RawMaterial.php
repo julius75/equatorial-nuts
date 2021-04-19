@@ -34,4 +34,12 @@ class RawMaterial extends Model
     {
         return $this->belongsToMany(BuyingCenter::class, 'buying_center_raw_materials');
     }
+    public function prices()
+    {
+        return $this->hasMany(PriceList::class);
+    }
+    public function currentPrice()
+    {
+        return $this->prices()->where('approved', '=', true)->latest('date');
+    }
 }
