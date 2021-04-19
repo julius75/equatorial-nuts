@@ -110,8 +110,8 @@ class UserController extends Controller
             return Redirect::back()->withInput()->with('error', 'Phone Number already exists');
         }
         // remove non digits including spaces, - and +
-//        try {
-            //$passcode = $this->passcode();
+        try {
+
             $user = User::create([
                 'first_name' => $input['first_name'],
                 'last_name' => $input['last_name'],
@@ -121,7 +121,6 @@ class UserController extends Controller
                 'status' => true,
                 'passcode' => mt_rand(1000,9999)
             ]);
-
             $user->assignRole('buyer');
 
             $details = [
@@ -130,11 +129,12 @@ class UserController extends Controller
                 'password'=>$password
             ];
             Mail::send(new BuyerCreated($details));
+
             return Redirect::route('admin.app-users.index')->with('message','User created Successfully');
 
-//        } catch (\Exception $exception) {
-//            return Redirect::route('admin.app-users.create')->with('error', $exception.'Something went wrong');
-//        }
+        } catch (\Exception $exception) {
+            return Redirect::route('admin.app-users.create')->with('error', 'Something went wrong');
+        }
     }
 
     /**

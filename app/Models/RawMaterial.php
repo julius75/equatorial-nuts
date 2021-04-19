@@ -15,6 +15,11 @@ class RawMaterial extends Model
         'updated_at',
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d h:i',
+        'updated_at' => 'datetime:Y-m-d h:i',
+    ];
+
     protected $hidden = ['pivot'];
 
     public function raw_material_requirements()

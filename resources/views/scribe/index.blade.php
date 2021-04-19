@@ -125,7 +125,7 @@ fetch(url, {
     "http://localhost/api/v1/farmers" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"full_name":"corrupti","phone_number":"temporibus","id_number":"odit","gender":"quaerat","date_of_birth":"nisi","region_id":12,"raw_material_ids":[]}'
+    -d '{"full_name":"et","phone_number":"natus","id_number":"dolorem","gender":"libero","date_of_birth":"cum","region_id":13,"raw_material_ids":[]}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/farmers"
@@ -137,12 +137,12 @@ let headers = {
 };
 
 let body = {
-    "full_name": "corrupti",
-    "phone_number": "temporibus",
-    "id_number": "odit",
-    "gender": "quaerat",
-    "date_of_birth": "nisi",
-    "region_id": 12,
+    "full_name": "et",
+    "phone_number": "natus",
+    "id_number": "dolorem",
+    "gender": "libero",
+    "date_of_birth": "cum",
+    "region_id": 13,
     "raw_material_ids": []
 }
 
@@ -224,11 +224,11 @@ Array of Raw Material IDs.
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost/api/v1/farmers/6" \
+    -G "http://localhost/api/v1/farmers/18" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/farmers/6"
+    "http://localhost/api/v1/farmers/18"
 );
 
 let headers = {
@@ -286,7 +286,7 @@ Farmer Id
     "http://localhost/api/v1/farmers-search" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"search_query":"qui"}'
+    -d '{"search_query":"unde"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/farmers-search"
@@ -298,7 +298,7 @@ let headers = {
 };
 
 let body = {
-    "search_query": "qui"
+    "search_query": "unde"
 }
 
 fetch(url, {
@@ -347,7 +347,7 @@ Search Query.
     "http://localhost/api/v1/farmers-region-filter" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"region_id":4}'
+    -d '{"region_id":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/farmers-region-filter"
@@ -359,7 +359,7 @@ let headers = {
 };
 
 let body = {
-    "region_id": 4
+    "region_id": 1
 }
 
 fetch(url, {
@@ -407,7 +407,7 @@ Search Query.
     "http://localhost/api/v1/farmers-verify-phone-number" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"farmer_id":10,"passcode":1}'
+    -d '{"farmer_id":9,"passcode":5}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/farmers-verify-phone-number"
@@ -419,8 +419,8 @@ let headers = {
 };
 
 let body = {
-    "farmer_id": 10,
-    "passcode": 1
+    "farmer_id": 9,
+    "passcode": 5
 }
 
 fetch(url, {
@@ -474,7 +474,7 @@ OTP.
     "http://localhost/api/v1/farmers-resend-otp" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"farmer_id":13}'
+    -d '{"farmer_id":11}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/farmers-resend-otp"
@@ -486,7 +486,7 @@ let headers = {
 };
 
 let body = {
-    "farmer_id": 13
+    "farmer_id": 11
 }
 
 fetch(url, {
@@ -727,6 +727,52 @@ Password.
 Password, must match password.
 </p>
 
+</form><h1>Raw Materials</h1>
+<p>API for Raw Material Products</p>
+<h2>List Raw Materials</h2>
+<p><small class="badge badge-darkred">requires authentication</small></p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://localhost/api/v1/raw-materials" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/v1/raw-materials"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+}).then(response =&gt; response.json());</code></pre>
+<div id="execution-results-POSTapi-v1-raw-materials" hidden>
+    <blockquote>Received response<span id="execution-response-status-POSTapi-v1-raw-materials"></span>:</blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-raw-materials"></code></pre>
+</div>
+<div id="execution-error-POSTapi-v1-raw-materials" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-v1-raw-materials"></code></pre>
+</div>
+<form id="form-POSTapi-v1-raw-materials" data-method="POST" data-path="api/v1/raw-materials" data-authed="1" data-hasfiles="0" data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}' onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-raw-materials', this);">
+<h3>
+    Request&nbsp;&nbsp;&nbsp;
+        <button type="button" style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-tryout-POSTapi-v1-raw-materials" onclick="tryItOut('POSTapi-v1-raw-materials');">Try it out ⚡</button>
+    <button type="button" style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-canceltryout-POSTapi-v1-raw-materials" onclick="cancelTryOut('POSTapi-v1-raw-materials');" hidden>Cancel</button>&nbsp;&nbsp;
+    <button type="submit" style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-executetryout-POSTapi-v1-raw-materials" hidden>Send Request 💥</button>
+    </h3>
+<p>
+<small class="badge badge-black">POST</small>
+ <b><code>api/v1/raw-materials</code></b>
+</p>
+<p>
+<label id="auth-POSTapi-v1-raw-materials" hidden>Authorization header: <b><code>Bearer </code></b><input type="text" name="Authorization" data-prefix="Bearer " data-endpoint="POSTapi-v1-raw-materials" data-component="header"></label>
+</p>
 </form><h1>Regions</h1>
 <p>API for fetching Equatorial Nut Regions</p>
 <h2>List Regions</h2>

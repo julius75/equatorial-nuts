@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PasswordResetController;
 use App\Http\Controllers\Api\FarmerController;
 use App\Http\Controllers\Api\RegionController;
+use App\Http\Controllers\Api\RawMaterialController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +44,8 @@ Route::prefix('v1')->group(function () {
         Route::post('farmers-resend-otp', [FarmerController::class, 'resend_OTP']);
 
         Route::post('/regions', RegionController::class);
+
+        Route::post('/raw-materials', [RawMaterialController::class, 'index']);
 
     });
 });
