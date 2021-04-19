@@ -58,6 +58,14 @@ class User extends Authenticatable
         'updated_at' => 'datetime',
     ];
 
+    public function regions(){
+        return $this->belongsToMany(Region::class, 'region_users')
+            ->withPivot(['current', 'assigned_by', 'assigned_at', 'created_at', 'updated_at'])
+            ->withTimestamps();
+    }
 
+    public function current_region(){
+        return $this->regions()->where('current', '=', true)->first();
+    }
 
 }

@@ -29,5 +29,10 @@ class Region extends Model
     {
         return $this->belongsTo(SubCounty::class);
     }
+    public function buyers(){
+        return $this->belongsToMany(User::class, 'region_users')
+            ->withPivot(['current', 'assigned_by', 'assigned_at', 'created_at', 'updated_at'])
+            ->withTimestamps();
+    }
 
 }
