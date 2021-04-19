@@ -26,14 +26,14 @@ class RegionController extends Controller
     public function __invoke(Request $request)
     {
         $regions = Region::with(['county:id,name', 'sub_county:id,name'])->get();
-        $regions->map(function ($region){
+        $regions->map(function ($region) {
             unset($region->created_at);
             unset($region->updated_at);
             unset($region->county_id);
             unset($region->sub_county_id);
             $region->buying_centers = $region->buying_centers()->select(['id', 'name'])->with('raw_materials:id,name')->get();
         });
-        return response()->json(['message'=> compact('regions'), Response::HTTP_OK]);
+        return response()->json(['message'=> compact('regions')], Response::HTTP_OK);
 
     }
 }
