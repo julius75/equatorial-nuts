@@ -103,8 +103,8 @@
                                             </div>
                                             <!--end::Wizard Step 1-->
                                             <!--begin::Wizard Actions-->
-                                                    <input class="btn btn-success font-weight-bolder border-top px-9 py-4" type="submit" value="Update Admin Details"/>
-                                                     <a href="{{route('admin.app-admins.index')}}" class="btn btn-success font-weight-bolder border-top px-9 py-4">Cancel</a>
+                                            <input class="btn btn-success font-weight-bolder border-top px-9 py-4" type="submit" value="Update Admin Details"/>
+                                            <a href="{{route('admin.app-admins.index')}}" class="btn btn-success font-weight-bolder border-top px-9 py-4">Cancel</a>
 
                                             <!--end::Wizard Actions-->
                                         </div>

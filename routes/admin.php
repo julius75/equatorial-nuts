@@ -26,6 +26,11 @@ Route::get('/', function () {
 Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 //buyers
 Route::resource('app-users', UserController::class);
+//app-admins
+Route::resource('app-admins', AdminController::class);
+//admin status
+Route::post('update-status-admin/{id}', [AdminController::class,'statusUpdate']);
+
 //status update
 Route::post('update-status/{id}', [UserController::class,'statusUpdate']);
 Route::get('/getchart/{month?}/{year?}', [HomeController::class, 'getMonthlyPostDataWeekly'])->name('discussions-analytics');
@@ -45,6 +50,8 @@ Route::get('/default', [UserController::class, 'default'])->name('default');
 //datatable routes
 Route::prefix('datatables')->group(function () {
     Route::get('get-app-users', [UserController::class, 'getUsers'])->name('get-app-users');
+    Route::get('get-admin-users', [AdminController::class, 'getAdminUsers'])->name('get-admin-users');
+
 });
 //charts routes
 Route::prefix('charts')->group(function () {
