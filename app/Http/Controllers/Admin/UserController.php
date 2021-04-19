@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\BuyerCreated;
 use App\Models\Admin;
 use App\Models\User;
 use Carbon\Carbon;
@@ -97,11 +98,12 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+            return Redirect::back()->withErrors($validator)->withInput();
         }
         $input = $request->only(
             'first_name', 'last_name', 'email', 'password', 'phone_number'
         );
+        $password = $request->password;
         $input['password'] = Hash::make($input['password']);
         $check_phone_number = User::where('phone_number', '=', '254'.substr($input['phone_number'], -9))->exists();
         if ($check_phone_number){
@@ -116,11 +118,17 @@ class UserController extends Controller
                 'email' => $input['email'],
                 'phone_number' => '254'.substr($input['phone_number'], -9),
                 'password' => $input['password'],
-                'is_active' => true,
+                'status' => true,
                 'passcode' => mt_rand(1000,9999)
             ]);
 
-            return Redirect::route('admin.app-users.index')->with('message','User created added Successfully');
+            $details = [
+                'name'=>$user->first_name.' '.$user->last_name,
+                'email'=>$user->email,
+                'password'=>$password
+            ];
+            Mail::send(new BuyerCreated($details));
+            return Redirect::route('admin.app-users.index')->with('message','User created Successfully');
 
         } catch (\Exception $exception) {
             return Redirect::route('admin.app-users.create')->with('error', 'Something went wrong');
