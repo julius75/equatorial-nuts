@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendSMS;
 use App\Mail\AdminCreated;
 use App\Models\Admin;
 use App\Models\User;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 use Spatie\Permission\Models\Role;
@@ -90,26 +92,29 @@ class AdminController extends Controller
             $validator = Validator::make($request->all(), [
                 'first_name' =>  'required|regex:/^[a-zA-Z]+$/u|min:4|max:12',
                 'last_name' =>  'required|regex:/^[a-zA-Z]+$/u|min:4|max:12',
-                'email' => 'required|email|unique:users',
-                'phone_number' => 'required',
+                'email' => 'required|email|unique:admins',
+                'phone_number' => 'required|unique:admins',
                 'password' => 'required',
             ]);
             if ($validator->fails()) {
                 return redirect()->route('admin.app-admins.create')
                     ->withErrors($validator)
-                    ->withInput();
-            }
-             $password = $request->password;
-            $role = $request->role;
+                    ->withInput()
+                    ->with('error', $validator->errors()->first());
 
-        // $phone_number = preg_replace("/[^0-9]/", "", $request->get('phone_number'));
+            }
+            $password = $request->password;
+            $check_phone_number = Admin::query()->where('phone_number', '=', '254'.substr($request->phone_number, -9))->exists();
+            if ($check_phone_number){
+                return Redirect::back()->withInput()->with('error', 'Phone Number already exists');
+            }
             try {
                 //$passcode = $this->passcode();
                 $user = Admin::create([
                     'first_name' => $request->first_name,
                     'last_name' =>$request->last_name,
                     'email' => $request->email,
-                    'phone_number' => $request->phone_number,
+                    'phone_number' => '254'.substr($request->phone_number, -9),
                     'password' => Hash::make($request->password),
                 ]);
                 $user->assignRole($request->role);
@@ -119,9 +124,13 @@ class AdminController extends Controller
                     'password'=>$password,
                 ];
                 if ($user)
-                    $user->notify(
-                        new \App\Notifications\AdminCreated($details)
-                    );
+                    //you did not include this
+                    //$user->notify(
+                    //  new \App\Notifications\AdminCreated($details)
+                    //);
+                //temporary
+                SendSMS::dispatch($user->phone_number, "Hello $user->first_name,\nYour Equatorial Nut System Password is: $password");
+
                 return redirect()->route('admin.app-admins.index')->with('message','Admin created Successfully');
             } catch (\Exception $exception) {
 

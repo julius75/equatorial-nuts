@@ -98,7 +98,7 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator)->withInput();
+            return Redirect::back()->withErrors($validator)->withInput()->with('error', $validator->errors()->first());
         }
         $input = $request->only(
             'first_name', 'last_name', 'email', 'password', 'phone_number'
