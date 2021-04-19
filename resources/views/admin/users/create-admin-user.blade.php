@@ -18,7 +18,7 @@
                                         <div class="col-xl-9">
                                             <!--begin::Wizard Step 1-->
                                             <div class="my-5 step" data-wizard-type="step-content" data-wizard-state="current">
-                                                <h5 class="text-dark font-weight-bold">Add Admin's Details:</h5>
+                                                <h5 class="text-dark font-weight-bold">Add System User's Details:</h5>
                                                 <div class="form-group row">
                                                     <label class="col-xl-3 col-lg-3 col-form-label">First Name</label>
                                                     <div class="col-lg-9 col-xl-9">
@@ -87,10 +87,11 @@
                                                 <div class="form-group row">
                                                     <label class="col-form-label col-xl-3 col-lg-3">Assign Role</label>
                                                     <div class="col-xl-9 col-lg-9">
-                                                        <select class="form-control form-control-lg form-control-solid" name="role">
-                                                            <option  value="inventory">Inventory</option>
-                                                            <option  value="management">Management</option>
-                                                            <option  value="quality_management">Quality Management</option>
+                                                        <select required class="form-control form-control-lg form-control-solid" name="role">
+                                                            <option selected disabled value="">Select Role</option>
+                                                            @foreach($roles as $role)
+                                                                <option  value="{{$role->name}}">{{ucfirst($role->name)}}</option>
+                                                            @endforeach
                                                         </select>
                                                     </div>
                                                 </div>
@@ -125,7 +126,6 @@
             event.preventDefault();
             var rnd = Math.floor(Math.random() * 1000000000);
             document.getElementById('myText').value = rnd;
-
         });
     </script>
 @endsection

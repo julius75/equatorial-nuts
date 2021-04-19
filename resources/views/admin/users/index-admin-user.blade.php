@@ -7,13 +7,14 @@
     <div class="card card-custom" style="margin-top: -5%;">
         <div class="card-header flex-wrap border-0 pt-6 pb-0">
             <div class="card-title">
-                <h3 class="card-label">Registered Equitorial Nuts Admins
+                <h3 class="card-label">Registered Equatorial Nut System Users
                 </h3>
             </div>
             <div class="card-toolbar">
                 <!--begin::Button-->
-                <a href="{{ route('admin.app-admins.create') }}" type="button" class="btn btn-primary font-weight-bolder">
-                    <span class="svg-icon svg-icon-md">
+                @role('admin')
+                    <a href="{{ route('admin.app-admins.create') }}" type="button" class="btn btn-primary font-weight-bolder">
+                        <span class="svg-icon svg-icon-md">
                         <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -23,8 +24,9 @@
                             </g>
                         </svg>
                         <!--end::Svg Icon-->
-                    </span>Register New Admin
-                </a>
+                    </span>Register New System User
+                    </a>
+                @endrole
                 <!--end::Button-->
             </div>
         </div>

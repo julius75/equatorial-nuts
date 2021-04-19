@@ -43,7 +43,11 @@ class AdminController extends Controller
      */
     public function create()
     {
-        return view('admin.users.create-admin-user');
+        $roles = Role::query()
+            ->where('name', '!=', 'buyer')
+            ->where('name', '!=', 'user')
+            ->get();
+        return view('admin.users.create-admin-user', compact('roles'));
     }
     /**
      * Get Users DataTable
@@ -52,19 +56,10 @@ class AdminController extends Controller
      */
     public function getAdminUsers()
     {
-        //$users = User::hasRole(['inventory', 'management','quality_management'])->get();
-        $users = Admin::role(['inventory', 'management','quality_management'])->get();
+        $users = Admin::role(['admin','inventory', 'management','quality_management','general_management'])->get();
         return Datatables::of($users)
             ->addColumn('role', function ($users){
-                if ($users->roles->first()->name == 'inventory'){
-                    return 'Inventory';
-                }
-                if ($users->roles->first()->name == 'management'){
-                    return 'Management';
-                }
-                if ($users->roles->first()->name == 'quality_management'){
-                    return 'Quality Management';
-                }
+                return $users->roles->first()->name ?? '--';
             })
             ->addColumn('action', function ($users) {
                 return '<div class="dropdown dropdown-inline">
