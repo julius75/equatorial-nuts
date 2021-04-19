@@ -1,7 +1,7 @@
 @extends('admin.layout.master')
 @section('content')
     <!--begin::Card-->
-    <div class="card card-custom card-transparent">
+    <div class="card card-custom card-transparent" style="margin-top: -5%;">
         <div class="card-body p-0">
             <!--begin::Wizard-->
             <div class="wizard wizard-4" id="kt_wizard" data-wizard-state="step-first" data-wizard-clickable="true">
@@ -20,17 +20,27 @@
                                             <div class="my-5 step" data-wizard-type="step-content" data-wizard-state="current">
                                                 <h5 class="text-dark font-weight-bold">Add Admin's Details:</h5>
                                                 <div class="form-group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label">Name</label>
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">First Name</label>
                                                     <div class="col-lg-9 col-xl-9">
-                                                        <input class="form-control form-control-solid form-control-lg" value="{{ old('name') }}" name="name" type="text" required autocomplete="off"/>
+                                                        <input class="form-control form-control-solid form-control-lg @error('first_name') is-invalid @enderror" value="{{ old('first_name') }}" id="first_name" name="first_name" type="text" required autocomplete="off"/>
+                                                        @error('first_name')
+                                                        <span class="invalid-feedback" role="alert">
+                                                     <strong>{{ $message }}</strong>
+                                                          </span>
+                                                        @enderror
                                                     </div>
                                                 </div>
                                                 <!--end::Group-->
                                                 <!--begin::Group-->
                                                 <div class="form-group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label">Username</label>
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">Last Name</label>
                                                     <div class="col-lg-9 col-xl-9">
-                                                        <input class="form-control form-control-solid form-control-lg" value="{{ old('username') }}" name="username" type="text" required autocomplete="off"/>
+                                                        <input class="form-control form-control-solid form-control-lg @error('last_name') is-invalid @enderror" value="{{ old('last_name') }}" name="last_name" id="last_name" type="text" required autocomplete="off"/>
+                                                        @error('last_name')
+                                                        <span class="invalid-feedback" role="alert">
+                                                     <strong>{{ $message }}</strong>
+                                                          </span>
+                                                        @enderror
                                                     </div>
                                                 </div>
                                                 <!--end::Group-->
@@ -61,7 +71,6 @@
                                                             </div>
                                                             <input type="text" class="form-control form-control-solid form-control-lg"value="{{ old('phone_number') }}" name="phone_number" placeholder="Phone" required autocomplete="off"/>
                                                         </div>
-                                                        <span class="form-text text-muted">Enter valid phone number(076789674).</span>
                                                     </div>
                                                 </div>
                                                 <!--end::Group-->
@@ -76,11 +85,12 @@
                                                 </div>
 
                                                 <div class="form-group row">
-                                                    <label class="col-form-label col-xl-3 col-lg-3">Status</label>
+                                                    <label class="col-form-label col-xl-3 col-lg-3">Assign Role</label>
                                                     <div class="col-xl-9 col-lg-9">
-                                                        <select class="form-control form-control-lg form-control-solid" name="is_active">
-                                                            <option  value="true">Active</option>
-                                                            <option  value="false">Suspend</option>
+                                                        <select class="form-control form-control-lg form-control-solid" name="role">
+                                                            <option  value="inventory">Inventory</option>
+                                                            <option  value="management">Management</option>
+                                                            <option  value="quality_management">Quality Management</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -88,8 +98,8 @@
                                             <!--end::Wizard Step 1-->
                                             <!--begin::Wizard Actions-->
 
-                                                    <input class="btn btn-success font-weight-bolder border-top px-9 py-4" type="submit" value="Create Admin"/>
-                                                    <a href="{{route('admin.app-admins.index')}}" class="btn btn-success font-weight-bolder border-top px-9 py-4">Cancel</a>
+                                            <input class="btn btn-success font-weight-bolder border-top px-9 py-4" type="submit" value="Create Admin"/>
+                                            <a href="{{route('admin.app-admins.index')}}" class="btn btn-success font-weight-bolder border-top px-9 py-4">Cancel</a>
 
                                             <!--end::Wizard Actions-->
                                         </div>
