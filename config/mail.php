@@ -84,12 +84,12 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'notifications@ruv.com'),
-        'name' => env('MAIL_FROM_NAME', 'RUV NOTIFICATIONS'),
+        'address' => env('MAIL_FROM_ADDRESS', 'notifications@equatorial.com'),
+        'name' => env('MAIL_FROM_NAME', 'Equatorial Nut Notifications'),
     ],
     'reply_to' => [
-        'address' => 'support@ruv.com',
-        'name' => 'RUV SUPPORT',
+        'address' => 'support@equatorial.com',
+        'name' => 'Equatorial Nut Support',
     ],
 
     /*
