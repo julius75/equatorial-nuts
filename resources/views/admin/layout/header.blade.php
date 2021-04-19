@@ -1298,7 +1298,7 @@
                 <!--begin::Toggle-->
                 <div class="topbar-item" data-toggle="dropdown" data-offset="10px,0px">
                     <div class="btn btn-icon btn-clean btn-dropdown btn-lg mr-1">
-                        <img class="h-20px w-20px rounded-sm" src="{{asset('assets/media/svg/flags/226-united-states.svg')}}" alt="" />
+                        <img class="h-20px w-20px rounded-sm" src="{{asset('assets/media/svg/flags/067-kenya.svg')}}" alt="" />
                     </div>
                 </div>
                 <!--end::Toggle-->
@@ -1310,19 +1310,9 @@
                         <li class="navi-item">
                             <a href="#" class="navi-link">
                                 <span class="symbol symbol-20 mr-3">
-                                    <img src="{{asset('assets/media/svg/flags/226-united-states.svg')}}" alt="" />
+                                    <img src="{{asset('assets/media/svg/flags/067-kenya.svg')}}" alt="" />
                                 </span>
                                 <span class="navi-text">English</span>
-                            </a>
-                        </li>
-                        <!--end::Item-->
-                        <!--begin::Item-->
-                        <li class="navi-item">
-                            <a href="#" class="navi-link">
-                                <span class="symbol symbol-20 mr-3">
-                                    <img src="{{asset('assets/media/svg/flags/195-france.svg')}}" alt="" />
-                                </span>
-                                <span class="navi-text">French</span>
                             </a>
                         </li>
                         <!--end::Item-->
