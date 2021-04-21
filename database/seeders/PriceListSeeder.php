@@ -24,11 +24,12 @@ class PriceListSeeder extends Seeder
             $amount = $randomPrices[$key];
             $material->prices()->create([
                 'region_id'=>Region::first()->id,
-                'date'=>Carbon::now()->subDays(2),
+                'date'=>Carbon::now(),
                 'amount'=>$amount,
                 'value'=>1,
                 'unit'=>'kg',
                 'approved'=>true,
+                'current'=>true,
                 'created_by'=>Admin::first()->id,
                 'approved_by'=>Admin::first()->id,
                 'approved_at'=>Carbon::now(),

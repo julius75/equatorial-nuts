@@ -21,7 +21,7 @@ class RegionSeeder extends Seeder
 
         $regions = Region::all();
         $raw_material = RawMaterial::where('name', '=', 'MACADAMIA NUTS')->firstOrFail();
-        if (isEmpty($regions))
+        if (count($regions) == 0)
         {
             $county = SubCounty::where('name', '=', 'Thika town')->first();
             $centers = ['Kamwangi', 'Kiganjo', 'Gitare', 'Marige', 'Kihumbu', 'Chomo', 'Ngorongo', 'Riuki'];
@@ -35,6 +35,24 @@ class RegionSeeder extends Seeder
                    'name'=>$center
                ]);
               $buying_center->raw_materials()->attach($raw_material->id);
+            }
+        }
+        else{
+            $check = Region::query()->where('name', '=', 'Nyeri')->first();
+            if (!$check){
+                $county = County::where('name', '=', 'Nyeri')->first();
+                $centers = ['Giakanja', 'Gachami', 'Kigwandi', 'Kangaita'];
+                $region =  Region::create([
+                    'name'=>'Nyeri',
+                    'county_id'=>$county->id,
+                    'sub_county_id'=>246,
+                ]);
+                foreach ($centers as $center){
+                    $buying_center = $region->buying_centers()->create([
+                        'name'=>$center
+                    ]);
+                    $buying_center->raw_materials()->attach($raw_material->id);
+                }
             }
         }
     }
