@@ -16,6 +16,7 @@ class PriceList extends Model
         'value',
         'unit',
         'approved',
+        'current',
         'created_by',
         'approved_by',
         'approved_at',
@@ -33,5 +34,13 @@ class PriceList extends Model
     public function raw_material()
     {
         return $this->belongsTo(RawMaterial::class);
+    }
+    public function approvedBy()
+    {
+        return $this->belongsTo(Admin::class, 'approved_by', 'id');
+    }
+    public function createdBy()
+    {
+        return $this->belongsTo(Admin::class, 'created_by', 'id');
     }
 }

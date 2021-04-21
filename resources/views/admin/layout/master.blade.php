@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <base href="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Equitorial Nuts</title>
+    <title>Equatorial Nuts</title>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="description" content="Metronic admin dashboard live demo. Check out all the features of the admin panel. A large number of settings, additional services and widgets." />
     <!--begin::Fonts-->
@@ -41,7 +41,7 @@
 <div id="kt_header_mobile" class="header-mobile align-items-center header-mobile-fixed">
     <!--begin::Logo-->
     <a href="">
-        <img alt="Logo" src="{{asset('assets/media/logos/ruv.png')}}" style="padding: 0 25px;height: 45px;" />
+        <img alt="Logo" src="{{asset('logo.jpeg')}}" style="padding: 0 25px;height: 45px;" />
     </a>
     <!--end::Logo-->
     <!--begin::Toolbar-->
@@ -110,7 +110,7 @@
                     <!--begin::Copyright-->
                     <div class="text-dark order-2 order-md-1">
                         <span class="text-muted font-weight-bold mr-2">2021©</span>
-                        <span class="text-muted  font-weight-bold mr-2">Equitorial Nuts</span>
+                        <span class="text-muted  font-weight-bold mr-2">Equatorial Nuts</span>
                     </div>
                     <!--end::Copyright-->
                 </div>
@@ -193,7 +193,7 @@
         <!--begin::Nav-->
         <div class="navi navi-spacer-x-0 p-0">
             <!--begin::Item-->
-            <a href="{{route('admin.profile.index')}}" class="navi-item">
+            <a href="#" class="navi-item">
                 <div class="navi-link">
                     <div class="symbol symbol-40 bg-light mr-3">
                         <div class="symbol-label">
@@ -983,7 +983,7 @@
 <!--begin::Page Scripts(used by this page)-->
 {{--<script src="{{asset('assets/js/pages/widgets.js')}}"></script>--}}
 <script src="{{asset('assets/js/pages/custom/profile/profile.js')}}"></script>
-<script src="{{asset('assets/js/pages/chart.js')}}"></script>
+{{--<script src="{{asset('assets/js/pages/chart.js')}}"></script>--}}
 <script>
     @if(Session::has('message'))
         toastr.options =
@@ -992,6 +992,15 @@
             "progressBar" : true
         }
     toastr.success("{{ session('message') }}");
+    @endif
+
+        @if(Session::has('success'))
+        toastr.options =
+        {
+            "closeButton" : false,
+            "progressBar" : true
+        }
+    toastr.success("{{ session('success') }}");
     @endif
 
         @if(Session::has('error'))

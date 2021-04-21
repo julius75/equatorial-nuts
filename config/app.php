@@ -27,7 +27,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Equitorial Nuts'),
+    'name' => env('APP_NAME', 'Equatorial Nuts'),
 
     /*
     |--------------------------------------------------------------------------

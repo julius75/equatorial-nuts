@@ -24,6 +24,7 @@ class CreatePriceListsTable extends Migration
             $table->foreignId('created_by')->nullable()->references('id')->on('admins')->onDelete('set null');
             $table->foreignId('approved_by')->nullable()->references('id')->on('admins')->onDelete('set null');
             $table->boolean('approved')->default(false);
+            $table->boolean('current')->default(false);
             $table->timestamp('approved_at')->nullable();
             $table->timestamp('created_at')->nullable()->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrentOnUpdate();

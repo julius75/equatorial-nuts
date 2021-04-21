@@ -40,6 +40,9 @@ class RawMaterial extends Model
     }
     public function currentPrice()
     {
-        return $this->prices()->where('approved', '=', true)->latest('date');
+        return $this->prices()
+            ->where('approved', '=', true)
+            ->where('current', '=', true)
+            ->latest('date');
     }
 }
