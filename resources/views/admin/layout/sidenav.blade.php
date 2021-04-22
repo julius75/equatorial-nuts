@@ -76,7 +76,7 @@
                                 </g>
                             </svg><!--end::Svg Icon-->
                         </span>
-                        <span class="menu-text">All Buyers</span>
+                        <span class="menu-text">Buyers</span>
                     </a>
                 </li>
                 <!---Vendors---->
@@ -90,28 +90,13 @@
                                 </g>
                             </svg><!--end::Svg Icon-->
                         </span>
-                        <span class="menu-text">Add Farmers</span>
+                        <span class="menu-text">Farmers</span>
                     </a>
                 </li>
                 <!---Teleco Providers---->
                 <li class="menu-section mt-0 mb-0">
-                    <h4 class="menu-text">Management’s</h4>
+                    <h4 class="menu-text">Management</h4>
                     <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
-                </li>
-                <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
-                    <a href="" class="menu-link menu-toggle">
-                        <span class="svg-icon menu-icon">
-                            <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-02-01-052524/theme/html/demo1/dist/../src/media/svg/icons/Devices/iPhone-X.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                <rect x="0" y="0" width="24" height="24"/>
-                                <path d="M8,2.5 C7.30964406,2.5 6.75,3.05964406 6.75,3.75 L6.75,20.25 C6.75,20.9403559 7.30964406,21.5 8,21.5 L16,21.5 C16.6903559,21.5 17.25,20.9403559 17.25,20.25 L17.25,3.75 C17.25,3.05964406 16.6903559,2.5 16,2.5 L8,2.5 Z" fill="#000000" opacity="0.3"/>
-                                <path d="M8,2.5 C7.30964406,2.5 6.75,3.05964406 6.75,3.75 L6.75,20.25 C6.75,20.9403559 7.30964406,21.5 8,21.5 L16,21.5 C16.6903559,21.5 17.25,20.9403559 17.25,20.25 L17.25,3.75 C17.25,3.05964406 16.6903559,2.5 16,2.5 L8,2.5 Z M8,1 L16,1 C17.5187831,1 18.75,2.23121694 18.75,3.75 L18.75,20.25 C18.75,21.7687831 17.5187831,23 16,23 L8,23 C6.48121694,23 5.25,21.7687831 5.25,20.25 L5.25,3.75 C5.25,2.23121694 6.48121694,1 8,1 Z M9.5,1.75 L14.5,1.75 C14.7761424,1.75 15,1.97385763 15,2.25 L15,3.25 C15,3.52614237 14.7761424,3.75 14.5,3.75 L9.5,3.75 C9.22385763,3.75 9,3.52614237 9,3.25 L9,2.25 C9,1.97385763 9.22385763,1.75 9.5,1.75 Z" fill="#000000" fill-rule="nonzero"/>
-                            </g>
-                        </svg><!--end::Svg Icon-->
-                        </span>
-                        <span class="menu-text">
-                            Inventory </span>
-                    </a>
                 </li>
                 @hasanyrole('admin|general_management')
                 <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
@@ -171,9 +156,52 @@
                         </ul>
                     </div>
                 </li>
+                <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
+                    <a href="javascript:;" class="menu-link menu-toggle">
+                        <span class="svg-icon menu-icon"><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-04-19-122603/theme/html/demo1/dist/../src/media/svg/icons/Cooking/Shovel.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <rect x="0" y="0" width="24" height="24"/>
+                                <path d="M8.52512627,14.5606602 L9.93933983,15.9748737 C10.3298641,16.365398 10.3298641,16.998563 9.93933983,17.3890873 L4.98959236,22.3388348 C4.59906807,22.7293591 3.96590309,22.7293591 3.5753788,22.3388348 L2.16116524,20.9246212 C1.77064094,20.5340969 1.77064094,19.9009319 2.16116524,19.5104076 L7.1109127,14.5606602 C7.501437,14.1701359 8.13460197,14.1701359 8.52512627,14.5606602 Z" fill="#000000" opacity="0.3"/>
+                                <path d="M11.3535534,11.732233 L9.23223305,9.6109127 C8.45118446,8.82986412 8.45118446,7.56353416 9.23223305,6.78248558 L13.4748737,2.53984489 C14.2559223,1.75879631 15.5222523,1.75879631 16.3033009,2.53984489 L21.9601551,8.19669914 C22.7412037,8.97774772 22.7412037,10.2440777 21.9601551,11.0251263 L17.7175144,15.267767 C16.9364658,16.0488155 15.6701359,16.0488155 14.8890873,15.267767 L12.767767,13.1464466 L10.6464466,15.267767 L9.23223305,13.8535534 L11.3535534,11.732233 Z M15.2426407,4.30761184 L11,8.55025253 L11.7071068,9.25735931 L15.9497475,5.01471863 L15.2426407,4.30761184 Z M17.363961,6.42893219 L13.1213203,10.6715729 L13.8284271,11.3786797 L18.0710678,7.13603897 L17.363961,6.42893219 Z M19.4852814,8.55025253 L15.2426407,12.7928932 L15.9497475,13.5 L20.1923882,9.25735931 L19.4852814,8.55025253 Z" fill="#000000"/>
+                            </g>
+                        </svg><!--end::Svg Icon-->
+                        </span>
+                        <span class="menu-text">Raw Materials</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="menu-submenu" kt-hidden-height="120" style="display: none; overflow: hidden;">
+                        <i class="menu-arrow"></i>
+                        <ul class="menu-subnav">
+                            <li class="menu-item" aria-haspopup="true">
+                                <a href="{{route('admin.raw-materials.requirements')}}" class="menu-link">
+                                    <i class="menu-bullet menu-bullet-dot">
+                                        <span></span>
+                                    </i>
+                                    <span class="menu-text">View Requirements</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
                 @endhasanyrole
+                <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
+                    <a href="" class="menu-link menu-toggle">
+                        <span class="svg-icon menu-icon">
+                            <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-02-01-052524/theme/html/demo1/dist/../src/media/svg/icons/Devices/iPhone-X.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <rect x="0" y="0" width="24" height="24"/>
+                                <path d="M8,2.5 C7.30964406,2.5 6.75,3.05964406 6.75,3.75 L6.75,20.25 C6.75,20.9403559 7.30964406,21.5 8,21.5 L16,21.5 C16.6903559,21.5 17.25,20.9403559 17.25,20.25 L17.25,3.75 C17.25,3.05964406 16.6903559,2.5 16,2.5 L8,2.5 Z" fill="#000000" opacity="0.3"/>
+                                <path d="M8,2.5 C7.30964406,2.5 6.75,3.05964406 6.75,3.75 L6.75,20.25 C6.75,20.9403559 7.30964406,21.5 8,21.5 L16,21.5 C16.6903559,21.5 17.25,20.9403559 17.25,20.25 L17.25,3.75 C17.25,3.05964406 16.6903559,2.5 16,2.5 L8,2.5 Z M8,1 L16,1 C17.5187831,1 18.75,2.23121694 18.75,3.75 L18.75,20.25 C18.75,21.7687831 17.5187831,23 16,23 L8,23 C6.48121694,23 5.25,21.7687831 5.25,20.25 L5.25,3.75 C5.25,2.23121694 6.48121694,1 8,1 Z M9.5,1.75 L14.5,1.75 C14.7761424,1.75 15,1.97385763 15,2.25 L15,3.25 C15,3.52614237 14.7761424,3.75 14.5,3.75 L9.5,3.75 C9.22385763,3.75 9,3.52614237 9,3.25 L9,2.25 C9,1.97385763 9.22385763,1.75 9.5,1.75 Z" fill="#000000" fill-rule="nonzero"/>
+                            </g>
+                        </svg><!--end::Svg Icon-->
+                        </span>
+                        <span class="menu-text">
+                            Inventory </span>
+                    </a>
+                </li>
+
                 <li class="menu-section mt-0 mb-0">
-                    <h4 class="menu-text">Billings</h4>
+                    <h4 class="menu-text">Finance</h4>
                     <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
                 </li>
                 <!---Transactions---->
@@ -190,7 +218,7 @@
 											</svg>
                                             <!--end::Svg Icon-->
 										</span>
-                        <span class="menu-text">Billings </span>
+                        <span class="menu-text">Transaction Reports </span>
                     </a>
                 </li>
             </ul>

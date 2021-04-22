@@ -23,6 +23,10 @@ class Region extends Model
     {
         return $this->hasMany(BuyingCenter::class);
     }
+    public function farmers()
+    {
+        return $this->hasMany(Farmer::class);
+    }
     public function county()
     {
         return $this->belongsTo(County::class);

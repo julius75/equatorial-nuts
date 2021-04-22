@@ -258,13 +258,12 @@
         <hr>
         <div class="row">
             <div class="col-md-3" style="margin-bottom: 10px">
-                <form method="post" action="">
-                    @csrf
+                <form method="post" action="{{route('admin.dashboard.filter')}}">
                     <label for="region">Filter Stats by Region</label>
                     <select name="region" id="region" class="form-control" onchange="this.form.submit()">
-                        <option selected value="all">All</option>
+                        <option  value="all">All</option>
                         @foreach($regions as $region)
-                            <option value="{{$region->id}}" >{{$region->name}}</option>
+                            <option value="{{$region->id}}"  {{($region->id == $current_region ) ? 'selected' : ''}}>{{$region->name}}</option>
                         @endforeach
                     </select>
                 </form>
