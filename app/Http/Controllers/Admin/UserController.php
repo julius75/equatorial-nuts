@@ -5,12 +5,15 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Mail\BuyerCreated;
 use App\Models\Admin;
+use App\Models\Region;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
@@ -77,7 +80,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('admin.users.create');
+        $regions = Region::all();
+        return view('admin.users.create', compact('regions'));
     }
 
     /**
@@ -95,8 +99,8 @@ class UserController extends Controller
             'email' => 'required|email|unique:users',
             'phone_number' => 'required|unique:users',
             'password' => 'required',
+            'region_id' => 'required',
         ]);
-
         if ($validator->fails()) {
             return Redirect::back()->withErrors($validator)->withInput()->with('error', $validator->errors()->first());
         }
@@ -121,6 +125,12 @@ class UserController extends Controller
                 'status' => true,
                 'passcode' => mt_rand(1000,9999)
             ]);
+            $region = DB::table('region_users')->insert([
+                'region_id' => $request->region_id,
+                'user_id' => $user->id,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
             $user->assignRole('buyer');
 
             $details = [
@@ -128,9 +138,9 @@ class UserController extends Controller
                 'email'=>$user->email,
                 'password'=>$password
             ];
-            Mail::send(new BuyerCreated($details));
+           Mail::send(new BuyerCreated($details));
 
-            return Redirect::route('admin.app-users.index')->with('message','User created Successfully');
+            return Redirect::route('admin.app-users.index')->with('message','Buyer created Successfully');
 
         } catch (\Exception $exception) {
             return Redirect::route('admin.app-users.create')->with('error', 'Something went wrong');

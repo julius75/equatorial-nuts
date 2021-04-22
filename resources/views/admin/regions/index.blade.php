@@ -7,12 +7,12 @@
     <div class="card card-custom" style="margin-top: -5%;">
         <div class="card-header flex-wrap border-0 pt-6 pb-0">
             <div class="card-title">
-                <h3 class="card-label">Registered Equitorial Nuts Buyers
+                <h3 class="card-label">Registered Equitorial Nuts Regions
                 </h3>
             </div>
             <div class="card-toolbar">
                 <!--begin::Button-->
-                <a href="{{ route('admin.app-users.create') }}" type="button" class="btn btn-primary font-weight-bolder">
+                <a href="{{ route('admin.app-regions.create') }}" type="button" class="btn btn-primary font-weight-bolder">
                     <span class="svg-icon svg-icon-md">
                         <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -23,7 +23,7 @@
                             </g>
                         </svg>
                         <!--end::Svg Icon-->
-                    </span>Register New Buyer
+                    </span>Register New Region
                 </a>
                 <!--end::Button-->
             </div>
@@ -34,18 +34,19 @@
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Email</th>
-                    <th>Phone Number</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th>Name</th>
+                    <th>County</th>
+                    <th>Sub County</th>
+                    <th>Buyers</th>
+                    <th>Created</th>
+                    <th>Action</th>
                 </tr>
                 </thead>
             </table>
             <!--end: Datatable-->
         </div>
     </div>
+
     <!-- Modal -->
     <div class="modal fade" id="smallModal" role="dialog">
         <div class="modal-dialog" style="min-height: 800px">
@@ -54,7 +55,7 @@
                     {{csrf_field()}}
                     <input type="hidden" name="_method" value="POST">
                     <div class="modal-header">
-                        <div class="modal-title h4">Status update for selected Buyer</div>
+                        <div class="modal-title h4">Status update for selected Farmer</div>
                     </div>
 
                     <div class="modal-body overlay overlay-block cursor-default">
@@ -63,25 +64,25 @@
                             <table class="table table-head-custom table-vertical-center overflow-hidden">
                                 <thead>
                                 <tr>
-                                    <th>FIRSTNAME</th>
-                                    <th>LASTNAME</th>
+                                    <th>FULL NAME</th>
+                                    <th>ID NUMBER</th>
                                     <th>STATUS</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-{{--                                @foreach ($users as $user)--}}
-                                    <tr>
-                                        <td id="fname"></td>
-                                        <td id="lname">Morris</td>
-                                        <td id="status">
-                                            <span class="label label-lg label-inline label-light-danger"></span>
-                                        </td>
-                                    </tr>
-{{--                                @endforeach--}}
+                                {{--                                @foreach ($users as $user)--}}
+                                <tr>
+                                    <td id="fullname"></td>
+                                    <td id="id_number"></td>
+                                    <td id="status">
+                                        <span class="label label-lg label-inline label-light-danger"></span>
+                                    </td>
+                                </tr>
+                                {{--                                @endforeach--}}
                                 </tbody>
                                 <!--Table body-->
                             </table>
-                            </div>
+                        </div>
                     </div>
                     <div class="form modal-footer">
                         <div class="form-group mr-2">
@@ -95,7 +96,26 @@
                             <button type="submit" class="btn btn-primary btn-elevate">Update Status</button>
                         </div>
                     </div>
+
                 </form>
+            </div>
+        </div>
+    </div>
+    <div id="confirmModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            {{ csrf_field() }}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title">Confirmation</h2>
+                </div>
+                <div class="modal-body">
+                    <h4 align="center" style="margin:0;">Are you sure you want to remove this data?</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" name="ok_button" id="ok_button" class="btn btn-danger">OK</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
             </div>
         </div>
     </div>
@@ -113,7 +133,7 @@
                 table.DataTable({
                     responsive: true,
                     ajax: {
-                        url: APP_URL +'/admin/datatables/get-app-users',
+                        url: APP_URL +'/admin/datatables/get-app-regions',
                         type: 'GET',
                         data: {
                             pagination: {
@@ -123,14 +143,13 @@
                     },
                     columns: [
                         {data: 'id', name: 'id'},
-                        {data: 'first_name', name: 'first_name'},
-                        {data: 'last_name', name: 'last_name'},
-                        {data: 'email', name: 'email'},
-                        {data: 'phone_number', name: 'phone_number'},
-                        {data: 'status', name: 'status'},
+                        {data: 'name', name: 'name'},
+                        {data: 'county', name: 'county'},
+                        {data: 'sub_county', name: 'sub_county'},
+                        {data: 'buying_center_count', name: 'buying_center_count'},
+                        {data: 'created_at', name: 'created_at'},
                         {data: 'action', name: 'action'},
                     ],
-
                     columnDefs: [
                         {
                             width: '75px',
@@ -169,48 +188,41 @@
         });
 
     </script>
-    <script>
-        $(document).ready(function(event){
-            var table = $( "#kt_datatable" ).DataTable();
-            table.on('click','#smallButton', function() {
-                $tr = $(this).closest('tr');
-                if ($($tr).hasClass('child')){
-                        $tr = $tr.prev('.parent');
-                            }
-                        var data = table.row($tr).data();
-                        console.log(data)
-                $('#fname').html(data['first_name'])
-                $('#lname').html(data['last_name'])
-                if (data['status'] === true) {
-                    $('#status').html('<span class="label label-lg label-inline label-light-primary">Active</span>')
-                }
-                else  $('#status').html('<span class="label label-lg label-inline label-light-primary">Suspended</span>')
-
-                var statusValue = document.getElementById("statusValue").value;
-                console.log(statusValue);
-                jQuery.noConflict();
-                $('#editStatus').attr('action','update-status/'+data['id']);
-                $('#smallModal').modal('show');
-
-            });
+    <script type="text/javascript">
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
         });
     </script>
     <script>
-        // display a modal (small modal)
-        // $(document).ready(function () {
-        //     var table = $('datatable').DataTable;
-        //     table.on('click', '#smallButton', function(event) {
-        //         alert();
-        //         //event.preventDefault();
-        //         $tr = $(this).closest('tr');
-        //         if ($($tr).hasClass('child')){
-        //             $tr = $tr.prev('.parent');
-        //         }
-        //         var data = table.row($tr).data();
-        //
-        //     });
-        // });
+        var user_id;
+        $(document).ready(function(event){
+            var table = $( "#kt_datatable" ).DataTable();
+            table.on('click', '.delete', function(){
+                jQuery.noConflict();
+                user_id = $(this).attr('id');
+                $('#confirmModal').modal('show');
+            });
+            $('#ok_button').click(function(){
+                $.ajax({
+                    method: 'POST',
+                   // url:"delete-regions/"+user_id,
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    beforeSend:function(){
+                        $('#ok_button').text('Deleting...');
+                    },
+                    success:function(data)
+                    {
+                        setTimeout(function(){
+                            $('#confirmModal').modal('hide');
+                            table.draw();
+                        }, 2000);
+                    }
+                })
+            });
 
+        });
     </script>
 
 @endsection

@@ -24,14 +24,14 @@
                                 <!--begin::Username-->
                                 <!--end::Username-->
                                 <!--begin::Info-->
-                                <div class="card-title font-weight-bolder text-dark-75 text-hover-primary font-size-h4 m-0 pt-7 pb-1">Name: {{$user->first_name}} {{$user->last_name}}</div>
+                                <div class="card-title font-weight-bolder text-dark-75 text-hover-primary font-size-h4 m-0 pt-7 pb-1">Name: {{$user->full_name}}</div>
                                 <!--end::Info-->
                             </div>
                             <!--end::Header-->
                             <!--begin::Body-->
                             <div class="pt-1">
                                 <!--begin::Text-->
-                                <p class="text-dark-75 font-weight-nirmal font-size-lg m-0 pb-7">Position Held: <span class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bolder bg-success">{{$user->roles->first()->name}}</span></p>
+                                <p class="text-dark-75 font-weight-nirmal font-size-lg m-0 pb-7">Occupation Held: <span class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bolder bg-success">Farmer</span></p>
                                 <!--end::Text-->
                                 <!--begin::Item-->
                                 <div class="d-flex align-items-center pb-9">
@@ -202,15 +202,15 @@
                         <div class="tab-pane active" id="kt_apps_contacts_view_tab_2" role="tabpanel">
                             <form class="form">
                                 <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 text-right col-form-label">First Name</label>
+                                    <label class="col-xl-3 col-lg-3 text-right col-form-label">Full Name</label>
                                     <div class="col-lg-9 col-xl-6">
-                                        <input class="form-control form-control-lg form-control-solid" type="text" value="{{$user->first_name}}" readonly/>
+                                        <input class="form-control form-control-lg form-control-solid" type="text" value="{{$user->full_name}}" readonly/>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 text-right col-form-label">Last Name</label>
+                                    <label class="col-xl-3 col-lg-3 text-right col-form-label">Id Number</label>
                                     <div class="col-lg-9 col-xl-6">
-                                        <input class="form-control form-control-lg form-control-solid" type="text" value="{{$user->last_name}}" readonly/>
+                                        <input class="form-control form-control-lg form-control-solid" type="text" value="{{$user->id_number}}" readonly/>
                                     </div>
                                 </div>
                                 <div class="separator separator-dashed my-10"></div>
@@ -243,7 +243,7 @@
                         <div class="tab-pane" id="kt_apps_contacts_view_tab_3" role="tabpanel">
                             <form class="form">
                                 <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 text-right col-form-label">Email Address</label>
+                                    <label class="col-xl-3 col-lg-3 text-right col-form-label">Gender</label>
                                     <div class="col-lg-9 col-xl-6">
                                         <div class="input-group input-group-lg input-group-solid">
                                             <div class="input-group-prepend">
@@ -251,12 +251,18 @@
 																				<i class="la la-at"></i>
 																			</span>
                                             </div>
-                                            <input type="text" class="form-control form-control-lg form-control-solid" value="{{$user->email}}" readonly/>
+                                            <input type="text" class="form-control form-control-lg form-control-solid" value="{{$user->gender}}" readonly/>
                                         </div>
-                                        <span class="form-text text-muted">Email will not be publicly displayed.</span>
                                     </div>
                                 </div>
-
+                                <div class="form-group row">
+                                    <label class="col-xl-3 col-lg-3 text-right col-form-label">Materials</label>
+                                    <div class="col-lg-9 col-xl-6">
+                                        <div class="input-group input-group-lg input-group-solid">
+                                            <input type="text" class="form-control form-control-lg form-control-solid" value="{{$user->materials}}" readonly/>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="form-group row align-items-center">
                                     <label class="col-xl-3 col-lg-3 col-form-label text-right">Status :<span class="label label-lg label-inline label-light-primary">Active</span></label>
                                 </div>

@@ -6,7 +6,7 @@
             <!--begin::Info-->
             <div class="d-flex align-items-center flex-wrap mr-2">
                 <!--begin::Page Title-->
-                <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Dashboard</h5>
+                <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5 " id="demooss">Dashboard</h5>
                 <!--end::Page Title-->
                 <!--begin::Actions-->
                 <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
@@ -410,5 +410,17 @@
 
             drawEngagementGraph(elementId, chartType, labels, datasets, unit, maxTicksLimitX, maxTicksLimitY, maxY,maxYCount);
         }
+    </script>
+    <script>
+        if (window.location.pathname === '/admin/dashboard') {
+            var newText =  document.getElementsByClassName("menu-text");
+
+            newText.innerHTML = 'new text here';
+        }
+        else {
+            alert();
+            // span.innerText = 'Dashboard';
+        }
+
     </script>
 @endsection

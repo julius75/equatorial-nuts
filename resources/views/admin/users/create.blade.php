@@ -18,7 +18,7 @@
                                         <div class="col-xl-9">
                                             <!--begin::Wizard Step 1-->
                                             <div class="my-5 step" data-wizard-type="step-content" data-wizard-state="current">
-                                                <h5 class="text-dark font-weight-bold">Add User's Details:</h5>
+                                                <h5 class="text-dark font-weight-bold">Add Buyer's Details:</h5>
                                                 <div class="form-group row">
                                                     <label class="col-xl-3 col-lg-3 col-form-label">First Name</label>
                                                     <div class="col-lg-9 col-xl-9">
@@ -49,13 +49,8 @@
                                                     <label class="col-xl-3 col-lg-3 col-form-label">Email Address</label>
                                                     <div class="col-lg-9 col-xl-9">
                                                         <div class="input-group input-group-solid input-group-lg">
-                                                            <div class="input-group-prepend">
-																<span class="input-group-text">
-																<i class="la la-at"></i>
-																</span>
-                                                            </div>
                                                             <input type="email" class="form-control form-control-solid form-control-lg is-invalid  @error('email') is-invalid @enderror" value="{{ old('email') }}"
-                                                                    name="email"  id="email" required autofocus/>
+                                                                    name="email"  id="email" required  autocomplete="off"/>
                                                             @error('email')
                                                             <span class="invalid-feedback" role="alert">
                                                      <strong>{{ $message }}</strong>
@@ -64,19 +59,25 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="form-group row">
+                                                    <label class="col-form-label col-xl-3 col-lg-3">Region</label>
+                                                    <div class="col-xl-9 col-lg-9">
+                                                        <select required class="form-control form-control-lg form-control-solid" name="region_id" >
+                                                            <option selected disabled value="">Select Region</option>
+                                                            @foreach($regions as $region)
+                                                                <option  value="{{$region->id}}">{{ucfirst($region->name)}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
                                                 <!--end::Group-->
                                                 <!--begin::Group-->
                                                 <div class="form-group row">
                                                     <label class="col-xl-3 col-lg-3 col-form-label">Phone Number</label>
                                                     <div class="col-lg-9 col-xl-9">
                                                         <div class="input-group input-group-solid input-group-lg">
-                                                            <div class="input-group-prepend">
-																<span class="input-group-text">
-																<i class="">+254</i>
-																</span>
-                                                            </div>
                                                             <input type="number" class="form-control form-control-solid form-control-lg is-invalid  @error('phone_number') is-invalid @enderror" value="{{ old('phone_number') }}"
-                                                                   name="phone_number"  id="phone_number" required autofocus/>
+                                                                   name="phone_number"  id="phone_number" required/>
                                                             @error('phone_number')
                                                             <span class="invalid-feedback" role="alert">
                                                      <strong>{{ $message }}</strong>

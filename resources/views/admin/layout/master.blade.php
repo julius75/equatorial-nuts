@@ -12,6 +12,7 @@
 
     <title>@yield('title')</title>
     <link href="{{asset('assets/css/pages/wizard/wizard-4.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('assets/css/select2.min.css')}}" rel="stylesheet" type="text/css" />
 
     <link href="{{asset('assets/plugins/custom/fullcalendar/fullcalendar.bundle.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/plugins/custom/datatables/datatables.bundle.css')}}" rel="stylesheet" type="text/css" />
@@ -973,6 +974,7 @@
 <script src="{{asset('assets/js/jquery.min.js')}}"></script>
 
 <script src="{{asset('assets/js/toastr.min.js')}}"></script>
+<script src="{{asset('assets/js/bootstrap-confirmation.min.js')}}"></script>
 
 <!--end::Global Theme Bundle-->
 <!--begin::Page Vendors(used by this page)-->
@@ -983,6 +985,8 @@
 <!--begin::Page Scripts(used by this page)-->
 {{--<script src="{{asset('assets/js/pages/widgets.js')}}"></script>--}}
 <script src="{{asset('assets/js/pages/custom/profile/profile.js')}}"></script>
+<script src="{{asset('assets/js/select2.min.js')}}"></script>
+
 <script src="{{asset('assets/js/pages/chart.js')}}"></script>
 <script>
     @if(Session::has('message'))

@@ -95,6 +95,7 @@ class AdminController extends Controller
                 'email' => 'required|email|unique:admins',
                 'phone_number' => 'required|unique:admins',
                 'password' => 'required',
+                'role' => 'required',
             ]);
             if ($validator->fails()) {
                 return redirect()->route('admin.app-admins.create')
@@ -125,12 +126,11 @@ class AdminController extends Controller
                 ];
                 if ($user)
                     //you did not include this
-                    //$user->notify(
-                    //  new \App\Notifications\AdminCreated($details)
-                    //);
+                    $user->notify(
+                      new \App\Notifications\AdminCreated($details)
+                    );
                 //temporary
                 SendSMS::dispatch($user->phone_number, "Hello $user->first_name,\nYour Equatorial Nut System Password is: $password");
-
                 return redirect()->route('admin.app-admins.index')->with('message','Admin created Successfully');
             } catch (\Exception $exception) {
 
