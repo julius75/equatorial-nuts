@@ -148,7 +148,7 @@
                 use Illuminate\Support\Facades\Auth;
                 $user = Auth::guard('admin')->user();
                 ?>
-                <div class="text-muted mt-1"> {{$user->name}} </div>
+                <div class="text-muted mt-1"> {{$user->first_name.' '.$user->last_name}} </div>
                 <div class="navi mt-2">
                     <a href="#" class="navi-item">
 								<span class="navi-link p-0 pb-2">
