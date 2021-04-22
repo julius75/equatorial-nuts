@@ -118,7 +118,7 @@ class FarmerController extends Controller
         $validator = Validator::make($request->all(),
             [
                 'farmer_id' => 'required|exists:farmers,id',
-                'passcode' => 'required|exists:farmer_verification_codes,id',
+                'passcode' => 'required|exists:farmer_verification_codes,passcode',
             ]);
         if ($validator->fails())
             return response()->json(['message' => $validator->errors()->first()], Response::HTTP_BAD_REQUEST);
@@ -165,7 +165,10 @@ class FarmerController extends Controller
             return response()->json(['message' => $validator->errors()->first()], Response::HTTP_BAD_REQUEST);
 
         $farmer = Farmer::find($request->farmer_id);
-        $code = $farmer->verification_codes()->where('verified', '=', false)->first();
+        $code = FarmerVerificationCode::query()
+            ->where('farmer_id', '=', $request->farmer_id)
+            ->where('verified', '=', false)
+            ->first();
         if (!$code){
             return response()->json(['message' => 'Farmer Does Not have an unverified OTP'], Response::HTTP_NOT_FOUND);
         }else{
