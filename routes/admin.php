@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\PriceListController;
+use App\Http\Controllers\Admin\RawMaterialController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,7 @@ Route::get('/', function () {
 });
 //homepage
 Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
+Route::post('/dashboard', [HomeController::class, 'index'])->name('dashboard.filter');
 //buyers
 Route::resource('app-users', UserController::class);
 //app-admins
@@ -31,6 +33,9 @@ Route::resource('price-lists', PriceListController::class);
 Route::get('price-lists-current', [PriceListController::class,'current'])->name('price-lists.current');
 Route::get('price-lists-pending-approval', [PriceListController::class,'pending_approval'])->name('price-lists.pending-approval');
 Route::get('price-lists-approve/{priceListID}', [PriceListController::class,'approve'])->name('price-lists.approve');
+
+Route::get('raw-material-requirements', [RawMaterialController::class,'requirements'])->name('raw-materials.requirements');
+Route::get('raw-material-requirements/{id}/view', [RawMaterialController::class,'view_requirements'])->name('raw-materials.view.requirement');
 
 //admin status
 Route::post('update-status-admin/{id}', [AdminController::class,'statusUpdate']);
@@ -51,6 +56,8 @@ Route::prefix('datatables')->group(function () {
     Route::get('get-all-pricelists', [PriceListController::class, 'get_all_pricelists'])->name('get-all-pricelists');
     Route::get('get-current-pricelists', [PriceListController::class, 'get_current_pricelists'])->name('get-current-pricelists');
     Route::get('get-pending-approval-pricelists', [PriceListController::class, 'get_pending_approval'])->name('get-pending-approval-pricelists');
+    Route::get('get-raw-material-requirements', [RawMaterialController::class, 'get_requirements'])->name('get-raw-material-requirements');
+    Route::get('get-raw-material-requirements/{id}', [RawMaterialController::class, 'get_requirements_single'])->name('get-raw-material-requirement-single');
 
 });
 //charts routes
