@@ -173,6 +173,9 @@ class FarmerController extends Controller
             return response()->json(['message' => 'Farmer Does Not have an unverified OTP'], Response::HTTP_NOT_FOUND);
         }else{
             //send otp
+            $code->update([
+                'expires_at' => now()->addMinutes(10)
+            ]);
             SendSMS::dispatch($farmer->phone_number, "Your Equatorial Nut Farmer Verification Token is: $code->passcode");
             return response()->json(['message' => 'OTP Resent'], Response::HTTP_OK);
         }
