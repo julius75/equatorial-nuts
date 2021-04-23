@@ -28,6 +28,8 @@ Route::prefix('v1')->group(function () {
         //login, forgot and update passwords
         Route::prefix('login')->group(function (){
             Route::post('/', [AuthController::class, 'login']);
+            Route::post('/verify-otp', [AuthController::class, 'verify_OTP'])->middleware('auth:api');
+            Route::post('/resend-otp', [AuthController::class, 'resend_OTP'])->middleware('auth:api');
         });
         //password
         Route::prefix('password')->group(function () {
@@ -35,7 +37,7 @@ Route::prefix('v1')->group(function () {
             Route::post('update', [PasswordResetController::class, 'updatePassword']);
         });
     });
-    Route::middleware('auth:api')->group(function (){
+    Route::middleware(['auth:api', 'ensure.otp.auth'])->group(function (){
         //farmers
         Route::resource('farmers', FarmerController::class)->except(['create', 'edit', 'update', 'destroy']);
         Route::post('farmers-search', [FarmerController::class, 'search']);
