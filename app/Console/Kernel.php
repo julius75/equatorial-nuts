@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\RevokeUserLoginTokens;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -14,6 +15,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //
+        RevokeUserLoginTokens::class
     ];
 
     /**
@@ -24,6 +26,12 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $schedule->command('enp:revokelogintokens')
+            ->timezone('Africa/Nairobi')
+//            ->dailyAt('23:50')
+            ->everyFiveMinutes() //testing console config
+            ->withoutOverlapping();
+
         // $schedule->command('inspire')->hourly();
     }
 

@@ -70,4 +70,18 @@ class User extends Authenticatable
         return $this->regions()->where('current', '=', true)->first();
     }
 
+    public function login_token()
+    {
+        return $this->hasMany(UserLoginToken::class);
+    }
+
+    public function activeLoginToken()
+    {
+        return $this->login_token()
+            ->where('verified', '=', true)
+            ->where('active', '=', true)
+            ->exists();
+    }
+
+
 }
