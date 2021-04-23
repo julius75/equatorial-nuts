@@ -425,4 +425,16 @@
             repaymentsChart.init();
         } )( jQuery );
     </script>
+    <script>
+        if (window.location.pathname === '/admin/dashboard') {
+            var newText =  document.getElementsByClassName("menu-text");
+
+            newText.innerHTML = 'new text here';
+        }
+        else {
+            alert();
+            // span.innerText = 'Dashboard';
+        }
+
+    </script>
 @endsection

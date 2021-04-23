@@ -124,8 +124,9 @@
     <script>
         $( ".random" ).click(function( event ) {
             event.preventDefault();
-            var rnd = Math.floor(Math.random() * 1000000000);
-            document.getElementById('myText').value = rnd;
+            var rnd = Math.floor(Math.random() * 100000);
+            document.getElementById('myText').value = "ENP".concat(rnd.toString());
+
         });
     </script>
 @endsection

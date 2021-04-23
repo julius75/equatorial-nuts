@@ -54,7 +54,7 @@ var KTDatatableChildRemoteDataDemo = function() {
 				}, {
 					field: 'checkbox',
 					title: '',
-					template: '{{RecordID}}',
+
 					sortable: false,
 					width: 20,
 					textAlign: 'center',

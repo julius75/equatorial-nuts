@@ -5,12 +5,15 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Mail\BuyerCreated;
 use App\Models\Admin;
+use App\Models\Region;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
@@ -36,6 +39,7 @@ class UserController extends Controller
     {
         return view('admin.users.index');
     }
+
     public function test()
     {
         $users = User::role('buyer')->get();
@@ -47,6 +51,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function getUsers()
     {
         $users = User::role('buyer')->get();
@@ -69,17 +74,17 @@ class UserController extends Controller
             })
             ->make(true);
     }
-
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
+
     public function create()
     {
-        return view('admin.users.create');
+        $regions = Region::all();
+        return view('admin.users.create', compact('regions'));
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -87,6 +92,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Validation\ValidationException
      */
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -95,8 +101,8 @@ class UserController extends Controller
             'email' => 'required|email|unique:users',
             'phone_number' => 'required|unique:users',
             'password' => 'required',
+            'region_id' => 'required',
         ]);
-
         if ($validator->fails()) {
             return Redirect::back()->withErrors($validator)->withInput()->with('error', $validator->errors()->first());
         }
@@ -121,6 +127,12 @@ class UserController extends Controller
                 'status' => true,
                 'passcode' => mt_rand(1000,9999)
             ]);
+            $region = DB::table('region_users')->insert([
+                'region_id' => $request->region_id,
+                'user_id' => $user->id,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
             $user->assignRole('buyer');
 
             $details = [
@@ -128,21 +140,21 @@ class UserController extends Controller
                 'email'=>$user->email,
                 'password'=>$password
             ];
-            Mail::send(new BuyerCreated($details));
+           Mail::send(new BuyerCreated($details));
 
-            return Redirect::route('admin.app-users.index')->with('message','User created Successfully');
+            return Redirect::route('admin.app-users.index')->with('message','Buyer created Successfully');
 
         } catch (\Exception $exception) {
             return Redirect::route('admin.app-users.create')->with('error', 'Something went wrong');
         }
     }
-
     /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function show($id)
     {
         try {
@@ -154,13 +166,13 @@ class UserController extends Controller
         }
 
     }
-
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function edit($id)
     {
         try {
@@ -171,7 +183,6 @@ class UserController extends Controller
             return $e;
         }
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -179,6 +190,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\RedirectResponse
      */
+
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -204,6 +216,7 @@ class UserController extends Controller
             return back()->with('error', 'User Not Found');
         }
     }
+
     public function statusUpdate(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -223,6 +236,7 @@ class UserController extends Controller
             return back()->with('error', 'Error Try Again...');
         }
     }
+
     /**
      * Remove the specified resource from storage.
      *

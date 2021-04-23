@@ -14,13 +14,13 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
+            RawMaterialSeeder::class,
+            CountySeeder::class,
+            RegionSeeder::class,
             RoleSeeder::class,
             AdminSeeder::class,
             UserSeeder::class,
-            CountySeeder::class,
-            RawMaterialSeeder::class,
             RawMaterialRequirementSeeder::class,
-            RegionSeeder::class,
             FarmerSeeder::class,
             PriceListSeeder::class
         ]);

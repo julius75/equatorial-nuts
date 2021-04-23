@@ -10,7 +10,6 @@ class Region extends Model
     use HasFactory;
     protected $fillable = [
         'name',
-        'buying_center',
         'county_id',
         'sub_county_id',
         'created_at',

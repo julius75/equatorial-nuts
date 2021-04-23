@@ -21,6 +21,7 @@ class RoleSeeder extends Seeder
             !Role::where('name', '=', 'buyer')->exists() and
             !Role::where('name', '=', 'inventory')->exists() and
             !Role::where('name', '=', 'management')->exists() and
+            !Role::where('name', '=', 'general_management')->exists() and
             !Role::where('name', '=', 'quality_management')->exists())
         {
             DB::table('roles')->insert([
@@ -29,6 +30,10 @@ class RoleSeeder extends Seeder
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),],
                 ['name' => 'inventory',
+                    'guard_name' => 'admin',
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),],
+                ['name' => 'general_management',
                     'guard_name' => 'admin',
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),],
