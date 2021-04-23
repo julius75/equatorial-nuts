@@ -28,8 +28,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('enp:revokelogintokens')
             ->timezone('Africa/Nairobi')
-//            ->dailyAt('23:50')
-            ->everyFiveMinutes() //testing console config
+            ->dailyAt('23:50')
             ->withoutOverlapping();
 
         // $schedule->command('inspire')->hourly();
