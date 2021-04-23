@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\FarmerController;
+use App\Http\Controllers\Admin\RegionController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\HomeController;
@@ -42,10 +44,21 @@ Route::post('update-status-admin/{id}', [AdminController::class,'statusUpdate'])
 
 //status update
 Route::post('update-status/{id}', [UserController::class,'statusUpdate']);
+Route::post('update-status-farmers/{id}', [FarmerController::class,'statusUpdate']);
+Route::post('delete-farmers/{id}', [FarmerController::class,'DeleteFarmer']);
+
 Route::get('/getchart/{month?}/{year?}', [HomeController::class, 'getMonthlyPostDataWeekly'])->name('discussions-analytics');
 
 //app-admins
 Route::resource('app-admins', AdminController::class);
+Route::get('/test', [RegionController::class, 'regions'])->name('regions');
+Route::get('/getSubCounty/{id}', [RegionController::class, 'getSubCounty'])->name('getSubCounty');
+//app-admins
+Route::resource('app-admins', AdminController::class);
+//farmers
+Route::resource('app-farmers', FarmerController::class);
+//regions
+Route::resource('app-regions', RegionController::class);
 //default list
 Route::get('/default', [UserController::class, 'default'])->name('default');
 
@@ -58,12 +71,13 @@ Route::prefix('datatables')->group(function () {
     Route::get('get-pending-approval-pricelists', [PriceListController::class, 'get_pending_approval'])->name('get-pending-approval-pricelists');
     Route::get('get-raw-material-requirements', [RawMaterialController::class, 'get_requirements'])->name('get-raw-material-requirements');
     Route::get('get-raw-material-requirements/{id}', [RawMaterialController::class, 'get_requirements_single'])->name('get-raw-material-requirement-single');
+    Route::get('get-app-farmers', [FarmerController::class, 'getAdminFarmers'])->name('get-app-farmers');
+    Route::get('get-app-regions', [RegionController::class, 'getAdminRegions'])->name('get-app-regions');
 
 });
 //charts routes
 Route::prefix('charts')->group(function () {
-//area chart for transaction
-    Route::get('/getchart/{month?}/{year?}', [HomeController::class, 'getMonthlyPostDataWeekly'])->name('discussions-analytics');
+    //
 });
 
 require __DIR__.'/admin_auth.php';

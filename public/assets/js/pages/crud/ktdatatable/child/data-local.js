@@ -514,7 +514,8 @@ var KTDatatableChildDataLocalDemo = function() {
 							'">' +
 							status[row.Type].title + '</span>';
 					},
-				}, {
+				},
+                {
 					field: 'Actions',
 					width: 130,
 					title: 'Actions',

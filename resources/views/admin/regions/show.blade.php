@@ -16,23 +16,25 @@
                             <div class="d-flex flex-column flex-center">
                                 <!--begin::Symbol-->
                                 <div class="symbol symbol-120 symbol-circle symbol-success overflow-hidden">
-																<span class="symbol-label">
-																	<img src="{{asset('assets/media/svg/avatars/007-boy-2.svg')}}" class="h-75 align-self-end" alt="" />
-																</span>
+{{--																<span class="symbol-label">--}}
+{{--																	<img src="{{asset('assets/media/placeholder.svg')}}" class="h-75 align-self-end" alt="" />--}}
+{{--																</span>--}}
                                 </div>
                                 <!--end::Symbol-->
                                 <!--begin::Username-->
                                 <!--end::Username-->
                                 <!--begin::Info-->
-                                <div class="card-title font-weight-bolder text-dark-75 text-hover-primary font-size-h4 m-0 pt-7 pb-1">Name: {{$user->first_name}} {{$user->last_name}}</div>
+                                <div class="card-title font-weight-bolder text-dark-75 text-hover-primary font-size-h4 m-0 pt-7 pb-1">Region Name: </div>
                                 <!--end::Info-->
                             </div>
                             <!--end::Header-->
                             <!--begin::Body-->
                             <div class="pt-1">
                                 <!--begin::Text-->
-                                <p class="text-dark-75 font-weight-nirmal font-size-lg m-0 pb-7">Position Held: <span class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bolder bg-success">{{$user->roles->first()->name}}</span></p>
+                                <p class="text-dark-75 font-weight-nirmal font-size-sm m-0 pb-4 ml-14">County: <span class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bolder bg-success">{{$region->county->name}}</span></p>
                                 <!--end::Text-->
+                                <p class="text-dark-75 font-weight-nirmal font-size-sm m-0 pb-4 ml-14">Sub County: <span class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bolder bg-success">{{$region->sub_county->name}}</span></p>
+
                                 <!--begin::Item-->
                                 <div class="d-flex align-items-center pb-9">
                                     <!--begin::Symbol-->
@@ -56,12 +58,11 @@
                                     <!--end::Symbol-->
                                     <!--begin::Text-->
                                     <div class="d-flex flex-column flex-grow-1">
-                                        <a href="#" class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bolder">Ricky Hunt</a>
-                                        <span class="text-muted font-weight-bold">PHP, SQLite, Artisan CLI</span>
+                                        <span class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bolder">Buying Center</span>
                                     </div>
                                     <!--end::Text-->
                                     <!--begin::label-->
-                                    <span class="font-weight-bolder label label-xl label-light-success label-inline px-3 py-5 min-w-45px">2.8</span>
+                                    <span class="font-weight-bolder label label-xl label-light-success label-inline px-3 py-5 min-w-45px">8</span>
                                     <!--end::label-->
                                 </div>
                                 <!--end::Item-->
@@ -86,8 +87,7 @@
                                     <!--end::Symbol-->
                                     <!--begin::Text-->
                                     <div class="d-flex flex-column flex-grow-1">
-                                        <a href="#" class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bolder">Modules</a>
-                                        <span class="text-muted font-weight-bold">Successful Fellas</span>
+                                        <span class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bolder">Raw Materials</span>
                                     </div>
                                     <!--end::Text-->
                                     <!--begin::label-->
@@ -134,7 +134,7 @@
                                                                         <!--end::Svg Icon-->
 																	</span>
 																</span>
-                                    <span class="nav-text font-weight-bold">Personal</span>
+                                    <span class="nav-text font-weight-bold">Buying centers</span>
                                 </a>
                             </li>
                             <li class="nav-item mr-3">
@@ -152,7 +152,7 @@
                                                                         <!--end::Svg Icon-->
 																	</span>
 																</span>
-                                    <span class="nav-text font-weight-bold">Account</span>
+                                    <span class="nav-text font-weight-bold">Raw Materials</span>
                                 </a>
                             </li>
                             <li class="nav-item mr-3">
@@ -200,68 +200,53 @@
                     <div class="tab-content pt-5">
                         <!--begin::Tab Content-->
                         <div class="tab-pane active" id="kt_apps_contacts_view_tab_2" role="tabpanel">
-                            <form class="form">
-                                <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 text-right col-form-label">First Name</label>
-                                    <div class="col-lg-9 col-xl-6">
-                                        <input class="form-control form-control-lg form-control-solid" type="text" value="{{$user->first_name}}" readonly/>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 text-right col-form-label">Last Name</label>
-                                    <div class="col-lg-9 col-xl-6">
-                                        <input class="form-control form-control-lg form-control-solid" type="text" value="{{$user->last_name}}" readonly/>
-                                    </div>
-                                </div>
-                                <div class="separator separator-dashed my-10"></div>
-                                <!--begin::Heading-->
-                                <div class="row">
-                                    <div class="col-lg-9 col-xl-6 offset-xl-3">
-                                        <h3 class="font-size-h6 mb-5">Contact Info:</h3>
-                                    </div>
-                                </div>
-                                <!--end::Heading-->
-                                <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 text-right col-form-label">Phone</label>
-                                    <div class="col-lg-9 col-xl-6">
-                                        <div class="input-group input-group-lg input-group-solid">
-                                            <div class="input-group-prepend">
-																			<span class="input-group-text">
-																				<i class="la la-phone"></i>
-																			</span>
-                                            </div>
-                                            <input type="text" class="form-control form-control-lg form-control-solid" value="{{$user->phone_number}}" readonly />
-                                        </div>
-                                        <span class="form-text text-muted">We'll never share your phone number with anyone else.</span>
-                                    </div>
-                                </div>
-                                <div class="separator separator-dashed my-10"></div>
-                            </form>
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">No.</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Date Created</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php $i = 0 ?>
+                                        @foreach ($buying_centers as $buying_center)
+                                            <?php $i++ ?>
+                                        <tr>
+                                            <th scope="row"><span class="label">{{ $i}}</span></th>
+                                            <td>{{$buying_center->name}}</td>
+                                            <td>{{\Carbon\Carbon::parse($buying_center->created_at)->isoFormat('MMM D YYYY')}}</td>
+                                        </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
                         </div>
                         <!--end::Tab Content-->
                         <!--begin::Tab Content-->
                         <div class="tab-pane" id="kt_apps_contacts_view_tab_3" role="tabpanel">
                             <form class="form">
-                                <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 text-right col-form-label">Email Address</label>
-                                    <div class="col-lg-9 col-xl-6">
-                                        <div class="input-group input-group-lg input-group-solid">
-                                            <div class="input-group-prepend">
-																			<span class="input-group-text">
-																				<i class="la la-at"></i>
-																			</span>
-                                            </div>
-                                            <input type="text" class="form-control form-control-lg form-control-solid" value="{{$user->email}}" readonly/>
-                                        </div>
-                                        <span class="form-text text-muted">Email will not be publicly displayed.</span>
-                                    </div>
-                                </div>
 
-                                <div class="form-group row align-items-center">
-                                    <label class="col-xl-3 col-lg-3 col-form-label text-right">Status :<span class="label label-lg label-inline label-light-primary">Active</span></label>
-                                </div>
-                                <div class="separator separator-dashed my-10"></div>
-                                <!--begin::Heading-->
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">No.</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Date Created</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php $i = 0 ?>
+                                        @foreach ($materials as $material)
+                                            <?php $i++ ?>
+                                            <tr>
+                                                <th scope="row"><span class="label">{{ $i}}</span></th>
+                                                <td>{{$material->name}}</td>
+                                                <td>{{\Carbon\Carbon::parse($material->created_at)->isoFormat('MMM D YYYY')}}</td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+
                             </form>
                         </div>
                     </div>
