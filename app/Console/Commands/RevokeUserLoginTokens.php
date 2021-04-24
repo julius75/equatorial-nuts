@@ -47,7 +47,5 @@ class RevokeUserLoginTokens extends Command
             if ($tokens){
                 \App\Jobs\RevokeUserLoginTokens::dispatch();
             }
-        SendSMS::dispatch('254725730055', 'Console Config Worked! @'.now());
-
     }
 }
