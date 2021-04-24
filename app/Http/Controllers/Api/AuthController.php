@@ -53,10 +53,10 @@ class AuthController extends Controller
         else{
             return response()->json(['message' => 'Buyer Credentials Not Found'], Response::HTTP_BAD_REQUEST);
         }
-        if (Auth::attempt(['phone_number' => '254'.substr($request->phone_number, -9), 'password' => request('password')])) {
+        if (Auth::attempt(['phone_number' => '254'.substr($request->get('phone_number'), -9), 'password' => request('password')])) {
             $user = Auth::user();
             if (env('APP_ENV') == 'production') {
-                $token = $this->getPassportToken($request->get('email'), $request->get('password'));
+                $token = $this->getPassportToken('254'.substr($request->get('phone_number'), -9), $request->get('password'));
             }
             else {
                 //mimic production response
