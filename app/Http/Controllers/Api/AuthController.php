@@ -56,7 +56,7 @@ class AuthController extends Controller
         if (Auth::attempt(['phone_number' => '254'.substr($request->get('phone_number'), -9), 'password' => request('password')])) {
             $user = Auth::user();
             if (env('APP_ENV') == 'production') {
-                $token = $this->getPassportToken('254'.substr($request->get('phone_number'), -9), $request->get('password'));
+                $token = $this->getPassportToken($user->email, $request->get('password'));
             }
             else {
                 //mimic production response
