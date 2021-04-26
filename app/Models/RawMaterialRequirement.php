@@ -15,6 +15,7 @@ class RawMaterialRequirement extends Model
         'value',
         'requirement',
         'unit',
+        'status',
         'created_at',
         'updated_at',
     ];

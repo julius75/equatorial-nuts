@@ -68,7 +68,6 @@ class FarmerController extends Controller
 							    		<li class="nav-item"><a class="nav-link" href="'.route('admin.app-farmers.show',Crypt::encrypt($users->id)).'"><i class="nav-icon la la-user"></i><span class="nav-text">View Farmer Details</span></a></li>
 							    		<li class="nav-item"><a class="nav-link" href="'.route('admin.app-farmers.edit',Crypt::encrypt($users->id)).'"><i class="nav-icon la la-edit"></i><span class="nav-text">Edit Details</span></a></li>
 							    		<li class="btn btn-light font-size-sm mr-5"data-toggle="modal"data-target="#smallModal" id="smallButton"><i class="nav-icon la la-sync-alt"></i><span class="nav-text">Update Status</span></li>
-							    		<button type="button" name="edit" id="'.$users->id.'" class="delete btn btn-danger btn-sm">Delete</button>
 							    	</ul>
 							  	</div>
 							</div>
@@ -132,6 +131,7 @@ class FarmerController extends Controller
             return Redirect::route('admin.app-farmers.create')->with('error', 'Something went wrong');
         }
     }
+
     /**
      * @return integer
      */
@@ -143,6 +143,7 @@ class FarmerController extends Controller
         }
         return $otp;
     }
+
     /**
      * @param int $otp
      * @return mixed
@@ -168,13 +169,7 @@ class FarmerController extends Controller
             return Redirect::back()->with('error', 'Farmer Not Found');
         }
     }
-    public function test()
-    {
-        $user = Farmer::findOrFail(1);
-        $usr =  $user->raw_materials()->first()->name  ?? '--';;
-            return $usr;
 
-    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -195,6 +190,7 @@ class FarmerController extends Controller
 
         }
     }
+
     public function statusUpdate(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -214,6 +210,7 @@ class FarmerController extends Controller
             return back()->with('error', 'Error Try Again...');
         }
     }
+
     /**
      * Update the specified resource in storage.
      *
@@ -239,6 +236,7 @@ class FarmerController extends Controller
             return $e;
         }
     }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -247,10 +245,7 @@ class FarmerController extends Controller
     public function DeleteFarmer($id)
     {
         Farmer::find($id)->delete();
-
         return response()->json(['success'=>'Farmer deleted successfully.']);
-
-
     }
 
 }

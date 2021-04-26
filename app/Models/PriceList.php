@@ -17,6 +17,7 @@ class PriceList extends Model
         'unit',
         'approved',
         'current',
+        'status',
         'created_by',
         'approved_by',
         'approved_at',
