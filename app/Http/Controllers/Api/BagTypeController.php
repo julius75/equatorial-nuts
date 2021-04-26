@@ -7,6 +7,12 @@ use App\Models\BagType;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+/**
+ * @group Bag Types
+ *
+ * API for fetching Bag Types
+ *
+ */
 class BagTypeController extends Controller
 {
     /**

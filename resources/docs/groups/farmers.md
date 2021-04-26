@@ -79,7 +79,7 @@ curl -X POST \
     "http://localhost/api/v1/farmers" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"full_name":"est","phone_number":"qui","id_number":"quas","gender":"architecto","date_of_birth":"quia","region_id":2,"raw_material_ids":[]}'
+    -d '{"full_name":"nemo","phone_number":"velit","id_number":"omnis","gender":"deserunt","date_of_birth":"id","region_id":14,"raw_material_ids":[]}'
 
 ```
 
@@ -94,12 +94,12 @@ let headers = {
 };
 
 let body = {
-    "full_name": "est",
-    "phone_number": "qui",
-    "id_number": "quas",
-    "gender": "architecto",
-    "date_of_birth": "quia",
-    "region_id": 2,
+    "full_name": "nemo",
+    "phone_number": "velit",
+    "id_number": "omnis",
+    "gender": "deserunt",
+    "date_of_birth": "id",
+    "region_id": 14,
     "raw_material_ids": []
 }
 
@@ -190,14 +190,14 @@ Array of Raw Material IDs.
 
 ```bash
 curl -X GET \
-    -G "http://localhost/api/v1/farmers/10" \
+    -G "http://localhost/api/v1/farmers/12" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost/api/v1/farmers/10"
+    "http://localhost/api/v1/farmers/12"
 );
 
 let headers = {
@@ -265,7 +265,7 @@ curl -X POST \
     "http://localhost/api/v1/farmers-search" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"search_query":"quia"}'
+    -d '{"search_query":"omnis"}'
 
 ```
 
@@ -280,7 +280,7 @@ let headers = {
 };
 
 let body = {
-    "search_query": "quia"
+    "search_query": "omnis"
 }
 
 fetch(url, {
@@ -337,7 +337,7 @@ curl -X POST \
     "http://localhost/api/v1/farmers-region-filter" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"region_id":8}'
+    -d '{"region_id":2}'
 
 ```
 
@@ -352,7 +352,7 @@ let headers = {
 };
 
 let body = {
-    "region_id": 8
+    "region_id": 2
 }
 
 fetch(url, {
@@ -409,7 +409,7 @@ curl -X POST \
     "http://localhost/api/v1/farmers-verify-phone-number" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"farmer_id":18,"passcode":4}'
+    -d '{"farmer_id":11,"passcode":17}'
 
 ```
 
@@ -424,8 +424,8 @@ let headers = {
 };
 
 let body = {
-    "farmer_id": 18,
-    "passcode": 4
+    "farmer_id": 11,
+    "passcode": 17
 }
 
 fetch(url, {
@@ -488,7 +488,7 @@ curl -X POST \
     "http://localhost/api/v1/farmers-resend-otp" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"farmer_id":4}'
+    -d '{"farmer_id":16}'
 
 ```
 
@@ -503,7 +503,7 @@ let headers = {
 };
 
 let body = {
-    "farmer_id": 4
+    "farmer_id": 16
 }
 
 fetch(url, {

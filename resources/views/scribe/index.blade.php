@@ -64,7 +64,8 @@ You can switch the language used with the tabs at the top right (or from the nav
 <p>Base URL</p>
 </blockquote>
 <pre><code class="language-yaml">http://localhost</code></pre><h1>Authenticating requests</h1>
-<p>This API is not authenticated.</p><h1>Endpoints</h1>
+<p>This API is not authenticated.</p><h1>Bag Types</h1>
+<p>API for fetching Bag Types</p>
 <h2>List Bag Types</h2>
 <blockquote>
 <p>Example request:</p>
@@ -166,7 +167,7 @@ fetch(url, {
     "http://localhost/api/v1/farmers" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"full_name":"est","phone_number":"qui","id_number":"quas","gender":"architecto","date_of_birth":"quia","region_id":2,"raw_material_ids":[]}'
+    -d '{"full_name":"nemo","phone_number":"velit","id_number":"omnis","gender":"deserunt","date_of_birth":"id","region_id":14,"raw_material_ids":[]}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/farmers"
@@ -178,12 +179,12 @@ let headers = {
 };
 
 let body = {
-    "full_name": "est",
-    "phone_number": "qui",
-    "id_number": "quas",
-    "gender": "architecto",
-    "date_of_birth": "quia",
-    "region_id": 2,
+    "full_name": "nemo",
+    "phone_number": "velit",
+    "id_number": "omnis",
+    "gender": "deserunt",
+    "date_of_birth": "id",
+    "region_id": 14,
     "raw_material_ids": []
 }
 
@@ -265,11 +266,11 @@ Array of Raw Material IDs.
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost/api/v1/farmers/10" \
+    -G "http://localhost/api/v1/farmers/12" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/farmers/10"
+    "http://localhost/api/v1/farmers/12"
 );
 
 let headers = {
@@ -327,7 +328,7 @@ Farmer Id
     "http://localhost/api/v1/farmers-search" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"search_query":"quia"}'
+    -d '{"search_query":"omnis"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/farmers-search"
@@ -339,7 +340,7 @@ let headers = {
 };
 
 let body = {
-    "search_query": "quia"
+    "search_query": "omnis"
 }
 
 fetch(url, {
@@ -388,7 +389,7 @@ Search Query.
     "http://localhost/api/v1/farmers-region-filter" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"region_id":8}'
+    -d '{"region_id":2}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/farmers-region-filter"
@@ -400,7 +401,7 @@ let headers = {
 };
 
 let body = {
-    "region_id": 8
+    "region_id": 2
 }
 
 fetch(url, {
@@ -448,7 +449,7 @@ Search Query.
     "http://localhost/api/v1/farmers-verify-phone-number" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"farmer_id":18,"passcode":4}'
+    -d '{"farmer_id":11,"passcode":17}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/farmers-verify-phone-number"
@@ -460,8 +461,8 @@ let headers = {
 };
 
 let body = {
-    "farmer_id": 18,
-    "passcode": 4
+    "farmer_id": 11,
+    "passcode": 17
 }
 
 fetch(url, {
@@ -515,7 +516,7 @@ OTP.
     "http://localhost/api/v1/farmers-resend-otp" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"farmer_id":4}'
+    -d '{"farmer_id":16}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/farmers-resend-otp"
@@ -527,7 +528,7 @@ let headers = {
 };
 
 let body = {
-    "farmer_id": 4
+    "farmer_id": 16
 }
 
 fetch(url, {
@@ -578,7 +579,7 @@ a mechanism to check whether the token has expired before requiring the user to 
     "http://localhost/api/v1/user/login" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"phone_number":"dicta","password":"suscipit"}'
+    -d '{"phone_number":"ut","password":"quos"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/user/login"
@@ -590,8 +591,8 @@ let headers = {
 };
 
 let body = {
-    "phone_number": "dicta",
-    "password": "suscipit"
+    "phone_number": "ut",
+    "password": "quos"
 }
 
 fetch(url, {
@@ -805,7 +806,7 @@ Email address.
     "http://localhost/api/v1/user/password/update" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"email":"voluptas","token":"vero","password":"est","password_confirm":"earum"}'
+    -d '{"email":"quasi","token":"et","password":"delectus","password_confirm":"similique"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/user/password/update"
@@ -817,10 +818,10 @@ let headers = {
 };
 
 let body = {
-    "email": "voluptas",
-    "token": "vero",
-    "password": "est",
-    "password_confirm": "earum"
+    "email": "quasi",
+    "token": "et",
+    "password": "delectus",
+    "password_confirm": "similique"
 }
 
 fetch(url, {
@@ -976,7 +977,7 @@ fetch(url, {
     "http://localhost/api/v1/raw-materials-requirements" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"raw_material_id":4}'
+    -d '{"raw_material_id":7}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/raw-materials-requirements"
@@ -988,7 +989,7 @@ let headers = {
 };
 
 let body = {
-    "raw_material_id": 4
+    "raw_material_id": 7
 }
 
 fetch(url, {
@@ -1036,7 +1037,7 @@ Raw Material ID.
     "http://localhost/api/v1/raw-materials-requirement-submission/create" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"order_id":7,"submissions":[]}'
+    -d '{"order_id":17,"submissions":[]}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/raw-materials-requirement-submission/create"
@@ -1048,7 +1049,7 @@ let headers = {
 };
 
 let body = {
-    "order_id": 7,
+    "order_id": 17,
     "submissions": []
 }
 
@@ -1103,7 +1104,7 @@ Array of objects containing the submissions eg. [{"raw_material_requirement_id":
     "http://localhost/api/v1/raw-materials-requirement-submission/view" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"order_id":14}'
+    -d '{"order_id":11}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/raw-materials-requirement-submission/view"
@@ -1115,7 +1116,7 @@ let headers = {
 };
 
 let body = {
-    "order_id": 14
+    "order_id": 11
 }
 
 fetch(url, {
