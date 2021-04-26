@@ -82,7 +82,7 @@ curl -X POST \
     "http://localhost/api/v1/user/password/update" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"email":"voluptas","token":"vero","password":"est","password_confirm":"earum"}'
+    -d '{"email":"quasi","token":"et","password":"delectus","password_confirm":"similique"}'
 
 ```
 
@@ -97,10 +97,10 @@ let headers = {
 };
 
 let body = {
-    "email": "voluptas",
-    "token": "vero",
-    "password": "est",
-    "password_confirm": "earum"
+    "email": "quasi",
+    "token": "et",
+    "password": "delectus",
+    "password_confirm": "similique"
 }
 
 fetch(url, {

@@ -1,10 +1,11 @@
 # GENERATED. YOU SHOULDN'T MODIFY OR DELETE THIS FILE.
 # Scribe uses this file to know when you change something manually in your docs.
-resources/docs/groups/login.md=1619475927
-resources/docs/groups/password-management.md=1619475927
+resources/docs/groups/login.md=1619476296
+resources/docs/groups/password-management.md=1619476296
 resources/docs/index.md=1618581702
 resources/docs/authentication.md=1618581702
-resources/docs/groups/farmers.md=1619475927
-resources/docs/groups/regions.md=1619475927
-resources/docs/groups/raw-materials.md=1619475927
+resources/docs/groups/farmers.md=1619476296
+resources/docs/groups/regions.md=1619476296
+resources/docs/groups/raw-materials.md=1619476296
 resources/docs/groups/endpoints.md=1619475927
+resources/docs/groups/bag-types.md=1619476296

@@ -1,5 +1,6 @@
-# Endpoints
+# Bag Types
 
+API for fetching Bag Types
 
 ## List Bag Types
 
