@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\PasswordResetController;
 use App\Http\Controllers\Api\FarmerController;
 use App\Http\Controllers\Api\RegionController;
 use App\Http\Controllers\Api\RawMaterialController;
+use App\Http\Controllers\Api\BagTypeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,10 +47,13 @@ Route::prefix('v1')->group(function () {
         Route::post('farmers-resend-otp', [FarmerController::class, 'resend_OTP']);
 
         Route::post('/regions', RegionController::class);
+        Route::post('/bag-types', BagTypeController::class);
 
         Route::post('/raw-materials', [RawMaterialController::class, 'index']);
         Route::post('/raw-materials-prices', [RawMaterialController::class, 'fetch_price']);
         Route::post('/raw-materials-requirements', [RawMaterialController::class, 'fetch_requirements']);
+        Route::post('/raw-materials-requirement-submission/create', [RawMaterialController::class, 'create_raw_material_requirements_submission']);
+        Route::post('/raw-materials-requirement-submission/view', [RawMaterialController::class, 'view_raw_material_requirements_submission']);
 
     });
 });

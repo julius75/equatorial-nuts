@@ -79,7 +79,7 @@ curl -X POST \
     "http://localhost/api/v1/farmers" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"full_name":"aspernatur","phone_number":"voluptatem","id_number":"cupiditate","gender":"qui","date_of_birth":"tenetur","region_id":11,"raw_material_ids":[]}'
+    -d '{"full_name":"est","phone_number":"qui","id_number":"quas","gender":"architecto","date_of_birth":"quia","region_id":2,"raw_material_ids":[]}'
 
 ```
 
@@ -94,12 +94,12 @@ let headers = {
 };
 
 let body = {
-    "full_name": "aspernatur",
-    "phone_number": "voluptatem",
-    "id_number": "cupiditate",
-    "gender": "qui",
-    "date_of_birth": "tenetur",
-    "region_id": 11,
+    "full_name": "est",
+    "phone_number": "qui",
+    "id_number": "quas",
+    "gender": "architecto",
+    "date_of_birth": "quia",
+    "region_id": 2,
     "raw_material_ids": []
 }
 
@@ -190,14 +190,14 @@ Array of Raw Material IDs.
 
 ```bash
 curl -X GET \
-    -G "http://localhost/api/v1/farmers/11" \
+    -G "http://localhost/api/v1/farmers/10" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost/api/v1/farmers/11"
+    "http://localhost/api/v1/farmers/10"
 );
 
 let headers = {
@@ -265,7 +265,7 @@ curl -X POST \
     "http://localhost/api/v1/farmers-search" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"search_query":"officiis"}'
+    -d '{"search_query":"quia"}'
 
 ```
 
@@ -280,7 +280,7 @@ let headers = {
 };
 
 let body = {
-    "search_query": "officiis"
+    "search_query": "quia"
 }
 
 fetch(url, {
@@ -337,7 +337,7 @@ curl -X POST \
     "http://localhost/api/v1/farmers-region-filter" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"region_id":6}'
+    -d '{"region_id":8}'
 
 ```
 
@@ -352,7 +352,7 @@ let headers = {
 };
 
 let body = {
-    "region_id": 6
+    "region_id": 8
 }
 
 fetch(url, {
@@ -409,7 +409,7 @@ curl -X POST \
     "http://localhost/api/v1/farmers-verify-phone-number" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"farmer_id":18,"passcode":9}'
+    -d '{"farmer_id":18,"passcode":4}'
 
 ```
 
@@ -425,7 +425,7 @@ let headers = {
 
 let body = {
     "farmer_id": 18,
-    "passcode": 9
+    "passcode": 4
 }
 
 fetch(url, {
