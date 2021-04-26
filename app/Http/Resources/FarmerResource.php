@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\FarmerVerificationCode;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -15,10 +16,15 @@ class FarmerResource extends JsonResource
      */
     public function toArray($request)
     {
+        $is_verified = FarmerVerificationCode::query()
+            ->where('farmer_id', '=', $this->id)
+            ->where('verified', '=', true)
+            ->exists();
         return [
             'id'=>$this->id,
             'full_name'=>$this->full_name,
             'phone_number'=>$this->phone_number,
+            'phone_number_verified'=>$is_verified,
             'id_number'=>$this->id_number,
             'gender'=>$this->gender,
             'region'=>$this->region,

@@ -38,6 +38,8 @@ Route::get('price-lists-approve/{priceListID}', [PriceListController::class,'app
 
 Route::get('raw-material-requirements', [RawMaterialController::class,'requirements'])->name('raw-materials.requirements');
 Route::get('raw-material-requirements/{id}/view', [RawMaterialController::class,'view_requirements'])->name('raw-materials.view.requirement');
+Route::get('raw-material-requirements/{id}/create', [RawMaterialController::class,'create_new_requirement'])->name('raw-materials.create.requirement');
+Route::post('raw-material-requirements/store', [RawMaterialController::class,'store_new_requirement'])->name('raw-materials.store.requirement');
 
 //admin status
 Route::post('update-status-admin/{id}', [AdminController::class,'statusUpdate']);
