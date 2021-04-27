@@ -83,5 +83,10 @@ class User extends Authenticatable
             ->exists();
     }
 
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
 
 }
