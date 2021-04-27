@@ -16,6 +16,10 @@ return [
     'passport_client_secret' => env('PASSPORT_CLIENT_SECRET', ''),
     'africastalking_username' => env('AFRICASTALKING_USERNAME', ''),
     'africastalking_api_key' => env('AFRICASTALKING_API_KEY', ''),
+
+    'mpesa_environment' => env('MPESA_ENV', 'sandbox'),
+    'mpesa_sandbox_msisdn' => '254708374149',
+    'mpesa_disbursement_command_id' => 'BusinessPayment',
     /*
     |--------------------------------------------------------------------------
     | Application Name

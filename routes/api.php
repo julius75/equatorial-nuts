@@ -8,6 +8,8 @@ use App\Http\Controllers\Api\FarmerController;
 use App\Http\Controllers\Api\RegionController;
 use App\Http\Controllers\Api\RawMaterialController;
 use App\Http\Controllers\Api\BagTypeController;
+use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\DisbursementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,6 +56,13 @@ Route::prefix('v1')->group(function () {
         Route::post('/raw-materials-requirements', [RawMaterialController::class, 'fetch_requirements']);
         Route::post('/raw-materials-requirement-submission/create', [RawMaterialController::class, 'create_raw_material_requirements_submission']);
         Route::post('/raw-materials-requirement-submission/view', [RawMaterialController::class, 'view_raw_material_requirements_submission']);
+
+        Route::post('/orders', [OrderController::class, 'list_orders']);
+        Route::post('/orders-create-new', [OrderController::class, 'create_order']);
+
+        Route::post('/initiate-mpesa-disbursement', [DisbursementController::class, 'post_disbursement']);
+        Route::post('/mpesa-disbursement-result-url', [DisbursementController::class, 'result'])->name('mpesa_disbursement.result');
+        Route::post('/mpesa-disbursement-timeout-url', [DisbursementController::class, 'timeout'])->name('mpesa_disbursement.timeout');
 
     });
 });
