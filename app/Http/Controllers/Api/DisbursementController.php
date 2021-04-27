@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\MpesaDisbursementSetting;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
@@ -89,9 +90,10 @@ class DisbursementController extends Controller
             $obj = json_decode($send_request);
             Log::info("response received from disbursement post =>".(string)$send_request);
             return response()->json(['message'=>'Successfully initiated payment request. Notification SMS will be sent once complete', 'response'=>$send_request],Response::HTTP_OK );
-        } catch (\Exception $exception){
+        } catch (ClientException $exception){
             Log::error("error received from disbursement post =>". (string)$exception);
-            return response()->json(['message' => 'There seems to be an error connecting to the MPESA API, Try again later', 'exception'=>$exception],Response::HTTP_INTERNAL_SERVER_ERROR );
+            Log::error("guzzle exception => ". (string)$exception->getResponse()->getBody()->getContents());
+            return response()->json(['message' => 'There seems to be an error connecting to the MPESA API, Try again later', 'exception'=>$exception, 'e'=>$exception->getResponse()->getBody()->getContents()],Response::HTTP_INTERNAL_SERVER_ERROR );
         }
     }
 
