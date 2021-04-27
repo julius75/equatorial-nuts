@@ -35,6 +35,7 @@
                                 <!--end::Text-->
                                 <p class="text-dark-75 font-weight-nirmal font-size-sm m-0 pb-4 ml-14">Sub County: <span class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bolder bg-success">{{$region->sub_county->name}}</span></p>
 
+                                <input type="hidden" id="region_id" value="{{$region->id}}" style="display: none">
                                 <!--begin::Item-->
                                 <div class="d-flex align-items-center pb-9">
                                     <!--begin::Symbol-->
@@ -200,54 +201,40 @@
                     <div class="tab-content pt-5">
                         <!--begin::Tab Content-->
                         <div class="tab-pane active" id="kt_apps_contacts_view_tab_2" role="tabpanel">
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th scope="col">No.</th>
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Date Created</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <?php $i = 0 ?>
-                                        @foreach ($buying_centers as $buying_center)
-                                            <?php $i++ ?>
-                                        <tr>
-                                            <th scope="row"><span class="label">{{ $i}}</span></th>
-                                            <td>{{$buying_center->name}}</td>
-                                            <td>{{\Carbon\Carbon::parse($buying_center->created_at)->isoFormat('MMM D YYYY')}}</td>
-                                        </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
+                            <div class="card-body">
+                                <!--begin: Datatable-->
+                                <table class="table table-bordered table-hover table-checkable mt-10 datatable" id="kt_datatable" style="margin-top: 13px !important">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Buying Centers</th>
+                                        <th>Created</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                                <!--end: Datatable-->
+                            </div>
+
+
                         </div>
                         <!--end::Tab Content-->
                         <!--begin::Tab Content-->
                         <div class="tab-pane" id="kt_apps_contacts_view_tab_3" role="tabpanel">
-                            <form class="form">
-
-                                    <table class="table">
+                            <div class="tab-pane active" id="kt_apps_contacts_view_tab_2" role="tabpanel">
+                                <div class="card-body">
+                                    <!--begin: Datatable-->
+                                    <table class="table table-bordered table-hover table-checkable mt-10 datatable" id="kt_datatable_raw" style="margin-top: 13px !important">
                                         <thead>
                                         <tr>
-                                            <th scope="col">No.</th>
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Date Created</th>
+                                            <th>#</th>
+                                            <th>Raw Materials</th>
+                                            <th>Created</th>
                                         </tr>
                                         </thead>
-                                        <tbody>
-                                        <?php $i = 0 ?>
-                                        @foreach ($materials as $material)
-                                            <?php $i++ ?>
-                                            <tr>
-                                                <th scope="row"><span class="label">{{ $i}}</span></th>
-                                                <td>{{$material->name}}</td>
-                                                <td>{{\Carbon\Carbon::parse($material->created_at)->isoFormat('MMM D YYYY')}}</td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
                                     </table>
-
-                            </form>
+                                    <!--end: Datatable-->
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -261,5 +248,116 @@
 @endsection
 @section('scripts')
     <script src="{{asset('assets/js/pages/custom/education/student/profile.js')}}"></script>
+    <script>
+        'use strict';
+        var KTDatatablesDataSourceAjaxClient = function() {
+            $("#kt_datatable_raw").dataTable().fnDestroy();
+
+            var initTable1 = function() {
+                $("#kt_datatable_raw").dataTable().fnDestroy();
+
+                var table = $('#kt_datatable');
+                var tables = $('#kt_datatable_raw');
+
+                // begin first table
+                table.DataTable({
+                    destroy: true,
+                    responsive: true,
+                    ajax: {
+                        url: '{{route('admin.get-app-regions-buying-centers',$region->id)}}',
+                        type: 'GET',
+                        data: {
+                            pagination: {
+                                perpage: 5,
+                            },
+                        },
+
+                    },
+                    stateSave: true,
+                    "bDestroy": true,
+                    columns: [
+                        {data: 'id', name: 'id'},
+                        {data: 'name', name: 'name'},
+                        {data: 'created_at', name: 'created_at'},
+                    ],
+                    columnDefs: [
+                        {
+                            width: '75px',
+                            targets: -2,
+                            render: function(data, type, full, meta) {
+                                var is_active = {
+                                    false: {'title': 'Suspended', 'state': 'danger'},
+                                    true: {'title': 'Active', 'state': 'primary'},
+                                    3: {'title': 'Direct', 'state': 'success'},
+                                };
+
+                                if (typeof is_active[data] === 'undefined') {
+                                    return data;
+                                }
+                                return '<span class="label label-' + is_active[data].state + ' label-dot mr-2"></span>' +
+                                    '<span class="font-weight-bold text-' + is_active[data].state + '">' + is_active[data].title + '</span>';
+                            },
+                        },
+                    ],
+                });
+                tables.DataTable({
+                    destroy: true,
+                    responsive: true,
+                    ajax: {
+                        url: '{{route('admin.get-app-regions-raw')}}',
+                        type: 'GET',
+                        data: {
+                            pagination: {
+                                perpage: 5,
+                            },
+                        },
+
+                    },
+                    stateSave: true,
+                    "bDestroy": true,
+                    columns: [
+                        {data: 'id', name: 'id'},
+                        {data: 'name', name: 'name'},
+                        {data: 'created_at', name: 'created_at'},
+                    ],
+                    columnDefs: [
+                        {
+                            width: '75px',
+                            targets: -2,
+                            render: function(data, type, full, meta) {
+                                var is_active = {
+                                    false: {'title': 'Suspended', 'state': 'danger'},
+                                    true: {'title': 'Active', 'state': 'primary'},
+                                    3: {'title': 'Direct', 'state': 'success'},
+                                };
+
+                                if (typeof is_active[data] === 'undefined') {
+                                    return data;
+                                }
+                                return '<span class="label label-' + is_active[data].state + ' label-dot mr-2"></span>' +
+                                    '<span class="font-weight-bold text-' + is_active[data].state + '">' + is_active[data].title + '</span>';
+                            },
+                        },
+                    ],
+                });
+
+            };
+
+            return {
+
+                //main function to initiate the module
+                init: function() {
+                    initTable1();
+                },
+
+            };
+
+        }();
+
+        jQuery(document).ready(function() {
+            KTDatatablesDataSourceAjaxClient.init();
+        });
+
+    </script>
 @endsection
 

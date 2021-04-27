@@ -172,12 +172,41 @@ class RegionController extends Controller
             $region = Region::findOrFail($id);
             $buying_centers = $region->buying_centers()->get() ?? '--';
             $materials = RawMaterial::all();
-            return view('admin.regions.show',compact('region','buying_centers','materials'));
+            return view('admin.regions.show',compact('region','buying_centers','materials','id'));
         } catch (ModelNotFoundException $e) {
             return $e;
         }
     }
+    public function getRegions($id)
+    {
+        try {
+            $region = Region::findOrFail($id);
+            $buying_centers = $region->buying_centers()->get() ?? '--';
+          //  return $buying_centers;
+            return Datatables::of($buying_centers)
+                ->editColumn('created_at', function ($buying_centers){
+                    return Carbon::parse($buying_centers->created_at)->isoFormat('MMM D YYYY');
+                })
+                ->make(true);
+        } catch (ModelNotFoundException $e) {
+            return $e;
+        }
 
+    }
+    public function getMaterials()
+        {
+         try {
+             $materials = RawMaterial::all();
+        return Datatables::of($materials)
+            ->editColumn('created_at', function ($materials){
+                return Carbon::parse($materials->created_at)->isoFormat('MMM D YYYY');
+            })
+            ->make(true);
+    } catch (ModelNotFoundException $e) {
+        return $e;
+    }
+
+}
     /**
      * Show the form for editing the specified resource.
      *

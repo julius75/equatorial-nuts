@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\BuyingCentreController;
 use App\Http\Controllers\Admin\FarmerController;
 use App\Http\Controllers\Admin\RegionController;
 use App\Http\Controllers\Admin\UserController;
@@ -46,6 +47,7 @@ Route::post('update-status-admin/{id}', [AdminController::class,'statusUpdate'])
 Route::post('update-status/{id}', [UserController::class,'statusUpdate']);
 Route::post('update-status-farmers/{id}', [FarmerController::class,'statusUpdate']);
 Route::post('delete-farmers/{id}', [FarmerController::class,'DeleteFarmer']);
+Route::post('buying-centre/{id}', [BuyingCentreController::class,'AttachCentre']);
 
 Route::get('/getchart/{month?}/{year?}', [HomeController::class, 'getMonthlyPostDataWeekly'])->name('discussions-analytics');
 
@@ -59,8 +61,12 @@ Route::resource('app-admins', AdminController::class);
 Route::resource('app-farmers', FarmerController::class);
 //regions
 Route::resource('app-regions', RegionController::class);
+//buying centre
+Route::resource('app-buying-centre', BuyingCentreController::class);
+
 //default list
 Route::get('/default', [UserController::class, 'default'])->name('default');
+
 
 //datatable routes
 Route::prefix('datatables')->group(function () {
@@ -73,6 +79,9 @@ Route::prefix('datatables')->group(function () {
     Route::get('get-raw-material-requirements/{id}', [RawMaterialController::class, 'get_requirements_single'])->name('get-raw-material-requirement-single');
     Route::get('get-app-farmers', [FarmerController::class, 'getAdminFarmers'])->name('get-app-farmers');
     Route::get('get-app-regions', [RegionController::class, 'getAdminRegions'])->name('get-app-regions');
+    Route::get('get-app-regions-buying-centers/{id}', [RegionController::class, 'getRegions'])->name('get-app-regions-buying-centers');
+    Route::get('get-app-regions-raw', [RegionController::class, 'getMaterials'])->name('get-app-regions-raw');
+    Route::get('get-app-buying-centre', [BuyingCentreController::class, 'getCentres'])->name('get-app-buying-centre');
 
 });
 //charts routes
