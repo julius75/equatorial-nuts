@@ -35,7 +35,7 @@ class DisbursementController extends Controller
                 'Authorization'=>'Basic '.$credentials
             ]
         ]);
-        $obj = json_decode($send_request->getBody(), true);
+        $obj = json_decode($send_request->getBody());
         return $obj->access_token;
     }
 
@@ -90,7 +90,7 @@ class DisbursementController extends Controller
                     'Occasion'=>$occasion
                 ])
             ]);
-            $obj = json_decode((string)$send_request->getBody(), true);
+            $obj = json_decode((string)$send_request->getBody());
             Log::info("response received from disbursement post =>".(string)$send_request->getBody());
             return response()->json(['message'=>'Successfully initiated payment request. Notification SMS will be sent once complete', 'response'=>$obj],Response::HTTP_OK );
         } catch (BadResponseException $exception){
