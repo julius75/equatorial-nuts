@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\MpesaDisbursementSetting;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -29,11 +30,12 @@ class DisbursementController extends Controller
         $credentials = base64_encode($consumer_key.':'.$consumer_secret);
         $send_request = $client->request('get', 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials',[
             'verify'=>false,
+            'http_errors' => false,
             'headers'=>[
                 'Authorization'=>'Basic '.$credentials
             ]
         ]);
-        $obj = json_decode($send_request->getBody());
+        $obj = json_decode($send_request->getBody(), true);
         return $obj->access_token;
     }
 
@@ -49,7 +51,7 @@ class DisbursementController extends Controller
             }
             $url = 'https://sandbox.safaricom.co.ke/mpesa/b2c/v1/paymentrequest';
             $token = self::get_sandbox_access_token();
-            $recipient_phone =  config('app.sandbox_msisdn');
+            $recipient_phone =  config('app.mpesa_sandbox_msisdn');
             $initiator_name = decrypt($disbursement_settings->initiator_name);
             $security_credentials = decrypt($disbursement_settings->security_credential);
             $command_id = config('app.mpesa_disbursement_command_id');
@@ -66,10 +68,11 @@ class DisbursementController extends Controller
         $queue_timeout_url = route('mpesa_disbursement.timeout');
         $result_url = route('mpesa_disbursement.result');
         $occasion = $remarks;
-//        try {
+        try {
             $client = new Client();
             $send_request = $client->request('post', $url, [
                 'verify'=>false,
+                'http_errors' => false,
                 'headers'=>[
                     'Authorization'=> 'Bearer '.$token,
                     'Content-Type'=> 'application/json'
@@ -87,14 +90,13 @@ class DisbursementController extends Controller
                     'Occasion'=>$occasion
                 ])
             ]);
-            $obj = json_decode($send_request);
-//            Log::info("response received from disbursement post =>".(string)$send_request);
-            return response()->json(['response'=>$send_request],Response::HTTP_OK );
-//        } catch (ClientException $exception){
-//            Log::error("error received from disbursement post =>". (string)$exception);
-//            Log::error("guzzle exception => ". (string)$exception->getResponse()->getBody()->getContents());
-//            return response()->json(['message' => 'There seems to be an error connecting to the MPESA API, Try again later', 'exception'=>$exception, 'e'=>$exception->getResponse()->getBody()->getContents()],Response::HTTP_INTERNAL_SERVER_ERROR );
-//        }
+            $obj = json_decode((string)$send_request->getBody(), true);
+            Log::info("response received from disbursement post =>".(string)$send_request->getBody());
+            return response()->json(['message'=>'Successfully initiated payment request. Notification SMS will be sent once complete', 'response'=>$obj],Response::HTTP_OK );
+        } catch (BadResponseException $exception){
+            Log::error("guzzle exception => ". (string)$exception->getResponse()->getBody()->getContents());
+            return response()->json(['message' => 'There seems to be an error connecting to the MPESA API, Try again later', 'exception'=>$exception->getResponse()->getBody()->getContents()],Response::HTTP_INTERNAL_SERVER_ERROR );
+        }
     }
 
     public function result(Request $request)
