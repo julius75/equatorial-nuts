@@ -66,7 +66,7 @@ class DisbursementController extends Controller
         $queue_timeout_url = route('mpesa_disbursement.timeout');
         $result_url = route('mpesa_disbursement.result');
         $occasion = $remarks;
-        try {
+//        try {
             $client = new Client();
             $send_request = $client->request('post', $url, [
                 'verify'=>false,
@@ -88,13 +88,13 @@ class DisbursementController extends Controller
                 ])
             ]);
             $obj = json_decode($send_request);
-            Log::info("response received from disbursement post =>".(string)$send_request);
-            return response()->json(['message'=>'Successfully initiated payment request. Notification SMS will be sent once complete', 'response'=>$send_request],Response::HTTP_OK );
-        } catch (ClientException $exception){
-            Log::error("error received from disbursement post =>". (string)$exception);
-            Log::error("guzzle exception => ". (string)$exception->getResponse()->getBody()->getContents());
-            return response()->json(['message' => 'There seems to be an error connecting to the MPESA API, Try again later', 'exception'=>$exception, 'e'=>$exception->getResponse()->getBody()->getContents()],Response::HTTP_INTERNAL_SERVER_ERROR );
-        }
+//            Log::info("response received from disbursement post =>".(string)$send_request);
+            return response()->json(['response'=>$send_request],Response::HTTP_OK );
+//        } catch (ClientException $exception){
+//            Log::error("error received from disbursement post =>". (string)$exception);
+//            Log::error("guzzle exception => ". (string)$exception->getResponse()->getBody()->getContents());
+//            return response()->json(['message' => 'There seems to be an error connecting to the MPESA API, Try again later', 'exception'=>$exception, 'e'=>$exception->getResponse()->getBody()->getContents()],Response::HTTP_INTERNAL_SERVER_ERROR );
+//        }
     }
 
     public function result(Request $request)
