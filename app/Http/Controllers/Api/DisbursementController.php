@@ -88,10 +88,10 @@ class DisbursementController extends Controller
             ]);
             $obj = json_decode($send_request);
             Log::info("response received from disbursement post =>".(string)$send_request);
-            return response()->json(['message' => 'Successfully initiated payment request. Notification SMS will be sent once complete'],Response::HTTP_OK );
+            return response()->json(['message'=>'Successfully initiated payment request. Notification SMS will be sent once complete', 'response'=>$send_request],Response::HTTP_OK );
         } catch (\Exception $exception){
             Log::error("error received from disbursement post =>". (string)$exception);
-            return response()->json(['message' => 'There seems to be an error connecting to the MPESA API, Try again later'],Response::HTTP_INTERNAL_SERVER_ERROR );
+            return response()->json(['message' => 'There seems to be an error connecting to the MPESA API, Try again later', 'exception'=>$exception],Response::HTTP_INTERNAL_SERVER_ERROR );
         }
     }
 
