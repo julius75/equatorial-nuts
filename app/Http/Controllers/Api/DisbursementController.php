@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\MpesaDisbursementRequest;
 use App\Models\MpesaDisbursementSetting;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
 class DisbursementController extends Controller
@@ -41,6 +44,13 @@ class DisbursementController extends Controller
 
     public function post_disbursement(Request $request)
     {
+//        $validator = Validator::make($request->all(),
+//            [
+//                'order_id'=>'required|exists:orders,id',
+//            ]);
+//        if ($validator->fails()) {
+//            return response()->json(['message' => $validator->errors()->first()], Response::HTTP_BAD_REQUEST);
+//        }
         $environment = config('app.mpesa_environment');
         if ($environment == 'sandbox'){
             $disbursement_settings = MpesaDisbursementSetting::query()
@@ -91,8 +101,25 @@ class DisbursementController extends Controller
                 ])
             ]);
             $obj = json_decode((string)$send_request->getBody());
-            Log::info("response received from disbursement post =>".(string)$send_request->getBody());
-            return response()->json(['message'=>'Successfully initiated payment request. Notification SMS will be sent once complete', 'response'=>$obj],Response::HTTP_OK );
+            if ($obj->ResponseCode == 0) {
+
+//                $disbursement_request = new MpesaDisbursementRequest();
+//                $disbursement_request->order_id = $request->get('order_id');
+//                $disbursement_request->user_id = Auth::id();
+//                $disbursement_request->ResponseDescription = $obj->ResponseDescription;
+//                $disbursement_request->ResponseCode = $obj->ResponseCode;
+//                $disbursement_request->OriginatorConversationID = $obj->OriginatorConversationID;
+//                $disbursement_request->ConversationID = $obj->ConversationID;
+//                $disbursement_request->issued = false;
+//                $disbursement_request->save();
+
+                Log::info("response received from disbursement post =>".(string)$send_request->getBody());
+                return response()->json(['message'=>'Successfully initiated payment request. Notification SMS will be sent once complete', 'response'=>$obj],Response::HTTP_OK );
+            }
+            else {
+                Log::info("failed response received from disbursement post =>".(string)$send_request->getBody());
+                return response()->json(['message'=>'Could not complete request at this time. Please again later', 'response'=>$obj],Response::HTTP_OK );
+            }
         } catch (BadResponseException $exception){
             Log::error("guzzle exception => ". (string)$exception->getResponse()->getBody()->getContents());
             return response()->json(['message' => 'There seems to be an error connecting to the MPESA API, Try again later', 'exception'=>$exception->getResponse()->getBody()->getContents()],Response::HTTP_INTERNAL_SERVER_ERROR );
@@ -102,14 +129,16 @@ class DisbursementController extends Controller
     public function result(Request $request)
     {
         $callbackJsonData = file_get_contents('php://input');
-        Log::info("success response received on mpesa result url => ".$callbackJsonData);
+        $callbackData = json_decode($callbackJsonData);
+        Log::info("success response received on mpesa result url => ".(string)$callbackJsonData);
 
     }
 
     public function timeout(Request $request)
     {
         $callbackJsonData = file_get_contents('php://input');
-        Log::info("success response received on mpesa result url => ".$callbackJsonData);
+        $callbackData = json_decode($callbackJsonData);
+        Log::info("success response received on mpesa timeout url => ".(string)$callbackJsonData);
 
     }
 }
