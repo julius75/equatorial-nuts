@@ -14,7 +14,7 @@ curl -X POST \
     "http://localhost/api/v1/user/password/forgot" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"email":"molestiae"}'
+    -d '{"email":"veniam"}'
 
 ```
 
@@ -29,7 +29,7 @@ let headers = {
 };
 
 let body = {
-    "email": "molestiae"
+    "email": "veniam"
 }
 
 fetch(url, {
@@ -82,7 +82,7 @@ curl -X POST \
     "http://localhost/api/v1/user/password/update" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"email":"odit","token":"placeat","password":"laborum","password_confirm":"sunt"}'
+    -d '{"email":"quasi","token":"et","password":"delectus","password_confirm":"similique"}'
 
 ```
 
@@ -97,10 +97,10 @@ let headers = {
 };
 
 let body = {
-    "email": "odit",
-    "token": "placeat",
-    "password": "laborum",
-    "password_confirm": "sunt"
+    "email": "quasi",
+    "token": "et",
+    "password": "delectus",
+    "password_confirm": "similique"
 }
 
 fetch(url, {

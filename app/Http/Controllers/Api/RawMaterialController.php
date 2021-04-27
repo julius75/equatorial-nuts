@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use App\Models\RawMaterial;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -76,6 +77,67 @@ class RawMaterialController extends Controller
                         ->with('raw_material_requirements')
                         ->first();
         return response()->json(['message'=> compact('raw_material')], Response::HTTP_OK);
+    }
+    /**
+     * Submit Raw Material Requirement Submission
+     *
+     *
+     * @authenticated
+     * @bodyParam order_id integer required Order ID.
+     * @bodyParam submissions object required Array of objects containing the submissions eg. [{"raw_material_requirement_id":1, "value":0.95}, {"raw_material_requirement_id":2, "value":"spherical shapes"}].
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function create_raw_material_requirements_submission(Request $request){
+        $validator = Validator::make($request->all(),
+            [
+                'order_id'=>'required|exists:orders,id',
+                'submissions.*.raw_material_requirement_id' => 'required|exists:raw_material_requirements,id',
+                'submissions.*.value' => 'required',
+            ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first()], Response::HTTP_BAD_REQUEST);
+        }
+        $order = Order::query()->find($request->get('order_id'));
+        try {
+            foreach ($request->get('submissions') as $item) {
+                $order->raw_material_requirement_submissions()->create([
+                    'raw_material_requirement_id'=>$item->raw_material_requirement_id,
+                    'value'=>$item->value,
+                ]);
+            }
+            return response()->json(['message'=> "Quality Submissions for $order->ref_number registered successfully"],Response::HTTP_OK);
+        }
+        catch (\Exception $exception) {
+            return response()->json(['message'=> "Failed to register Quality Submissions", 'exception'=>$exception],Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    /**
+     * View an Order Details + Raw Material Requirement Submissions
+     *
+     * @authenticated
+     * @bodyParam order_id integer required Order ID.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function view_raw_material_requirements_submission(Request $request){
+        $validator = Validator::make($request->all(),
+            [
+                'order_id'=>'required|exists:orders,id',
+            ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first()], Response::HTTP_BAD_REQUEST);
+        }
+        $order = Order::query()
+            ->with(['user','farmer','price_list','order_raw_material','order_region'])
+            ->find($request->get('order_id'));
+        $orderSubmissions = $order->raw_material_requirement_submissions()->with('raw_material_requirement');
+        return response()->json(['message'=> compact('order', 'orderSubmissions')],Response::HTTP_OK);
+
     }
 
 }

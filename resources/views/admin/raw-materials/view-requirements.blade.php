@@ -12,7 +12,7 @@
             <div class="card-toolbar">
                 @hasanyrole('admin|general_management')
                 <!--begin::Button-->
-                    <a href="{{ route('admin.price-lists.create') }}" type="button" class="btn btn-secondary mr-2 font-weight-bolder">
+                    <a href="{{ route('admin.raw-materials.create.requirement', $raw_material->id) }}" type="button" class="btn btn-secondary mr-2 font-weight-bolder">
                             <span class="svg-icon svg-icon-md">
                                 <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -58,7 +58,9 @@
                 var table = $('#kt_datatable');
                 // begin first table
                 table.DataTable({
+                    processing: true,
                     responsive: true,
+                    serverSide: true,
                     ajax: {
                         url: '{{route('admin.get-raw-material-requirement-single', $raw_material->id)}}',
                         type: 'GET',

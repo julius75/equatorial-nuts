@@ -64,7 +64,49 @@ You can switch the language used with the tabs at the top right (or from the nav
 <p>Base URL</p>
 </blockquote>
 <pre><code class="language-yaml">http://localhost</code></pre><h1>Authenticating requests</h1>
-<p>This API is not authenticated.</p><h1>Farmers</h1>
+<p>This API is not authenticated.</p><h1>Bag Types</h1>
+<p>API for fetching Bag Types</p>
+<h2>List Bag Types</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://localhost/api/v1/bag-types" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/v1/bag-types"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+}).then(response =&gt; response.json());</code></pre>
+<div id="execution-results-POSTapi-v1-bag-types" hidden>
+    <blockquote>Received response<span id="execution-response-status-POSTapi-v1-bag-types"></span>:</blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-bag-types"></code></pre>
+</div>
+<div id="execution-error-POSTapi-v1-bag-types" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-v1-bag-types"></code></pre>
+</div>
+<form id="form-POSTapi-v1-bag-types" data-method="POST" data-path="api/v1/bag-types" data-authed="0" data-hasfiles="0" data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}' onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-bag-types', this);">
+<h3>
+    Request&nbsp;&nbsp;&nbsp;
+        <button type="button" style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-tryout-POSTapi-v1-bag-types" onclick="tryItOut('POSTapi-v1-bag-types');">Try it out ⚡</button>
+    <button type="button" style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-canceltryout-POSTapi-v1-bag-types" onclick="cancelTryOut('POSTapi-v1-bag-types');" hidden>Cancel</button>&nbsp;&nbsp;
+    <button type="submit" style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-executetryout-POSTapi-v1-bag-types" hidden>Send Request 💥</button>
+    </h3>
+<p>
+<small class="badge badge-black">POST</small>
+ <b><code>api/v1/bag-types</code></b>
+</p>
+</form><h1>Farmers</h1>
 <h2>Display a listing of the resource.</h2>
 <p><small class="badge badge-darkred">requires authentication</small></p>
 <blockquote>
@@ -125,7 +167,7 @@ fetch(url, {
     "http://localhost/api/v1/farmers" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"full_name":"voluptas","phone_number":"rem","id_number":"sit","gender":"iste","date_of_birth":"vitae","region_id":1,"raw_material_ids":[]}'
+    -d '{"full_name":"nemo","phone_number":"velit","id_number":"omnis","gender":"deserunt","date_of_birth":"id","region_id":14,"raw_material_ids":[]}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/farmers"
@@ -137,12 +179,12 @@ let headers = {
 };
 
 let body = {
-    "full_name": "voluptas",
-    "phone_number": "rem",
-    "id_number": "sit",
-    "gender": "iste",
-    "date_of_birth": "vitae",
-    "region_id": 1,
+    "full_name": "nemo",
+    "phone_number": "velit",
+    "id_number": "omnis",
+    "gender": "deserunt",
+    "date_of_birth": "id",
+    "region_id": 14,
     "raw_material_ids": []
 }
 
@@ -286,7 +328,7 @@ Farmer Id
     "http://localhost/api/v1/farmers-search" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"search_query":"ad"}'
+    -d '{"search_query":"omnis"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/farmers-search"
@@ -298,7 +340,7 @@ let headers = {
 };
 
 let body = {
-    "search_query": "ad"
+    "search_query": "omnis"
 }
 
 fetch(url, {
@@ -347,7 +389,7 @@ Search Query.
     "http://localhost/api/v1/farmers-region-filter" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"region_id":17}'
+    -d '{"region_id":2}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/farmers-region-filter"
@@ -359,7 +401,7 @@ let headers = {
 };
 
 let body = {
-    "region_id": 17
+    "region_id": 2
 }
 
 fetch(url, {
@@ -407,7 +449,7 @@ Search Query.
     "http://localhost/api/v1/farmers-verify-phone-number" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"farmer_id":7,"passcode":9}'
+    -d '{"farmer_id":11,"passcode":17}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/farmers-verify-phone-number"
@@ -419,8 +461,8 @@ let headers = {
 };
 
 let body = {
-    "farmer_id": 7,
-    "passcode": 9
+    "farmer_id": 11,
+    "passcode": 17
 }
 
 fetch(url, {
@@ -474,7 +516,7 @@ OTP.
     "http://localhost/api/v1/farmers-resend-otp" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"farmer_id":4}'
+    -d '{"farmer_id":16}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/farmers-resend-otp"
@@ -486,7 +528,7 @@ let headers = {
 };
 
 let body = {
-    "farmer_id": 4
+    "farmer_id": 16
 }
 
 fetch(url, {
@@ -537,7 +579,7 @@ a mechanism to check whether the token has expired before requiring the user to 
     "http://localhost/api/v1/user/login" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"email":"doloremque","password":"totam"}'
+    -d '{"phone_number":"ut","password":"quos"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/user/login"
@@ -549,8 +591,8 @@ let headers = {
 };
 
 let body = {
-    "email": "doloremque",
-    "password": "totam"
+    "phone_number": "ut",
+    "password": "quos"
 }
 
 fetch(url, {
@@ -579,10 +621,10 @@ fetch(url, {
 </p>
 <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
 <p>
-<b><code>email</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
-<input type="text" name="email" data-endpoint="POSTapi-v1-user-login" data-component="body" required  hidden>
+<b><code>phone_number</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+<input type="text" name="phone_number" data-endpoint="POSTapi-v1-user-login" data-component="body" required  hidden>
 <br>
-Email address.
+Phone Number.
 </p>
 <p>
 <b><code>password</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
@@ -591,6 +633,111 @@ Email address.
 Password.
 </p>
 
+</form>
+<h2>Verify Buyer&#039;s Login Token</h2>
+<p><small class="badge badge-darkred">requires authentication</small></p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://localhost/api/v1/user/login/verify-otp" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"token":5}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/v1/user/login/verify-otp"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "token": 5
+}
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre>
+<div id="execution-results-POSTapi-v1-user-login-verify-otp" hidden>
+    <blockquote>Received response<span id="execution-response-status-POSTapi-v1-user-login-verify-otp"></span>:</blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-user-login-verify-otp"></code></pre>
+</div>
+<div id="execution-error-POSTapi-v1-user-login-verify-otp" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-v1-user-login-verify-otp"></code></pre>
+</div>
+<form id="form-POSTapi-v1-user-login-verify-otp" data-method="POST" data-path="api/v1/user/login/verify-otp" data-authed="1" data-hasfiles="0" data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}' onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-user-login-verify-otp', this);">
+<h3>
+    Request&nbsp;&nbsp;&nbsp;
+        <button type="button" style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-tryout-POSTapi-v1-user-login-verify-otp" onclick="tryItOut('POSTapi-v1-user-login-verify-otp');">Try it out ⚡</button>
+    <button type="button" style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-canceltryout-POSTapi-v1-user-login-verify-otp" onclick="cancelTryOut('POSTapi-v1-user-login-verify-otp');" hidden>Cancel</button>&nbsp;&nbsp;
+    <button type="submit" style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-executetryout-POSTapi-v1-user-login-verify-otp" hidden>Send Request 💥</button>
+    </h3>
+<p>
+<small class="badge badge-black">POST</small>
+ <b><code>api/v1/user/login/verify-otp</code></b>
+</p>
+<p>
+<label id="auth-POSTapi-v1-user-login-verify-otp" hidden>Authorization header: <b><code>Bearer </code></b><input type="text" name="Authorization" data-prefix="Bearer " data-endpoint="POSTapi-v1-user-login-verify-otp" data-component="header"></label>
+</p>
+<h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+<p>
+<b><code>token</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+<input type="number" name="token" data-endpoint="POSTapi-v1-user-login-verify-otp" data-component="body" required  hidden>
+<br>
+OTP.
+</p>
+
+</form>
+<h2>Resend OTP</h2>
+<p><small class="badge badge-darkred">requires authentication</small></p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://localhost/api/v1/user/login/resend-otp" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/v1/user/login/resend-otp"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+}).then(response =&gt; response.json());</code></pre>
+<div id="execution-results-POSTapi-v1-user-login-resend-otp" hidden>
+    <blockquote>Received response<span id="execution-response-status-POSTapi-v1-user-login-resend-otp"></span>:</blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-user-login-resend-otp"></code></pre>
+</div>
+<div id="execution-error-POSTapi-v1-user-login-resend-otp" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-v1-user-login-resend-otp"></code></pre>
+</div>
+<form id="form-POSTapi-v1-user-login-resend-otp" data-method="POST" data-path="api/v1/user/login/resend-otp" data-authed="1" data-hasfiles="0" data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}' onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-user-login-resend-otp', this);">
+<h3>
+    Request&nbsp;&nbsp;&nbsp;
+        <button type="button" style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-tryout-POSTapi-v1-user-login-resend-otp" onclick="tryItOut('POSTapi-v1-user-login-resend-otp');">Try it out ⚡</button>
+    <button type="button" style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-canceltryout-POSTapi-v1-user-login-resend-otp" onclick="cancelTryOut('POSTapi-v1-user-login-resend-otp');" hidden>Cancel</button>&nbsp;&nbsp;
+    <button type="submit" style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-executetryout-POSTapi-v1-user-login-resend-otp" hidden>Send Request 💥</button>
+    </h3>
+<p>
+<small class="badge badge-black">POST</small>
+ <b><code>api/v1/user/login/resend-otp</code></b>
+</p>
+<p>
+<label id="auth-POSTapi-v1-user-login-resend-otp" hidden>Authorization header: <b><code>Bearer </code></b><input type="text" name="Authorization" data-prefix="Bearer " data-endpoint="POSTapi-v1-user-login-resend-otp" data-component="header"></label>
+</p>
 </form><h1>Password Management</h1>
 <p>APIs for user reset password</p>
 <h2>Send Password Reset Token</h2>
@@ -602,7 +749,7 @@ Password.
     "http://localhost/api/v1/user/password/forgot" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"email":"molestiae"}'
+    -d '{"email":"veniam"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/user/password/forgot"
@@ -614,7 +761,7 @@ let headers = {
 };
 
 let body = {
-    "email": "molestiae"
+    "email": "veniam"
 }
 
 fetch(url, {
@@ -659,7 +806,7 @@ Email address.
     "http://localhost/api/v1/user/password/update" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"email":"odit","token":"placeat","password":"laborum","password_confirm":"sunt"}'
+    -d '{"email":"quasi","token":"et","password":"delectus","password_confirm":"similique"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/user/password/update"
@@ -671,10 +818,10 @@ let headers = {
 };
 
 let body = {
-    "email": "odit",
-    "token": "placeat",
-    "password": "laborum",
-    "password_confirm": "sunt"
+    "email": "quasi",
+    "token": "et",
+    "password": "delectus",
+    "password_confirm": "similique"
 }
 
 fetch(url, {
@@ -819,6 +966,194 @@ fetch(url, {
 <p>
 <label id="auth-POSTapi-v1-raw-materials-prices" hidden>Authorization header: <b><code>Bearer </code></b><input type="text" name="Authorization" data-prefix="Bearer " data-endpoint="POSTapi-v1-raw-materials-prices" data-component="header"></label>
 </p>
+</form>
+<h2>Fetch Raw Materials Specifications</h2>
+<p><small class="badge badge-darkred">requires authentication</small></p>
+<p>Returns Specifications of the desired Raw Material</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://localhost/api/v1/raw-materials-requirements" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"raw_material_id":7}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/v1/raw-materials-requirements"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "raw_material_id": 7
+}
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre>
+<div id="execution-results-POSTapi-v1-raw-materials-requirements" hidden>
+    <blockquote>Received response<span id="execution-response-status-POSTapi-v1-raw-materials-requirements"></span>:</blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-raw-materials-requirements"></code></pre>
+</div>
+<div id="execution-error-POSTapi-v1-raw-materials-requirements" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-v1-raw-materials-requirements"></code></pre>
+</div>
+<form id="form-POSTapi-v1-raw-materials-requirements" data-method="POST" data-path="api/v1/raw-materials-requirements" data-authed="1" data-hasfiles="0" data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}' onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-raw-materials-requirements', this);">
+<h3>
+    Request&nbsp;&nbsp;&nbsp;
+        <button type="button" style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-tryout-POSTapi-v1-raw-materials-requirements" onclick="tryItOut('POSTapi-v1-raw-materials-requirements');">Try it out ⚡</button>
+    <button type="button" style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-canceltryout-POSTapi-v1-raw-materials-requirements" onclick="cancelTryOut('POSTapi-v1-raw-materials-requirements');" hidden>Cancel</button>&nbsp;&nbsp;
+    <button type="submit" style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-executetryout-POSTapi-v1-raw-materials-requirements" hidden>Send Request 💥</button>
+    </h3>
+<p>
+<small class="badge badge-black">POST</small>
+ <b><code>api/v1/raw-materials-requirements</code></b>
+</p>
+<p>
+<label id="auth-POSTapi-v1-raw-materials-requirements" hidden>Authorization header: <b><code>Bearer </code></b><input type="text" name="Authorization" data-prefix="Bearer " data-endpoint="POSTapi-v1-raw-materials-requirements" data-component="header"></label>
+</p>
+<h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+<p>
+<b><code>raw_material_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+<input type="number" name="raw_material_id" data-endpoint="POSTapi-v1-raw-materials-requirements" data-component="body" required  hidden>
+<br>
+Raw Material ID.
+</p>
+
+</form>
+<h2>Submit Raw Material Requirement Submission</h2>
+<p><small class="badge badge-darkred">requires authentication</small></p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://localhost/api/v1/raw-materials-requirement-submission/create" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"order_id":17,"submissions":[]}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/v1/raw-materials-requirement-submission/create"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "order_id": 17,
+    "submissions": []
+}
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre>
+<div id="execution-results-POSTapi-v1-raw-materials-requirement-submission-create" hidden>
+    <blockquote>Received response<span id="execution-response-status-POSTapi-v1-raw-materials-requirement-submission-create"></span>:</blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-raw-materials-requirement-submission-create"></code></pre>
+</div>
+<div id="execution-error-POSTapi-v1-raw-materials-requirement-submission-create" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-v1-raw-materials-requirement-submission-create"></code></pre>
+</div>
+<form id="form-POSTapi-v1-raw-materials-requirement-submission-create" data-method="POST" data-path="api/v1/raw-materials-requirement-submission/create" data-authed="1" data-hasfiles="0" data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}' onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-raw-materials-requirement-submission-create', this);">
+<h3>
+    Request&nbsp;&nbsp;&nbsp;
+        <button type="button" style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-tryout-POSTapi-v1-raw-materials-requirement-submission-create" onclick="tryItOut('POSTapi-v1-raw-materials-requirement-submission-create');">Try it out ⚡</button>
+    <button type="button" style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-canceltryout-POSTapi-v1-raw-materials-requirement-submission-create" onclick="cancelTryOut('POSTapi-v1-raw-materials-requirement-submission-create');" hidden>Cancel</button>&nbsp;&nbsp;
+    <button type="submit" style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-executetryout-POSTapi-v1-raw-materials-requirement-submission-create" hidden>Send Request 💥</button>
+    </h3>
+<p>
+<small class="badge badge-black">POST</small>
+ <b><code>api/v1/raw-materials-requirement-submission/create</code></b>
+</p>
+<p>
+<label id="auth-POSTapi-v1-raw-materials-requirement-submission-create" hidden>Authorization header: <b><code>Bearer </code></b><input type="text" name="Authorization" data-prefix="Bearer " data-endpoint="POSTapi-v1-raw-materials-requirement-submission-create" data-component="header"></label>
+</p>
+<h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+<p>
+<b><code>order_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+<input type="number" name="order_id" data-endpoint="POSTapi-v1-raw-materials-requirement-submission-create" data-component="body" required  hidden>
+<br>
+Order ID.
+</p>
+<p>
+<b><code>submissions</code></b>&nbsp;&nbsp;<small>object</small>  &nbsp;
+<input type="text" name="submissions" data-endpoint="POSTapi-v1-raw-materials-requirement-submission-create" data-component="body" required  hidden>
+<br>
+Array of objects containing the submissions eg. [{"raw_material_requirement_id":1, "value":0.95}, {"raw_material_requirement_id":2, "value":"spherical shapes"}].
+</p>
+
+</form>
+<h2>View an Order Details + Raw Material Requirement Submissions</h2>
+<p><small class="badge badge-darkred">requires authentication</small></p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://localhost/api/v1/raw-materials-requirement-submission/view" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"order_id":11}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/v1/raw-materials-requirement-submission/view"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "order_id": 11
+}
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre>
+<div id="execution-results-POSTapi-v1-raw-materials-requirement-submission-view" hidden>
+    <blockquote>Received response<span id="execution-response-status-POSTapi-v1-raw-materials-requirement-submission-view"></span>:</blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-raw-materials-requirement-submission-view"></code></pre>
+</div>
+<div id="execution-error-POSTapi-v1-raw-materials-requirement-submission-view" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-v1-raw-materials-requirement-submission-view"></code></pre>
+</div>
+<form id="form-POSTapi-v1-raw-materials-requirement-submission-view" data-method="POST" data-path="api/v1/raw-materials-requirement-submission/view" data-authed="1" data-hasfiles="0" data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}' onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-raw-materials-requirement-submission-view', this);">
+<h3>
+    Request&nbsp;&nbsp;&nbsp;
+        <button type="button" style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-tryout-POSTapi-v1-raw-materials-requirement-submission-view" onclick="tryItOut('POSTapi-v1-raw-materials-requirement-submission-view');">Try it out ⚡</button>
+    <button type="button" style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-canceltryout-POSTapi-v1-raw-materials-requirement-submission-view" onclick="cancelTryOut('POSTapi-v1-raw-materials-requirement-submission-view');" hidden>Cancel</button>&nbsp;&nbsp;
+    <button type="submit" style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-executetryout-POSTapi-v1-raw-materials-requirement-submission-view" hidden>Send Request 💥</button>
+    </h3>
+<p>
+<small class="badge badge-black">POST</small>
+ <b><code>api/v1/raw-materials-requirement-submission/view</code></b>
+</p>
+<p>
+<label id="auth-POSTapi-v1-raw-materials-requirement-submission-view" hidden>Authorization header: <b><code>Bearer </code></b><input type="text" name="Authorization" data-prefix="Bearer " data-endpoint="POSTapi-v1-raw-materials-requirement-submission-view" data-component="header"></label>
+</p>
+<h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+<p>
+<b><code>order_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+<input type="number" name="order_id" data-endpoint="POSTapi-v1-raw-materials-requirement-submission-view" data-component="body" required  hidden>
+<br>
+Order ID.
+</p>
+
 </form><h1>Regions</h1>
 <p>API for fetching Equatorial Nut Regions</p>
 <h2>List Regions</h2>

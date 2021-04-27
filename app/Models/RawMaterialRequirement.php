@@ -15,6 +15,7 @@ class RawMaterialRequirement extends Model
         'value',
         'requirement',
         'unit',
+        'status',
         'created_at',
         'updated_at',
     ];
@@ -27,5 +28,13 @@ class RawMaterialRequirement extends Model
     public function raw_material()
     {
         return $this->belongsTo(RawMaterial::class);
+    }
+    public function raw_material_requirement_submissions()
+    {
+        return $this->hasMany(RawMaterialRequirementSubmission::class);
+    }
+    public function get_order_requirement_submissions($id)
+    {
+        return $this->raw_material_requirement_submissions()->where('order_id', '=', $id)->get();
     }
 }
