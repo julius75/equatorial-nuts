@@ -40,6 +40,7 @@ Route::prefix('v1')->group(function () {
             Route::post('update', [PasswordResetController::class, 'updatePassword']);
         });
     });
+
     Route::middleware(['auth:api', 'ensure.otp.auth'])->group(function (){
         //farmers
         Route::resource('farmers', FarmerController::class)->except(['create', 'edit', 'update', 'destroy']);
@@ -61,8 +62,9 @@ Route::prefix('v1')->group(function () {
         Route::post('/orders-create-new', [OrderController::class, 'create_order']);
 
         Route::post('/initiate-mpesa-disbursement', [DisbursementController::class, 'post_disbursement']);
-        Route::post('/mpesa-disbursement-result-url', [DisbursementController::class, 'result'])->name('mpesa_disbursement.result');
-        Route::post('/mpesa-disbursement-timeout-url', [DisbursementController::class, 'timeout'])->name('mpesa_disbursement.timeout');
-
     });
+
+    Route::post('/mpesa-disbursement-result-url', [DisbursementController::class, 'result'])->name('mpesa_disbursement.result');
+    Route::post('/mpesa-disbursement-timeout-url', [DisbursementController::class, 'timeout'])->name('mpesa_disbursement.timeout');
+
 });
