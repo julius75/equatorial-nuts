@@ -85,7 +85,7 @@ class DisbursementController extends Controller
                     'PartyA'=>$partyA,
                     'PartyB'=>$partyB,
                     'Remarks'=>$remarks,
-                    'QueueTimeoutURL'=>$queue_timeout_url,
+                    'QueueTimeOutURL'=>$queue_timeout_url,
                     'ResultURL'=>$result_url,
                     'Occasion'=>$occasion
                 ])
