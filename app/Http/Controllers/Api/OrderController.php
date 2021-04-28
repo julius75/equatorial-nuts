@@ -122,10 +122,10 @@ class OrderController extends Controller
         return $ref_number;
     }
     /**
-     * @param int $ref_number
+     * @param string $ref_number
      * @return mixed
      */
-    protected function check_RefNumber_exists(int $ref_number)
+    protected function check_RefNumber_exists(string $ref_number)
     {
         return Order::query()->where('ref_number','=',$ref_number)->exists();
     }
