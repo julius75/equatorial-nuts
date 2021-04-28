@@ -198,7 +198,7 @@ class DisbursementController extends Controller
                 'B2CWorkingAccountAvailableFunds' => $B2CWorkingAccountAvailableFunds,
                 'issued' => true,
                 'order_id' => $order->id,
-                'json'=>$callbackJsonData
+                'response'=>$callbackJsonData
             ];
 
         }
@@ -212,7 +212,7 @@ class DisbursementController extends Controller
                 'TransactionID' => $transactionID,
                 'issued' => false,
                 'order_id' => $order->id,
-                'json'=>$callbackJsonData
+                'response'=>$callbackJsonData
             ];
         }
 
@@ -223,7 +223,8 @@ class DisbursementController extends Controller
             //mark request as complete
             $mpesa_disbursement_request->update(['issued' => true]);
             //store entire response
-            $disbursement_response = MpesaDisbursementResponse::query()->create($result);
+            $disbursement_response = MpesaDisbursementResponse::query()
+                ->create($result);
 
             if ($disbursement_response->issued) {
                 $transaction = new MpesaDisbursementTransaction();
