@@ -22,7 +22,7 @@ class CreateMpesaDisbursementRequestsTable extends Migration
             $table->string('ResponseCode');
             $table->string('ResponseDescription');
             $table->boolean('issued')->default(false);
-            $table->json('response')->default(false);
+            $table->json('response')->nullable();
             $table->timestamp('created_at')->nullable()->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrentOnUpdate();
         });
