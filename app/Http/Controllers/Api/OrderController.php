@@ -60,7 +60,7 @@ class OrderController extends Controller
             [
                 'farmer_id'=>'required|exists:farmers,id',
                 'price_list_id'=>'required|exists:price_lists,id',
-                'buying_center_id'=>'required|exists:buying_centers,id',
+                'region_id'=>'required|exists:regions,id',
                 'raw_material_id'=>'required|exists:raw_materials,id',
                 'bag_type_id'=>'required|exists:bag_types,id',
                 'bags'=>'required|integer',

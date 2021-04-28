@@ -49,7 +49,7 @@ class RawMaterialController extends Controller
         $raw_materials = RawMaterial::query()
             ->whereHas('currentPrice',function ($q) use ($buyerRegion){
                 $q->where('region_id', '=', $buyerRegion->id);
-            })->with(['currentPrice:raw_material_id,region_id,amount,amount,value,unit,date,approved_at,created_at'])->get();
+            })->with(['currentPrice:id,raw_material_id,region_id,amount,amount,value,unit,date,approved_at,created_at'])->get();
         return response()->json(['message'=> compact('raw_materials')], Response::HTTP_OK);
     }
 

@@ -72,7 +72,7 @@ curl -X POST \
     "http://localhost/api/v1/orders-create-new" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"farmer_id":10,"price_list_id":11,"buying_center_id":16,"raw_material_id":13,"bag_type_id":17,"bags":5,"gross_weight":"cum","net_weight":"voluptatem","amount":"consequatur","latitude":"provident","longitude":"sequi"}'
+    -d '{"farmer_id":12,"price_list_id":10,"buying_center_id":9,"raw_material_id":13,"bag_type_id":14,"bags":4,"gross_weight":"quam","net_weight":"voluptas","amount":"numquam","latitude":"quae","longitude":"perspiciatis"}'
 
 ```
 
@@ -87,17 +87,17 @@ let headers = {
 };
 
 let body = {
-    "farmer_id": 10,
-    "price_list_id": 11,
-    "buying_center_id": 16,
+    "farmer_id": 12,
+    "price_list_id": 10,
+    "buying_center_id": 9,
     "raw_material_id": 13,
-    "bag_type_id": 17,
-    "bags": 5,
-    "gross_weight": "cum",
-    "net_weight": "voluptatem",
-    "amount": "consequatur",
-    "latitude": "provident",
-    "longitude": "sequi"
+    "bag_type_id": 14,
+    "bags": 4,
+    "gross_weight": "quam",
+    "net_weight": "voluptas",
+    "amount": "numquam",
+    "latitude": "quae",
+    "longitude": "perspiciatis"
 }
 
 fetch(url, {

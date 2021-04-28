@@ -49,6 +49,10 @@ class Order extends Model
     {
         return $this->hasMany(RawMaterialRequirementSubmission::class);
     }
+    public function mpesa_disbursement_request()
+    {
+        return $this->hasOne(MpesaDisbursementRequest::class);
+    }
     public function scopeDisbursed($query){
         $query->where('disbursed', true);
     }
