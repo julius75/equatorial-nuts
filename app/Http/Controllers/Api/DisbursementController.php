@@ -9,6 +9,7 @@ use App\Models\MpesaDisbursementResponse;
 use App\Models\MpesaDisbursementSetting;
 use App\Models\MpesaDisbursementTransaction;
 use App\Models\Order;
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\ClientException;
@@ -70,7 +71,7 @@ class DisbursementController extends Controller
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()->first()], Response::HTTP_BAD_REQUEST);
         }
-        $order = Order::query()->find($request->get('order_id'))->first();
+        $order = Order::query()->find($request->get('order_id'));
         if ($order->disbursed == true){
             return response()->json(['message' => 'The selected Order has already been disbursed'], Response::HTTP_BAD_REQUEST);
         }
@@ -181,6 +182,8 @@ class DisbursementController extends Controller
             $TransactionCompletedDateTime = $callbackData->Result->ResultParameters->ResultParameter[5]->Value;
             $B2CUtilityAccountAvailableFunds = $callbackData->Result->ResultParameters->ResultParameter[6]->Value;
             $B2CWorkingAccountAvailableFunds = $callbackData->Result->ResultParameters->ResultParameter[7]->Value;
+
+            $TransactionCompletedDateTime = now(); //Carbon::parse($TransactionCompletedDateTime)->format('Y-m-d H:i:s');
 
             $result = [
                 'ResultCode' => $resultCode,
