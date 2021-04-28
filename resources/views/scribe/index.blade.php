@@ -64,7 +64,68 @@ You can switch the language used with the tabs at the top right (or from the nav
 <p>Base URL</p>
 </blockquote>
 <pre><code class="language-yaml">http://localhost</code></pre><h1>Authenticating requests</h1>
-<p>This API is not authenticated.</p><h1>Bag Types</h1>
+<p>This API is not authenticated.</p><h1>B2C Disbursement</h1>
+<p>API for Disbursing funds to a registered farmer</p>
+<h2>Initiate a Disbursement Request</h2>
+<p><small class="badge badge-darkred">requires authentication</small></p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://localhost/api/v1/initiate-mpesa-disbursement" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"order_id":"at"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/v1/initiate-mpesa-disbursement"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "order_id": "at"
+}
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre>
+<div id="execution-results-POSTapi-v1-initiate-mpesa-disbursement" hidden>
+    <blockquote>Received response<span id="execution-response-status-POSTapi-v1-initiate-mpesa-disbursement"></span>:</blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-initiate-mpesa-disbursement"></code></pre>
+</div>
+<div id="execution-error-POSTapi-v1-initiate-mpesa-disbursement" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-v1-initiate-mpesa-disbursement"></code></pre>
+</div>
+<form id="form-POSTapi-v1-initiate-mpesa-disbursement" data-method="POST" data-path="api/v1/initiate-mpesa-disbursement" data-authed="1" data-hasfiles="0" data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}' onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-initiate-mpesa-disbursement', this);">
+<h3>
+    Request&nbsp;&nbsp;&nbsp;
+        <button type="button" style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-tryout-POSTapi-v1-initiate-mpesa-disbursement" onclick="tryItOut('POSTapi-v1-initiate-mpesa-disbursement');">Try it out ⚡</button>
+    <button type="button" style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-canceltryout-POSTapi-v1-initiate-mpesa-disbursement" onclick="cancelTryOut('POSTapi-v1-initiate-mpesa-disbursement');" hidden>Cancel</button>&nbsp;&nbsp;
+    <button type="submit" style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-executetryout-POSTapi-v1-initiate-mpesa-disbursement" hidden>Send Request 💥</button>
+    </h3>
+<p>
+<small class="badge badge-black">POST</small>
+ <b><code>api/v1/initiate-mpesa-disbursement</code></b>
+</p>
+<p>
+<label id="auth-POSTapi-v1-initiate-mpesa-disbursement" hidden>Authorization header: <b><code>Bearer </code></b><input type="text" name="Authorization" data-prefix="Bearer " data-endpoint="POSTapi-v1-initiate-mpesa-disbursement" data-component="header"></label>
+</p>
+<h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+<p>
+<b><code>order_id</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+<input type="text" name="order_id" data-endpoint="POSTapi-v1-initiate-mpesa-disbursement" data-component="body" required  hidden>
+<br>
+Order id.
+</p>
+
+</form><h1>Bag Types</h1>
 <p>API for fetching Bag Types</p>
 <h2>List Bag Types</h2>
 <blockquote>
@@ -105,47 +166,6 @@ fetch(url, {
 <p>
 <small class="badge badge-black">POST</small>
  <b><code>api/v1/bag-types</code></b>
-</p>
-</form><h1>Endpoints</h1>
-<h2>api/v1/initiate-mpesa-disbursement</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
-<pre><code class="language-bash">curl -X POST \
-    "http://localhost/api/v1/initiate-mpesa-disbursement" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"</code></pre>
-<pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/initiate-mpesa-disbursement"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "POST",
-    headers,
-}).then(response =&gt; response.json());</code></pre>
-<div id="execution-results-POSTapi-v1-initiate-mpesa-disbursement" hidden>
-    <blockquote>Received response<span id="execution-response-status-POSTapi-v1-initiate-mpesa-disbursement"></span>:</blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-v1-initiate-mpesa-disbursement"></code></pre>
-</div>
-<div id="execution-error-POSTapi-v1-initiate-mpesa-disbursement" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-POSTapi-v1-initiate-mpesa-disbursement"></code></pre>
-</div>
-<form id="form-POSTapi-v1-initiate-mpesa-disbursement" data-method="POST" data-path="api/v1/initiate-mpesa-disbursement" data-authed="0" data-hasfiles="0" data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}' onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-initiate-mpesa-disbursement', this);">
-<h3>
-    Request&nbsp;&nbsp;&nbsp;
-        <button type="button" style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-tryout-POSTapi-v1-initiate-mpesa-disbursement" onclick="tryItOut('POSTapi-v1-initiate-mpesa-disbursement');">Try it out ⚡</button>
-    <button type="button" style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-canceltryout-POSTapi-v1-initiate-mpesa-disbursement" onclick="cancelTryOut('POSTapi-v1-initiate-mpesa-disbursement');" hidden>Cancel</button>&nbsp;&nbsp;
-    <button type="submit" style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-executetryout-POSTapi-v1-initiate-mpesa-disbursement" hidden>Send Request 💥</button>
-    </h3>
-<p>
-<small class="badge badge-black">POST</small>
- <b><code>api/v1/initiate-mpesa-disbursement</code></b>
 </p>
 </form><h1>Farmers</h1>
 <h2>Display a listing of the resource.</h2>
@@ -208,7 +228,7 @@ fetch(url, {
     "http://localhost/api/v1/farmers" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"full_name":"omnis","phone_number":"nihil","id_number":"doloribus","gender":"cum","date_of_birth":"qui","region_id":9,"raw_material_ids":[]}'
+    -d '{"full_name":"assumenda","phone_number":"facere","id_number":"molestiae","gender":"voluptas","date_of_birth":"sed","region_id":5,"raw_material_ids":[]}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/farmers"
@@ -220,12 +240,12 @@ let headers = {
 };
 
 let body = {
-    "full_name": "omnis",
-    "phone_number": "nihil",
-    "id_number": "doloribus",
-    "gender": "cum",
-    "date_of_birth": "qui",
-    "region_id": 9,
+    "full_name": "assumenda",
+    "phone_number": "facere",
+    "id_number": "molestiae",
+    "gender": "voluptas",
+    "date_of_birth": "sed",
+    "region_id": 5,
     "raw_material_ids": []
 }
 
@@ -307,11 +327,11 @@ Array of Raw Material IDs.
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost/api/v1/farmers/15" \
+    -G "http://localhost/api/v1/farmers/6" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/farmers/15"
+    "http://localhost/api/v1/farmers/6"
 );
 
 let headers = {
@@ -369,7 +389,7 @@ Farmer Id
     "http://localhost/api/v1/farmers-search" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"search_query":"rerum"}'
+    -d '{"search_query":"neque"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/farmers-search"
@@ -381,7 +401,7 @@ let headers = {
 };
 
 let body = {
-    "search_query": "rerum"
+    "search_query": "neque"
 }
 
 fetch(url, {
@@ -430,7 +450,7 @@ Search Query.
     "http://localhost/api/v1/farmers-region-filter" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"region_id":3}'
+    -d '{"region_id":12}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/farmers-region-filter"
@@ -442,7 +462,7 @@ let headers = {
 };
 
 let body = {
-    "region_id": 3
+    "region_id": 12
 }
 
 fetch(url, {
@@ -490,7 +510,7 @@ Search Query.
     "http://localhost/api/v1/farmers-verify-phone-number" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"farmer_id":17,"passcode":14}'
+    -d '{"farmer_id":3,"passcode":16}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/farmers-verify-phone-number"
@@ -502,8 +522,8 @@ let headers = {
 };
 
 let body = {
-    "farmer_id": 17,
-    "passcode": 14
+    "farmer_id": 3,
+    "passcode": 16
 }
 
 fetch(url, {
@@ -557,7 +577,7 @@ OTP.
     "http://localhost/api/v1/farmers-resend-otp" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"farmer_id":13}'
+    -d '{"farmer_id":4}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/farmers-resend-otp"
@@ -569,7 +589,7 @@ let headers = {
 };
 
 let body = {
-    "farmer_id": 13
+    "farmer_id": 4
 }
 
 fetch(url, {
@@ -620,7 +640,7 @@ a mechanism to check whether the token has expired before requiring the user to 
     "http://localhost/api/v1/user/login" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"phone_number":"ut","password":"odio"}'
+    -d '{"phone_number":"porro","password":"quia"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/user/login"
@@ -632,8 +652,8 @@ let headers = {
 };
 
 let body = {
-    "phone_number": "ut",
-    "password": "odio"
+    "phone_number": "porro",
+    "password": "quia"
 }
 
 fetch(url, {
@@ -684,7 +704,7 @@ Password.
     "http://localhost/api/v1/user/login/verify-otp" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"token":2}'
+    -d '{"token":13}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/user/login/verify-otp"
@@ -696,7 +716,7 @@ let headers = {
 };
 
 let body = {
-    "token": 2
+    "token": 13
 }
 
 fetch(url, {
@@ -834,7 +854,7 @@ fetch(url, {
     "http://localhost/api/v1/orders-create-new" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"farmer_id":10,"price_list_id":11,"buying_center_id":16,"raw_material_id":13,"bag_type_id":17,"bags":5,"gross_weight":"cum","net_weight":"voluptatem","amount":"consequatur","latitude":"provident","longitude":"sequi"}'
+    -d '{"farmer_id":12,"price_list_id":10,"buying_center_id":9,"raw_material_id":13,"bag_type_id":14,"bags":4,"gross_weight":"quam","net_weight":"voluptas","amount":"numquam","latitude":"quae","longitude":"perspiciatis"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/orders-create-new"
@@ -846,17 +866,17 @@ let headers = {
 };
 
 let body = {
-    "farmer_id": 10,
-    "price_list_id": 11,
-    "buying_center_id": 16,
+    "farmer_id": 12,
+    "price_list_id": 10,
+    "buying_center_id": 9,
     "raw_material_id": 13,
-    "bag_type_id": 17,
-    "bags": 5,
-    "gross_weight": "cum",
-    "net_weight": "voluptatem",
-    "amount": "consequatur",
-    "latitude": "provident",
-    "longitude": "sequi"
+    "bag_type_id": 14,
+    "bags": 4,
+    "gross_weight": "quam",
+    "net_weight": "voluptas",
+    "amount": "numquam",
+    "latitude": "quae",
+    "longitude": "perspiciatis"
 }
 
 fetch(url, {
@@ -965,7 +985,7 @@ Current Longitude.
     "http://localhost/api/v1/user/password/forgot" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"email":"excepturi"}'
+    -d '{"email":"quibusdam"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/user/password/forgot"
@@ -977,7 +997,7 @@ let headers = {
 };
 
 let body = {
-    "email": "excepturi"
+    "email": "quibusdam"
 }
 
 fetch(url, {
@@ -1022,7 +1042,7 @@ Email address.
     "http://localhost/api/v1/user/password/update" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"email":"voluptas","token":"nesciunt","password":"porro","password_confirm":"accusantium"}'
+    -d '{"email":"molestias","token":"dicta","password":"corporis","password_confirm":"iure"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/user/password/update"
@@ -1034,10 +1054,10 @@ let headers = {
 };
 
 let body = {
-    "email": "voluptas",
-    "token": "nesciunt",
-    "password": "porro",
-    "password_confirm": "accusantium"
+    "email": "molestias",
+    "token": "dicta",
+    "password": "corporis",
+    "password_confirm": "iure"
 }
 
 fetch(url, {
@@ -1193,7 +1213,7 @@ fetch(url, {
     "http://localhost/api/v1/raw-materials-requirements" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"raw_material_id":2}'
+    -d '{"raw_material_id":3}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/raw-materials-requirements"
@@ -1205,7 +1225,7 @@ let headers = {
 };
 
 let body = {
-    "raw_material_id": 2
+    "raw_material_id": 3
 }
 
 fetch(url, {
@@ -1253,7 +1273,7 @@ Raw Material ID.
     "http://localhost/api/v1/raw-materials-requirement-submission/create" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"order_id":14,"submissions":[]}'
+    -d '{"order_id":10,"submissions":[]}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/raw-materials-requirement-submission/create"
@@ -1265,7 +1285,7 @@ let headers = {
 };
 
 let body = {
-    "order_id": 14,
+    "order_id": 10,
     "submissions": []
 }
 
@@ -1320,7 +1340,7 @@ Array of objects containing the submissions eg. [{"raw_material_requirement_id":
     "http://localhost/api/v1/raw-materials-requirement-submission/view" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"order_id":17}'
+    -d '{"order_id":8}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/raw-materials-requirement-submission/view"
@@ -1332,7 +1352,7 @@ let headers = {
 };
 
 let body = {
-    "order_id": 17
+    "order_id": 8
 }
 
 fetch(url, {

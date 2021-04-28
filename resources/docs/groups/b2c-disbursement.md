@@ -1,8 +1,10 @@
-# Endpoints
+# B2C Disbursement
 
+API for Disbursing funds to a registered farmer
 
-## api/v1/initiate-mpesa-disbursement
+## Initiate a Disbursement Request
 
+<small class="badge badge-darkred">requires authentication</small>
 
 
 
@@ -12,7 +14,9 @@
 curl -X POST \
     "http://localhost/api/v1/initiate-mpesa-disbursement" \
     -H "Content-Type: application/json" \
-    -H "Accept: application/json"
+    -H "Accept: application/json" \
+    -d '{"order_id":"at"}'
+
 ```
 
 ```javascript
@@ -25,10 +29,14 @@ let headers = {
     "Accept": "application/json",
 };
 
+let body = {
+    "order_id": "at"
+}
 
 fetch(url, {
     method: "POST",
     headers,
+    body: JSON.stringify(body),
 }).then(response => response.json());
 ```
 
@@ -41,7 +49,7 @@ fetch(url, {
     <blockquote>Request failed with error:</blockquote>
     <pre><code id="execution-error-message-POSTapi-v1-initiate-mpesa-disbursement"></code></pre>
 </div>
-<form id="form-POSTapi-v1-initiate-mpesa-disbursement" data-method="POST" data-path="api/v1/initiate-mpesa-disbursement" data-authed="0" data-hasfiles="0" data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}' onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-initiate-mpesa-disbursement', this);">
+<form id="form-POSTapi-v1-initiate-mpesa-disbursement" data-method="POST" data-path="api/v1/initiate-mpesa-disbursement" data-authed="1" data-hasfiles="0" data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}' onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-initiate-mpesa-disbursement', this);">
 <h3>
     Request&nbsp;&nbsp;&nbsp;
         <button type="button" style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-tryout-POSTapi-v1-initiate-mpesa-disbursement" onclick="tryItOut('POSTapi-v1-initiate-mpesa-disbursement');">Try it out ⚡</button>
@@ -52,6 +60,17 @@ fetch(url, {
 <small class="badge badge-black">POST</small>
  <b><code>api/v1/initiate-mpesa-disbursement</code></b>
 </p>
+<p>
+<label id="auth-POSTapi-v1-initiate-mpesa-disbursement" hidden>Authorization header: <b><code>Bearer </code></b><input type="text" name="Authorization" data-prefix="Bearer " data-endpoint="POSTapi-v1-initiate-mpesa-disbursement" data-component="header"></label>
+</p>
+<h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+<p>
+<b><code>order_id</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+<input type="text" name="order_id" data-endpoint="POSTapi-v1-initiate-mpesa-disbursement" data-component="body" required  hidden>
+<br>
+Order id.
+</p>
+
 </form>
 
 

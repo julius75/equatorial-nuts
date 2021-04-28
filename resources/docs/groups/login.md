@@ -16,7 +16,7 @@ curl -X POST \
     "http://localhost/api/v1/user/login" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"phone_number":"ut","password":"odio"}'
+    -d '{"phone_number":"porro","password":"quia"}'
 
 ```
 
@@ -31,8 +31,8 @@ let headers = {
 };
 
 let body = {
-    "phone_number": "ut",
-    "password": "odio"
+    "phone_number": "porro",
+    "password": "quia"
 }
 
 fetch(url, {
@@ -92,7 +92,7 @@ curl -X POST \
     "http://localhost/api/v1/user/login/verify-otp" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"token":2}'
+    -d '{"token":13}'
 
 ```
 
@@ -107,7 +107,7 @@ let headers = {
 };
 
 let body = {
-    "token": 2
+    "token": 13
 }
 
 fetch(url, {
