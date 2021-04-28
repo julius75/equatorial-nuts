@@ -102,9 +102,7 @@ class OrderController extends Controller
                 'net_weight'=>$request->get('net_weight'),
             ]);
             DB::commit();
-
-            $order = $order->with(['order_region','order_raw_material']);
-            return response()->json(['message' =>"Order Details Recorded Successfully!",compact('order')], Response::HTTP_OK);
+            return response()->json(['message' =>"Order Details Recorded Successfully!",'order'=>$order->load(['order_region','order_raw_material'])], Response::HTTP_OK);
         }catch (\Exception $exception){
             DB::rollBack();
             return response()->json(['message' =>"Order failed tobe recorded", 'exception'=>$exception], Response::HTTP_INTERNAL_SERVER_ERROR);
