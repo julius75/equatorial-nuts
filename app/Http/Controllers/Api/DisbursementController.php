@@ -71,7 +71,7 @@ class DisbursementController extends Controller
             return response()->json(['message' => $validator->errors()->first()], Response::HTTP_BAD_REQUEST);
         }
         $order = Order::query()->find($request->get('order_id'))->first();
-        if ($order->disbursed()){
+        if ($order->disbursed == true){
             return response()->json(['message' => 'The selected Order has already been disbursed'], Response::HTTP_BAD_REQUEST);
         }
         if ($order->mpesa_disbursement_request()->exists()) {
