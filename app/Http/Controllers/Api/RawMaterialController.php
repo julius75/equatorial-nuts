@@ -79,6 +79,7 @@ class RawMaterialController extends Controller
                         ->first();
         return response()->json(['message'=> compact('raw_material')], Response::HTTP_OK);
     }
+
     /**
      * Submit Raw Material Requirement Submission
      *
@@ -94,7 +95,7 @@ class RawMaterialController extends Controller
         $validator = Validator::make($request->all(),
             [
                 'order_id'=>'required|exists:orders,id',
-                'submissions' => 'required',
+                'submissions' => 'required|array|min:1',
                 'submissions.*.raw_material_requirement_id' => 'required|exists:raw_material_requirements,id',
                 'submissions.*.value' => 'required',
             ]);
@@ -104,11 +105,23 @@ class RawMaterialController extends Controller
         $order = Order::query()->find($request->get('order_id'));
         try {
             foreach ($request->get('submissions') as $item) {
-                RawMaterialRequirementSubmission::query()->create([
-                    'order_id'=>$order->id,
-                    'raw_material_requirement_id'=>$item->raw_material_requirement_id,
-                    'value'=>$item->value,
-                ]);
+                $check = RawMaterialRequirementSubmission::query()
+                    ->where(['order_id'=>$order->id, 'raw_material_requirement_id'=>$item['raw_material_requirement_id']])->first();
+                if ($check){
+                    $check->delete();
+                    RawMaterialRequirementSubmission::query()->create([
+                        'order_id'=>$order->id,
+                        'raw_material_requirement_id'=>$item['raw_material_requirement_id'],
+                        'value'=>$item['value'],
+                    ]);
+                } else
+                    {
+                    RawMaterialRequirementSubmission::query()->create([
+                        'order_id'=>$order->id,
+                        'raw_material_requirement_id'=>$item['raw_material_requirement_id'],
+                        'value'=>$item['value'],
+                    ]);
+                }
             }
             return response()->json(['message'=> "Quality Submissions for $order->ref_number registered successfully"],Response::HTTP_OK);
         }
