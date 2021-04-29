@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\RawMaterial;
+use App\Models\RawMaterialRequirementSubmission;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -93,6 +94,7 @@ class RawMaterialController extends Controller
         $validator = Validator::make($request->all(),
             [
                 'order_id'=>'required|exists:orders,id',
+                'submissions' => 'required',
                 'submissions.*.raw_material_requirement_id' => 'required|exists:raw_material_requirements,id',
                 'submissions.*.value' => 'required',
             ]);
@@ -100,19 +102,19 @@ class RawMaterialController extends Controller
             return response()->json(['message' => $validator->errors()->first()], Response::HTTP_BAD_REQUEST);
         }
         $order = Order::query()->find($request->get('order_id'));
-//        try {
+        try {
             foreach ($request->get('submissions') as $item) {
-                $order->raw_material_requirement_submissions()->create([
+                RawMaterialRequirementSubmission::query()->create([
+                    'order_id'=>$order->id,
                     'raw_material_requirement_id'=>$item->raw_material_requirement_id,
                     'value'=>$item->value,
                 ]);
             }
             return response()->json(['message'=> "Quality Submissions for $order->ref_number registered successfully"],Response::HTTP_OK);
-//        }
-//        catch (\Exception $exception) {
-//            return response()->json(['message'=> "Failed to register Quality Submissions", 'exception'=>$exception],Response::HTTP_INTERNAL_SERVER_ERROR);
-//        }
-
+        }
+        catch (\Exception $exception) {
+            return response()->json(['message'=> "Failed to register Quality Submissions", 'exception'=>$exception],Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**

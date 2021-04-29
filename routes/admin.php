@@ -87,7 +87,6 @@ Route::prefix('charts')->group(function () {
 
 
 Route::get('/utility-balances', [UtilityBalanceController::class, 'index'])->name('utility-balances');
-Route::post('/utility-balances', [UtilityBalanceController::class, 'index'])->name('utility-balances.post');
 Route::get('/mpesa-account-balance/post', [AccountBalanceController::class, 'mpesa_balance'])->name('mpesa.post-account-balance');
 
 require __DIR__.'/admin_auth.php';

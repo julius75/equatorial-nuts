@@ -35,10 +35,10 @@ class UtilityBalanceController extends Controller
         $data['paybill'] = decrypt($disbursement_settings->paybill);
         $data['ATBalance'] = $balance;
 
-        if ($disbursement_settings->utility_balance != null){
+        if ($disbursement_settings->utility_balance != null) {
             $exp = explode('|', $disbursement_settings->utility_balance);
-            $data['mpesa_paybill_balance'] = 'KSH ' . number_format($exp[2], 2) . ' as at ' . $disbursement_settings->last_updated;
-        }else{
+            $data['mpesa_paybill_balance'] = 'KES ' . number_format($exp[2], 2) . ' as at ' . $disbursement_settings->last_updated_at;
+        } else {
             $data['mpesa_paybill_balance'] = '--';
         }
         return view('admin.utilities.index', $data);
