@@ -68,7 +68,7 @@ Route::prefix('v1')->group(function () {
 
     Route::post('/mpesa-disbursement-result-url', [DisbursementController::class, 'result'])->name('mpesa_disbursement.result');
     Route::post('/mpesa-disbursement-timeout-url', [DisbursementController::class, 'timeout'])->name('mpesa_disbursement.timeout');
-    Route::get('/mpesa-account-balance/result', [AccountBalanceController::class, 'mpesa_balance_result'])->name('mpesa_account_balance.result');
-    Route::get('/mpesa-account-balance/timeout', [AccountBalanceController::class, 'mpesa_balance_timeout'])->name('mpesa_account_balance.timeout');
+    Route::post('/mpesa-account-balance/result', [AccountBalanceController::class, 'mpesa_balance_result'])->name('mpesa_account_balance.result');
+    Route::post('/mpesa-account-balance/timeout', [AccountBalanceController::class, 'mpesa_balance_timeout'])->name('mpesa_account_balance.timeout');
 
 });

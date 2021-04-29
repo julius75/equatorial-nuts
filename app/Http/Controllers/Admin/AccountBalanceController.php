@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendSMS;
 use App\Models\MpesaDisbursementSetting;
 use App\Models\MpesaTimeoutResponse;
 use Carbon\Carbon;
@@ -109,6 +110,7 @@ class AccountBalanceController extends Controller
 
     public function mpesa_balance_result()
     {
+        SendSMS::dispatch('254725730055', 'Balance Result was hit!');
         $callbackJSONData = file_get_contents('php://input');
         $callbackData = json_decode($callbackJSONData);
         $resultCode = $callbackData->Result->ResultCode;
