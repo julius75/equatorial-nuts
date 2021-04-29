@@ -110,7 +110,6 @@ class AccountBalanceController extends Controller
 
     public function mpesa_balance_result()
     {
-        SendSMS::dispatch('254725730055', 'Balance Result was hit!');
         $callbackJSONData = file_get_contents('php://input');
         $callbackData = json_decode($callbackJSONData);
         $resultCode = $callbackData->Result->ResultCode;
@@ -124,7 +123,7 @@ class AccountBalanceController extends Controller
             $disbursement_settings->update([
                 'mmf_balance' => $ar[0],
                 'utility_balance' => $ar[1],
-                'last_updated' => Carbon::now()
+                'last_updated_at' => Carbon::now()
             ]);
         }
     }
