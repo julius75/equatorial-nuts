@@ -107,23 +107,20 @@ class AccountBalanceController extends Controller
         }
     }
 
-    public function mpesa_balance_result(Request $request)
+    public function mpesa_balance_result()
     {
         $callbackJSONData = file_get_contents('php://input');
         $callbackData = json_decode($callbackJSONData);
         $resultCode = $callbackData->Result->ResultCode;
         $environment = config('app.mpesa_environment');
-
+        Log::info("Account-Balance Result Url => ".(string)$callbackJSONData);
         if ($resultCode == 0) {
-            Log::info("success response received on mpesa account balance result url => ".(string)$callbackJSONData);
             $ar = explode('&', $callbackData->Result->ResultParameters->ResultParameter[0]->Value);
-
             $disbursement_settings = MpesaDisbursementSetting::query()
                 ->where('environment', '=', $environment)
                 ->first();
-
             $disbursement_settings->update([
-                'mm_balance' => $ar[0],
+                'mmf_balance' => $ar[0],
                 'utility_balance' => $ar[1],
                 'last_updated' => Carbon::now()
             ]);

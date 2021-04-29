@@ -183,7 +183,6 @@ class DisbursementController extends Controller
             $TransactionCompletedDateTime = $callbackData->Result->ResultParameters->ResultParameter[5]->Value;
             $B2CUtilityAccountAvailableFunds = $callbackData->Result->ResultParameters->ResultParameter[6]->Value;
             $B2CWorkingAccountAvailableFunds = $callbackData->Result->ResultParameters->ResultParameter[7]->Value;
-
             $TransactionCompletedDateTime = now(); //Carbon::parse($TransactionCompletedDateTime)->format('Y-m-d H:i:s');
 
             $result = [
@@ -204,7 +203,6 @@ class DisbursementController extends Controller
                 'order_id' => $order->id,
                 'response'=>$callbackJsonData
             ];
-
         }
         //else the disbursement failed
         else {
