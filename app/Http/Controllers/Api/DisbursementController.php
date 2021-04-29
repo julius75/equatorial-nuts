@@ -8,6 +8,7 @@ use App\Models\MpesaDisbursementRequest;
 use App\Models\MpesaDisbursementResponse;
 use App\Models\MpesaDisbursementSetting;
 use App\Models\MpesaDisbursementTransaction;
+use App\Models\MpesaTimeoutResponse;
 use App\Models\Order;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
@@ -257,7 +258,13 @@ class DisbursementController extends Controller
         //terminate transaction
         return $this->finishTransaction($disbursement_response->issued);
     }
-
+    /**
+     *
+     * Timeout url that receives responses from Safaricom
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     */
     public function timeout(Request $request)
     {
         $callbackJsonData = file_get_contents('php://input');
@@ -281,7 +288,8 @@ class DisbursementController extends Controller
             'order_id' => $order->id,
             'json'=>$callbackJsonData
         ];
-        $disbursement_response = MpesaDisbursementResponse::query()->create($result);
+       MpesaDisbursementResponse::query()->create($result);
+       MpesaTimeoutResponse::query()->create(['response'=>$callbackJsonData]);
         Log::info("timeout response received on mpesa timeout url => ".(string)$callbackJsonData);
         return $this->finishTransaction(false);
     }
