@@ -12,6 +12,7 @@ class RawMaterialRequirementSubmission extends Model
     protected $fillable = [
         'raw_material_requirement_id',
         'value',
+        'order_id',
         'created_at',
         'updated_at',
     ];
