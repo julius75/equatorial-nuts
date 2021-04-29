@@ -14,5 +14,6 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
       'update-status/{}',
       'admin/dashboard',
+      'mpesa-account-balance/*',
     ];
 }

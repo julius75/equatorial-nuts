@@ -20,6 +20,9 @@ return [
     'mpesa_environment' => env('MPESA_ENV', 'sandbox'),
     'mpesa_sandbox_msisdn' => '254708374149',
     'mpesa_disbursement_command_id' => 'BusinessPayment',
+    'mpesa_account_balance_command_id' => 'AccountBalance',
+    'mpesa_account_balance_identifier_type' => '4',
+
     /*
     |--------------------------------------------------------------------------
     | Application Name

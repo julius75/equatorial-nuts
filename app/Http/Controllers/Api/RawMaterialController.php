@@ -100,7 +100,7 @@ class RawMaterialController extends Controller
             return response()->json(['message' => $validator->errors()->first()], Response::HTTP_BAD_REQUEST);
         }
         $order = Order::query()->find($request->get('order_id'));
-        try {
+//        try {
             foreach ($request->get('submissions') as $item) {
                 $order->raw_material_requirement_submissions()->create([
                     'raw_material_requirement_id'=>$item->raw_material_requirement_id,
@@ -108,10 +108,10 @@ class RawMaterialController extends Controller
                 ]);
             }
             return response()->json(['message'=> "Quality Submissions for $order->ref_number registered successfully"],Response::HTTP_OK);
-        }
-        catch (\Exception $exception) {
-            return response()->json(['message'=> "Failed to register Quality Submissions", 'exception'=>$exception],Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+//        }
+//        catch (\Exception $exception) {
+//            return response()->json(['message'=> "Failed to register Quality Submissions", 'exception'=>$exception],Response::HTTP_INTERNAL_SERVER_ERROR);
+//        }
 
     }
 
