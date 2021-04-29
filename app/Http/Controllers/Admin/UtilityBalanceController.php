@@ -14,7 +14,7 @@ class UtilityBalanceController extends Controller
         try {
             $mpesa_balance = new AccountBalanceController();
             $mpesa_balance->mpesa_balance();
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             //
         }
         $environment = config('app.mpesa_environment');
