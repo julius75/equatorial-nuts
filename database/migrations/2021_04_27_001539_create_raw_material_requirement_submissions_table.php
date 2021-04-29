@@ -15,6 +15,7 @@ class CreateRawMaterialRequirementSubmissionsTable extends Migration
     {
         Schema::create('raw_material_requirement_submissions', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('order_id')->references('id')->on('orders')->onDelete('restrict');
             $table->foreignId('raw_material_requirement_id')->references('id')->on('raw_material_requirements')->onDelete('restrict');
             $table->string('value');
             $table->timestamp('created_at')->nullable()->useCurrent();

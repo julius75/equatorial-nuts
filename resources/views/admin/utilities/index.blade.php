@@ -3,6 +3,7 @@
 @endsection
 @section('content')
     <!--end::Notice-->
+
     <div class="row">
         <div class="col-md-6">
             <div class="card card-custom bg-success">
@@ -16,9 +17,7 @@
                         </h3>
                     </div>
                     <div class="card-toolbar">
-                        <a href="#" class="btn btn-sm btn-white font-weight-bold">
-                            <i class="flaticon2-cube"></i> Refresh
-                        </a>
+
                     </div>
                 </div>
                 <div class="separator separator-solid separator-white opacity-20"></div>
@@ -39,7 +38,7 @@
                         </h3>
                     </div>
                     <div class="card-toolbar">
-                        <a href="#" class="btn btn-sm btn-white">
+                        <a href="{{route('admin.utility-balances')}}" class="btn btn-sm btn-white font-weight-bold">
                             <i class="flaticon2-cube"></i> Refresh
                         </a>
                     </div>
