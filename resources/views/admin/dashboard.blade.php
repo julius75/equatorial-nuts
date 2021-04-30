@@ -313,16 +313,125 @@
     </div>
 @endsection
 @section('scripts')
-
+    <script src="{{asset('assets/js/charts/Chart.min.js')}}"></script>
     <script>
-        if (window.location.pathname === '/admin/dashboard') {
-            var newText =  document.getElementsByClassName("menu-text");
-            newText.innerHTML = 'new text here';
-        }
-        else {
-            alert();
-            // span.innerText = 'Dashboard';
-        }
+        /**
+         * Transactions Graph
+         **/
+        ( function ( $ ) {
+            var repaymentsChart = {
+                init: function () {
+                    // -- Set new default font family and font color to mimic Bootstrap's default styling
+                    Chart.defaults.global.defaultFontFamily = 'Poppins';
+                    Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+                    Chart.defaults.global.defaultFontColor = '#292b2c';
+                    this.ajaxGetPaymentsMonthlyData();
+                },
 
+                ajaxGetPaymentsMonthlyData: function () {
+                    var payments_month_array = <?php echo $monthly_payments_data_array ; ?>;
+                    console.log( payments_month_array );
+                    repaymentsChart.createCompletedPaymentsChart( payments_month_array );
+                },
+
+                /**
+                 * Created the Completed Payments Chart
+                 */
+                createCompletedPaymentsChart: function ( payments_month_array ) {
+                    var ctx = document.getElementById("transactionsChart");
+                    var myLineChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: payments_month_array.month, // The response got from the ajax request containing all month names in the database
+                            datasets: [{
+                                label: "Disbursements Count",
+                                type: 'line',
+                                lineTension: 0.3,
+                                backgroundColor: "rgba(219,141,13, 0.4)",
+                                borderColor: "rgba(244,176,64,0.78)",
+                                pointBorderColor: "#fff",
+                                pointBackgroundColor: "rgba(219,141,13, 0.8)",
+                                pointRadius: 5,
+                                pointHoverRadius: 5,
+                                pointHoverBackgroundColor: "rgba(219,141,13, 0.8)",
+                                pointHitRadius: 20,
+                                pointBorderWidth: 2,
+                                yAxisID: 'A',
+                                data: payments_month_array.post_count_data // The response got from the ajax request containing data for the completed jobs in the corresponding months
+                            },
+                                {
+                                    label: "Payment Amounts (Ksh.)",
+                                    type: 'bar',
+                                    backgroundColor: "rgba(162,31,37, 0.8)",
+                                    borderColor: "rgba(162,31,37, 0.8)",
+                                    pointRadius: 5,
+                                    pointBackgroundColor: "rgba(171,53,58, 0.8)",
+                                    pointBorderColor: "rgba(255,255,255,0.8)",
+                                    pointHoverRadius: 5,
+                                    pointHoverBackgroundColor: "rgba(171,53,58, 0.8)",
+                                    pointHitRadius: 20,
+                                    pointBorderWidth: 2,
+                                    yAxisID: 'B',
+                                    data: payments_month_array.payment_amount // The response got from the ajax request containing data for the completed jobs in the corresponding months
+                                }
+                            ],
+                        },
+                        options: {
+                            scales: {
+                                xAxes: [{
+                                    time: {
+                                        unit: 'date'
+                                    },
+                                    gridLines: {
+                                        display: false
+                                    },
+                                    ticks: {
+                                        maxTicksLimit: 7
+                                    }
+                                }],
+                                yAxes: [{
+                                    id:'A',
+                                    position: 'right',
+                                    ticks: {
+                                        min: 0,
+                                        max: payments_month_array.max_payment, // The response got from the ajax request containing max limit for y axis
+                                        maxTicksLimit: 5
+                                    },
+                                    gridLines: {
+                                        display:false
+                                    }
+                                },
+                                    {id:'B',
+                                        position: 'left',
+                                        ticks: {
+                                            min: 0,
+                                            max: payments_month_array.max_amount, // The response got from the ajax request containing max limit for y axis
+                                            maxTicksLimit: 5
+                                        },
+                                        gridLines: {
+                                            color: "rgba(0, 0, 0, .125)",
+                                        }
+                                    },
+                                ],
+                            },
+                            legend: {
+                                display: true
+                            }
+                        }
+                    });
+                }
+            };
+            repaymentsChart.init();
+        } )( jQuery );
+    </script>
+    <script>
+        // if (window.location.pathname === '/admin/dashboard') {
+        //     var newText =  document.getElementsByClassName("menu-text");
+        //     newText.innerHTML = 'new text here';
+        // }
+        // else {
+        //     alert();
+        //     //span.innerText = 'Dashboard';
+        // }
     </script>
 @endsection

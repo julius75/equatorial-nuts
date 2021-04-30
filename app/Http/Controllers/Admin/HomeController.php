@@ -102,11 +102,16 @@ class HomeController extends Controller
         if ( ! empty( $month_array ) ) {
             foreach ( $month_array as $day => $month_name ){
                 if($request->has('region') && $request->region != 'all'){
-                    $region = Region::find($request->region);
-                    $monthly_disbursement_count = $region->orders()->where('disbursed', '=', true)
-                        ->whereDay('disbursed_at', $day)->whereMonth('disbursed_at', Carbon::now())->whereYear('disbursed_at', Carbon::now())
+                    $region = Region::query()->find($request->region);
+                    $monthly_disbursement_count = Order::query()
+                        ->whereHas('order_region', function ($q) use ($region){
+                            $q->where('region_id', '=', $region->id);
+                        })->where('disbursed', '=', true)->whereDay('disbursed_at', $day)->whereMonth('disbursed_at', Carbon::now())->whereYear('disbursed_at', Carbon::now())
                         ->get()->count();
-                    $monthly_disbursement_amount = $region->orders()->where('disbursed', '=', true)
+                    $monthly_disbursement_amount = Order::query()
+                        ->whereHas('order_region', function ($q) use ($region){
+                            $q->where('region_id', '=', $region->id);
+                        })->where('disbursed', '=', true)
                         ->whereDay('disbursed_at', $day)->whereMonth('disbursed_at', Carbon::now())->whereYear('disbursed_at', Carbon::now())
                         ->sum('amount');
                 } else {
