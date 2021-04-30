@@ -52,8 +52,8 @@ class HomeController extends Controller
                 ->whereHas('order_region', function ($q) use ($region){
                     $q->where('region_id', '=', $region->id);
                 })
-                ->where('disbursed', '=', true)
-                ->sum('amount');
+                ->where('orders.disbursed', '=', true)
+                ->sum('orders.amount');
 
             $data['page_description'] = "Specified Region: $region->name";
             $data['farmersCount'] = $region->farmers()->count();
