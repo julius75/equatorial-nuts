@@ -222,7 +222,7 @@ class HomeController extends Controller
             $monthly_loan_data_array = array(
                 'month' => $month_name_array,
                 'post_count_data' => $monthly_loan_count_array,
-                'loan_amount' => $monthly_loan_amount_array,
+                'payment_amount' => $monthly_loan_amount_array,
                 'max_disbursement' => $max_disbursement,
                 'max_amount' => $max_amount,
             );
