@@ -152,5 +152,347 @@ class HomeController extends Controller
         ));
     }
 
+    public function disbursed_payments_filter(Request $request)
+    {
+        $this->data['page_title'] = "Monthly Payments";
+        $this->data['page_description'] = "Monthly Payments Filter";
+        $this->data['regions'] = Region::all();
+        $this->data['buyers'] = User::query()->where('status', '=', true)->get();
+        if ($request->has('region') and $request->region != 'all' and $request->buyer == 'all')
+        {
+            $this->region_specified($request);
+        }
+        //if buyer is specified and region isn't
+        elseif ($request->has('buyer') and $request->buyer != 'all' and $request->region == 'all')
+        {
+          $this->buyer_specified($request);
+        }
+        //if both buyer and region are specified
+        elseif ($request->buyer and $request->region and $request->buyer != 'all' and $request->region != 'all')
+        {
+            $this->buyer_region_specified($request);
+        }
+        //month only
+        elseif ($request->month and $request->buyer == 'all' and $request->region == 'all')
+        {
+            $this->month_specified($request);
+        }
+        //default page data
+        else{
+            $loans_dates = Order::query()->where('disbursed','=', true)
+                ->whereMonth('disbursed_at', Carbon::now())
+                ->whereYear('disbursed_at', Carbon::now())
+                ->orderBy( 'disbursed_at', 'ASC' )
+                ->pluck( 'disbursed_at' );
+            $month_array = array();
+            $loans_dates = json_decode( $loans_dates );
+            if ( ! empty( $loans_dates ) ) {
+                foreach ( $loans_dates as $unformatted_date ) {
+                    $date = new \DateTime( $unformatted_date );
+                    $day = $date->format( 'd' );
+                    $month_name = $date->format( 'd-M' );
+                    $month_array[ $day ] = $month_name;
+                }
+            }
+            $monthly_loan_count_array = array();
+            $month_name_array = array();
+            $monthly_loan_amount_array = array();
+            if ( ! empty( $month_array ) ) {
+                foreach ( $month_array as $day => $month_name ) {
+                    $monthly_loan_count = Order::query()->where('disbursed', '=', true)->whereDay('disbursed_at', $day)->whereMonth('disbursed_at', Carbon::now())->whereYear('disbursed_at', Carbon::now())->get()->count();
+                    $monthly_loan_amount = Order::query()->where('disbursed', '=', true)->whereDay('disbursed_at', $day)->whereMonth('disbursed_at', Carbon::now())->whereYear('disbursed_at', Carbon::now())->sum('amount');
+                    array_push($monthly_loan_count_array, $monthly_loan_count);
+                    array_push($monthly_loan_amount_array, $monthly_loan_amount);
+                    array_push($month_name_array, $month_name);
+                }
+            }
+            if (!empty($monthly_loan_count_array)){
+                $max_disb_no = max( $monthly_loan_count_array );
+                $max_disbursement = round(( $max_disb_no + 10/2 ) / 10 ) * 10;
+            }else{
+                $max_disbursement = 0;
+            }
 
+            if (!empty($monthly_loan_amount_array)){
+                $max_amount_no = max( $monthly_loan_amount_array );
+                $max_amount = round(( $max_amount_no + 10/2 ) / 10 ) * 10;
+            }else{
+                $max_amount = 0;
+            }
+            $monthly_loan_data_array = array(
+                'month' => $month_name_array,
+                'post_count_data' => $monthly_loan_count_array,
+                'loan_amount' => $monthly_loan_amount_array,
+                'max_disbursement' => $max_disbursement,
+                'max_amount' => $max_amount,
+            );
+            $this->data['current'] = Carbon::now()->format('M-Y');
+            $disbAmount = array_sum($monthly_loan_amount_array);
+            $this->data['disbAmount'] = $disbAmount;
+            $this->data['disbCount'] = array_sum($monthly_loan_count_array);
+            $this->data['current_region'] = 'all';
+            $this->data['current_buyer'] = 'all';
+            $this->data['monthly_payments_data_array'] = json_encode($monthly_loan_data_array);
+        }
+
+        return view('admin.transaction_region_filter', $this->data);
+    }
+
+    protected function region_specified($request){
+        $month = Carbon::parse($request->month);
+        $region = Region::query()->find($request->region);
+        $order_dates = Order::query()
+            ->where('disbursed','=', true)
+            ->whereHas('order_region', function ($q) use ($region){
+                $q->where('region_id', '=', $region->id);
+            })
+            ->whereMonth('disbursed_at', $month)
+            ->whereYear('disbursed_at', $month)
+            ->orderBy( 'disbursed_at', 'ASC' )
+            ->pluck( 'disbursed_at');
+        $month_array = array();
+        $order_dates = json_decode( $order_dates );
+        if ( ! empty( $order_dates ) ) {
+            foreach ( $order_dates as $unformatted_date ) {
+                $date = new \DateTime( $unformatted_date );
+                $day = $date->format( 'd' );
+                $month_name = $date->format( 'd-M' );
+                $month_array[ $day ] = $month_name;
+            }
+        }
+
+        $monthly_disbursement_count_array = array();
+        $month_name_array = array();
+        $monthly_disbursement_amount_array = array();
+        if ( ! empty( $month_array ) ) {
+            foreach ( $month_array as $day => $month_name ){
+                $monthly_disbursement_count = Order::query()
+                    ->whereHas('order_region', function ($q) use ($region){
+                        $q->where('region_id', '=', $region->id);
+                    })->where('disbursed', '=', true)->whereDay('disbursed_at', $day)->whereMonth('disbursed_at', Carbon::now())->whereYear('disbursed_at', Carbon::now())
+                    ->get()->count();
+                $monthly_disbursement_amount = Order::query()
+                    ->whereHas('order_region', function ($q) use ($region){
+                        $q->where('region_id', '=', $region->id);
+                    })->where('disbursed', '=', true)
+                    ->whereDay('disbursed_at', $day)->whereMonth('disbursed_at', Carbon::now())->whereYear('disbursed_at', Carbon::now())
+                    ->sum('amount');
+                array_push( $monthly_disbursement_count_array, $monthly_disbursement_count );
+                array_push( $monthly_disbursement_amount_array, $monthly_disbursement_amount );
+                array_push( $month_name_array, $month_name );
+            }
+        }
+        if (!empty($monthly_disbursement_count_array)){
+            $max_disb_no = max( $monthly_disbursement_count_array );
+            $max_disbursement = round(( $max_disb_no + 10/2 ) / 10 ) * 10;
+        }else{
+            $max_disbursement = 0;
+        }
+
+        if (!empty($monthly_disbursement_amount_array)){
+            $max_amount_no = max( $monthly_disbursement_amount_array );
+            $max_amount = round(( $max_amount_no + 10/2 ) / 10 ) * 10;
+        }else{
+            $max_amount = 0;
+        }
+
+        $monthly_loan_data_array = array(
+            'month' => $month_name_array,
+            'post_count_data' => $monthly_disbursement_count_array,
+            'payment_amount' => $monthly_disbursement_amount_array,
+            'max_disbursement' => $max_disbursement,
+            'max_amount' => $max_amount,
+        );
+        $this->data['current'] = $request->month;
+        $this->data['current_region'] = $request->region;
+        $this->data['current_buyer'] = 'all';
+        $disbAmount = array_sum($monthly_disbursement_amount_array);
+        $this->data['disbAmount'] = $disbAmount;
+        $this->data['disbCount'] = array_sum($monthly_disbursement_count_array);
+        $this->data['monthly_payments_data_array'] = json_encode($monthly_loan_data_array);
+    }
+
+    protected function buyer_specified($request){
+        $month = Carbon::parse($request->month);
+        $user = User::query()->find($request->buyer);
+        $loans_dates = $user->orders()->where('disbursed', true)->whereMonth('disbursed_at', $month)->whereYear('disbursed_at', $month)->orderBy( 'disbursed_at', 'ASC' )->pluck( 'disbursed_at' );
+        $month_array = array();
+        $loans_dates = json_decode( $loans_dates );
+
+        if ( ! empty( $loans_dates ) ) {
+            foreach ( $loans_dates as $unformatted_date ) {
+                $date = new \DateTime( $unformatted_date );
+                $day = $date->format( 'd' );
+                $month_name = $date->format( 'd-M' );
+                $month_array[ $day ] = $month_name;
+            }
+        }
+        $monthly_loan_count_array = array();
+        $month_name_array = array();
+        $monthly_loan_amount_array = array();
+        if ( ! empty( $month_array ) ) {
+            foreach ( $month_array as $day => $month_name ){
+                $monthly_loan_count = $user->orders()->where('disbursed', true)->whereDay('disbursed_at', $day)->whereMonth('disbursed_at', $month)->whereYear('disbursed_at', $month)->get()->count();
+                $monthly_loan_amount = $user->orders()->where('disbursed', true)->whereDay('disbursed_at', $day)->whereMonth('disbursed_at', $month)->whereYear('disbursed_at', $month)->sum('amount');
+                array_push( $monthly_loan_count_array, $monthly_loan_count );
+                array_push( $monthly_loan_amount_array, $monthly_loan_amount );
+                array_push( $month_name_array, $month_name );
+            }
+        }
+        if (!empty($monthly_loan_count_array)){
+            $max_disb_no = max( $monthly_loan_count_array );
+            $max_disbursement = round(( $max_disb_no + 10/2 ) / 10 ) * 10;
+        }else{
+            $max_disbursement = 0;
+        }
+
+        if (!empty($monthly_loan_amount_array)){
+            $max_amount_no = max( $monthly_loan_amount_array );
+            $max_amount = round(( $max_amount_no + 10/2 ) / 10 ) * 10;
+        }else{
+            $max_amount = 0;
+        }
+
+        $monthly_loan_data_array = array(
+            'month' => $month_name_array,
+            'post_count_data' => $monthly_loan_count_array,
+            'payment_amount' => $monthly_loan_amount_array,
+            'max_disbursement' => $max_disbursement,
+            'max_amount' => $max_amount,
+        );
+        $this->data['current'] = $request->month;
+        $this->data['current_region'] ='all';
+        $this->data['current_buyer'] = $request->buyer;
+        $disbAmount = array_sum($monthly_loan_amount_array);
+        $this->data['disbAmount'] = $disbAmount;
+        $this->data['disbCount'] = array_sum($monthly_loan_count_array);
+        $this->data['monthly_payments_data_array'] = json_encode($monthly_loan_data_array);
+    }
+
+    protected function buyer_region_specified($request){
+        $month = Carbon::parse($request->month);
+        $user = User::query()->find($request->buyer);
+        $region = Region::query()->find($request->region);
+        $loans_dates = $user->orders()->where('disbursed', true)
+            ->whereHas('order_region', function ($q) use ($region){
+                $q->where('region_id', '=', $region->id);
+            })->whereMonth('disbursed_at', $month)->whereYear('disbursed_at', $month)->orderBy( 'disbursed_at', 'ASC' )->pluck( 'disbursed_at' );
+        $month_array = array();
+        $loans_dates = json_decode( $loans_dates );
+
+        if ( ! empty( $loans_dates ) ) {
+            foreach ( $loans_dates as $unformatted_date ) {
+                $date = new \DateTime( $unformatted_date );
+                $day = $date->format( 'd' );
+                $month_name = $date->format( 'd-M' );
+                $month_array[ $day ] = $month_name;
+            }
+        }
+        $monthly_loan_count_array = array();
+        $month_name_array = array();
+        $monthly_loan_amount_array = array();
+        if ( ! empty( $month_array ) ) {
+            foreach ( $month_array as $day => $month_name ){
+                $monthly_loan_count = $user->orders()->where('disbursed', true)
+                    ->whereHas('order_region', function ($q) use ($region){
+                        $q->where('region_id', '=', $region->id);
+                    })->whereDay('disbursed_at', $day)->whereMonth('disbursed_at', $month)->whereYear('disbursed_at', $month)->get()->count();
+                $monthly_loan_amount = $user->orders()->where('disbursed', true)
+                    ->whereHas('order_region', function ($q) use ($region){
+                        $q->where('region_id', '=', $region->id);
+                    })->whereDay('disbursed_at', $day)->whereMonth('disbursed_at', $month)->whereYear('disbursed_at', $month)->sum('amount');
+                array_push( $monthly_loan_count_array, $monthly_loan_count );
+                array_push( $monthly_loan_amount_array, $monthly_loan_amount );
+                array_push( $month_name_array, $month_name );
+            }
+        }
+        if (!empty($monthly_loan_count_array)){
+            $max_disb_no = max( $monthly_loan_count_array );
+            $max_disbursement = round(( $max_disb_no + 10/2 ) / 10 ) * 10;
+        }else{
+            $max_disbursement = 0;
+        }
+
+        if (!empty($monthly_loan_amount_array)){
+            $max_amount_no = max( $monthly_loan_amount_array );
+            $max_amount = round(( $max_amount_no + 10/2 ) / 10 ) * 10;
+        }else{
+            $max_amount = 0;
+        }
+
+        $monthly_loan_data_array = array(
+            'month' => $month_name_array,
+            'post_count_data' => $monthly_loan_count_array,
+            'payment_amount' => $monthly_loan_amount_array,
+            'max_disbursement' => $max_disbursement,
+            'max_amount' => $max_amount,
+        );
+        $this->data['current'] = $request->month;
+        $this->data['current_region'] =$request->region;
+        $this->data['current_buyer'] = $request->buyer;
+        $disbAmount = array_sum($monthly_loan_amount_array);
+        $this->data['disbAmount'] = $disbAmount;
+        $this->data['disbCount'] = array_sum($monthly_loan_count_array);
+        $this->data['monthly_payments_data_array'] = json_encode($monthly_loan_data_array);
+    }
+
+    protected function month_specified($request){
+        $month = Carbon::parse($request->month);
+        $loans_dates = Order::query()->where('disbursed', '=',true)
+            ->whereMonth('disbursed_at', $month)
+            ->whereYear('disbursed_at', $month)
+            ->orderBy( 'disbursed_at', 'ASC' )
+            ->pluck( 'disbursed_at' );
+        $month_array = array();
+        $loans_dates = json_decode( $loans_dates );
+        if ( ! empty( $loans_dates ) ) {
+            foreach ( $loans_dates as $unformatted_date ) {
+                $date = new \DateTime( $unformatted_date );
+                $day = $date->format( 'd' );
+                $month_name = $date->format( 'd-M' );
+                $month_array[ $day ] = $month_name;
+            }
+        }
+        $monthly_loan_count_array = array();
+        $month_name_array = array();
+        $monthly_loan_amount_array = array();
+        if ( ! empty( $month_array ) ) {
+            foreach ( $month_array as $day => $month_name ){
+                $monthly_loan_count = Order::query()->where('disbursed','=', true)->whereDay('disbursed_at', $day)->whereMonth('disbursed_at', $month)->whereYear('disbursed_at', $month)->get()->count();
+                $monthly_loan_amount = Order::query()->where('disbursed','=', true)->whereDay('disbursed_at', $day)->whereMonth('disbursed_at', $month)->whereYear('disbursed_at', $month)->sum('amount');
+                array_push( $monthly_loan_count_array, $monthly_loan_count );
+                array_push( $monthly_loan_amount_array, $monthly_loan_amount );
+                array_push( $month_name_array, $month_name );
+            }
+        }
+        if (!empty($monthly_loan_count_array)){
+            $max_disb_no = max( $monthly_loan_count_array );
+            $max_disbursement = round(( $max_disb_no + 10/2 ) / 10 ) * 10;
+        }else{
+            $max_disb_no = 0;
+            $max_disbursement = 0;
+        }
+
+        if (!empty($monthly_loan_amount_array)){
+            $max_amount_no = max( $monthly_loan_amount_array );
+            $max_amount = round(( $max_amount_no + 10/2 ) / 10 ) * 10;
+        }else{
+            $max_amount_no = 0;
+            $max_amount = 0;
+        }
+        $monthly_loan_data_array = array(
+            'month' => $month_name_array,
+            'post_count_data' => $monthly_loan_count_array,
+            'payment_amount' => $monthly_loan_amount_array,
+            'max_disbursement' => $max_disbursement,
+            'max_amount' => $max_amount,
+        );
+        $this->data['current'] = $month->format('M-Y');
+        $disbAmount = array_sum($monthly_loan_amount_array);
+        $this->data['disbAmount'] = $disbAmount;
+        $this->data['disbCount'] = array_sum($monthly_loan_count_array);
+        $this->data['current_region'] = 'all';
+        $this->data['current_buyer'] = 'all';
+        $this->data['monthly_payments_data_array'] = json_encode($monthly_loan_data_array);
+    }
 }
