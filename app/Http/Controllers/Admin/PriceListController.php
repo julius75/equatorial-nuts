@@ -9,8 +9,10 @@ use App\Models\RawMaterial;
 use App\Models\Region;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\Console\Input\Input;
 use Yajra\DataTables\Facades\DataTables;
 
 class PriceListController extends Controller
@@ -22,7 +24,9 @@ class PriceListController extends Controller
      */
     public function index()
     {
-        return view('admin.pricelists.index');
+        $regions = Region::all();
+        $raw_materials = RawMaterial::all();
+        return view('admin.pricelists.index',compact('regions','raw_materials'));
     }
 
     /**
@@ -63,7 +67,7 @@ class PriceListController extends Controller
             'unit' => 'required',
         ]);
         if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator)->withInput()->with('error', $validator->errors()->first());
+           return Redirect::back()->withErrors($validator)->withInput()->with('error', $validator->errors()->first());
         }
         $priceList = PriceList::query()->create([
            'region_id'=>$request->region_id,
@@ -87,14 +91,58 @@ class PriceListController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function get_all_pricelists()
-    {
+    public function test(Request $request){
+        $raw_material_id=1;
+        $region=1;
+        $users = PriceList::with(['region:id,name','raw_material:id,name','approvedBy:id,first_name,last_name','createdBy:id,first_name,last_name']);
+        if ($raw_material_id) {
+            $userss = $users->whereHas('raw_material', function( $query ) use ( $raw_material_id ){
+                $query->where('raw_material_id', 3);
+            })->orWhereHas('region', function( $query ) use ( $region ){
+                $query->where('region_id', 1);
+            });
+            $user = $userss->get();
+            return $user;
+        }
+        if ($request->has('material')) {
+            $userss = $users->whereHas('raw_material', function( $query ) use (  $request ){
+                $query->where('id', $request->material);
+            })->WhereHas('region', function( $query ) use (  $request ){
+                $query->where('region_id', 1);
+            });
+            $user = $userss->get();
+            return $user;
+        }
+        $data = PriceList::withAndWhereHas('raw_material', function($query) use ($id){
+            $query->where('taskid', $id);
+        })->get();
+        return $data;
+        $data = PriceList::query()
+            ->with(['region:id,name','raw_material'=> function ($query) {
+                $query->where('id', 1);
+            },'approvedBy:id,first_name,last_name','createdBy:id,first_name,last_name'])
+            ->get();
+        return $data;
         $data = PriceList::query()
             ->with(['region:id,name','raw_material:id,name','approvedBy:id,first_name,last_name','createdBy:id,first_name,last_name'])
             ->get();
-        return Datatables::of($data)
-            ->addColumn('action', function ($data) {
-                return '<div class="dropdown dropdown-inline">
+        return $data;
+
+    }
+    public function get_all_pricelists(Request $request)
+    {
+
+        if($request->region_id) {
+            $users = PriceList::with(['region:id,name','raw_material:id,name','approvedBy:id,first_name,last_name','createdBy:id,first_name,last_name']);
+            $userss = $users->whereHas('raw_material', function( $query ) use ( $request ){
+                $query->where('raw_material_id', $request->raw_material_id);
+            })->WhereHas('region', function( $query ) use ( $request ){
+                $query->where('region_id', $request->region_id);
+            });
+            $data = $userss->get();
+            return Datatables::of($data)
+                ->addColumn('action', function ($data) {
+                    return '<div class="dropdown dropdown-inline">
 								<a href="" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">
 	                                <i class="la la-cog"></i>
 	                            </a>
@@ -108,9 +156,35 @@ class PriceListController extends Controller
 							</div>
 
 						';
-            })
-            ->make(true);
-    }
+                })
+                ->make(true);
+        }
+        if ($request->region_id == null){
+            $data = PriceList::query()
+                ->with(['region:id,name','raw_material:id,name','approvedBy:id,first_name,last_name','createdBy:id,first_name,last_name'])
+                ->get();
+            return Datatables::of($data)
+                ->addColumn('action', function ($data) {
+                    return '<div class="dropdown dropdown-inline">
+								<a href="" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">
+	                                <i class="la la-cog"></i>
+	                            </a>
+							  	<div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+									<ul class="nav nav-hoverable flex-column">
+							    		<li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-user"></i><span class="nav-text">View User Details</span></a></li>
+							    		<li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-edit"></i><span class="nav-text">Edit Details</span></a></li>
+							    		<li class="btn btn-light font-size-sm mr-5"data-toggle="modal"data-target="#smallModal" id="smallButton"><i class="nav-icon la la-sync-alt"></i><span class="nav-text">Update Status</span></li>
+							    	</ul>
+							  	</div>
+							</div>
+
+						';
+                })
+                ->make(true);
+        }
+
+        }
+
 
     /**
      * Get Current PriceLists

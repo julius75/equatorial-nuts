@@ -4,15 +4,43 @@
 @section('content')
     <!--end::Notice-->
     <!--begin::Card-->
-    <div class="card card-custom">
+    <div class="card card-custom" style="margin-top: -5%;">
         <div class="card-header flex-wrap border-0 pt-6 pb-0">
-            <div class="card-title">
+            <div class="card-title" style="margin-top: 0px !important;">
                 <h3 class="card-label">Price Lists</h3>
             </div>
+            <form id="filter_form" method="post" action="">
+                @csrf
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label text-lg-right font-weight-bolder" for="region_id">Region:</label>
+                    <div class="col-md-3" style="margin-left: -20px;">
+                        <select class="js-example-basic-single form-control{{ $errors->has('region_id') ? ' is-invalid' : '' }}" name="region_id" required>
+{{--                            <option selected disabled value="">Region</option>--}}
+                            @foreach($regions as $region)
+                                <option  value="{{$region->id}}">{{ucfirst($region->name)}}</option>
+                            @endforeach
+                            <option value="">All</option>
+                        </select>                        </div>
+                    <label class="col-lg-2 col-form-label text-lg-right font-weight-bolder" for="material">Materials:</label>
+                    <div class="col-md-4" style="margin-left: -20px;">
+                        <select class="js-example-basic-single form-control" name="raw_material_id" required>
+{{--                            <option selected disabled value="">Material</option>--}}
+                            @foreach($raw_materials as $raw_material)
+                                <option value="{{$raw_material->id}}">{{ucfirst($raw_material->name)}}</option>
+                            @endforeach
+                            <option value="">All</option>
+                        </select>
+                    </div>
+                    <div class="col-md-1">
+                        <button class="btn btn-success font-weight-bolder mr-2" id="">Filter</button>
+                    </div>
+                </div>
+            </form>
+
             <div class="card-toolbar">
                 @hasanyrole('admin|general_management')
                 <!--begin::Button-->
-                    <a href="{{ route('admin.price-lists.create') }}" type="button" class="btn btn-secondary mr-2 font-weight-bolder">
+                <a href="{{ route('admin.price-lists.create') }}" type="button" class="btn btn-secondary  font-weight-bolder">
                             <span class="svg-icon svg-icon-md">
                                 <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -24,8 +52,8 @@
                                 </svg>
                                 <!--end::Svg Icon-->
                             </span>Set New Region Price
-                    </a>
-                    <!--end::Button-->
+                </a>
+                <!--end::Button-->
                 @endhasanyrole
             </div>
         </div>
@@ -57,14 +85,30 @@
         'use strict';
         var KTDatatablesDataSourceAjaxClient = function() {
             var initTable1 = function() {
-                var table = $('#kt_datatable');
-                // begin first table
-                table.DataTable({
+                var table = $('#kt_datatable').DataTable({
+                    dom: 'Bfrtip',
+                    "processing": true,
+                    "serverSide": true,
+                    buttons: [{extend: 'copyHtml5'}, {
+                        extend: 'excelHtml5',
+                        exportOptions: {columns: ':visible'},
+                    },
+                        {
+                            extend: 'pdfHtml5', /*exportOptions: {columns: ':visible'}*/
+                            orientation: 'landscape',
+                            pageSize: 'TABLOID'
+                        },
+                        'colvis','pageLength'],
+                    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                     responsive: true,
                     ajax: {
-                        url: '{{route('admin.get-all-pricelists')}}',
-                        type: 'GET',
+                        url: '{!! route('admin.get-all-pricelists') !!}',
+                        data: function (d) {
+                            d.region_id = $('select[name=region_id]').val();
+                            d.raw_material_id = $('select[name=raw_material_id]').val();
+                        }
                     },
+
                     columns: [
                         {data: 'id', name: 'id'},
                         {data: 'date', name: 'date'},
@@ -108,6 +152,10 @@
                             },
                         },
                     ],
+                });
+                $('#filter_form').on('submit', function(e) {
+                    table.draw();
+                    e.preventDefault();
                 });
             };
             return {
