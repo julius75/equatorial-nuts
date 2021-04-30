@@ -29,6 +29,8 @@ Route::get('/', function () {
 //homepage
 Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 Route::post('/dashboard', [HomeController::class, 'index'])->name('dashboard.filter');
+Route::get('/dashboard/monthly-purchases-filter', [HomeController::class, 'disbursed_payments_filter'])->name('dashboard.disbursed_payments_filter');
+Route::post('/dashboard/monthly-purchases-filter', [HomeController::class, 'disbursed_payments_filter'])->name('dashboard.disbursed_payments_filter.post');
 //buyers
 Route::resource('app-users', UserController::class);
 //app-admins
