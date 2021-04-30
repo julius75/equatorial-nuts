@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\RawMaterial;
+use App\Models\RawMaterialRequirementSubmission;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -49,7 +50,7 @@ class RawMaterialController extends Controller
         $raw_materials = RawMaterial::query()
             ->whereHas('currentPrice',function ($q) use ($buyerRegion){
                 $q->where('region_id', '=', $buyerRegion->id);
-            })->with(['currentPrice:raw_material_id,region_id,amount,amount,value,unit,date,approved_at,created_at'])->get();
+            })->with(['currentPrice:id,raw_material_id,region_id,amount,amount,value,unit,date,approved_at,created_at'])->get();
         return response()->json(['message'=> compact('raw_materials')], Response::HTTP_OK);
     }
 
@@ -78,6 +79,7 @@ class RawMaterialController extends Controller
                         ->first();
         return response()->json(['message'=> compact('raw_material')], Response::HTTP_OK);
     }
+
     /**
      * Submit Raw Material Requirement Submission
      *
@@ -93,6 +95,7 @@ class RawMaterialController extends Controller
         $validator = Validator::make($request->all(),
             [
                 'order_id'=>'required|exists:orders,id',
+                'submissions' => 'required|array|min:1',
                 'submissions.*.raw_material_requirement_id' => 'required|exists:raw_material_requirements,id',
                 'submissions.*.value' => 'required',
             ]);
@@ -102,17 +105,29 @@ class RawMaterialController extends Controller
         $order = Order::query()->find($request->get('order_id'));
         try {
             foreach ($request->get('submissions') as $item) {
-                $order->raw_material_requirement_submissions()->create([
-                    'raw_material_requirement_id'=>$item->raw_material_requirement_id,
-                    'value'=>$item->value,
-                ]);
+                $check = RawMaterialRequirementSubmission::query()
+                    ->where(['order_id'=>$order->id, 'raw_material_requirement_id'=>$item['raw_material_requirement_id']])->first();
+                if ($check){
+                    $check->delete();
+                    RawMaterialRequirementSubmission::query()->create([
+                        'order_id'=>$order->id,
+                        'raw_material_requirement_id'=>$item['raw_material_requirement_id'],
+                        'value'=>$item['value'],
+                    ]);
+                } else
+                    {
+                    RawMaterialRequirementSubmission::query()->create([
+                        'order_id'=>$order->id,
+                        'raw_material_requirement_id'=>$item['raw_material_requirement_id'],
+                        'value'=>$item['value'],
+                    ]);
+                }
             }
             return response()->json(['message'=> "Quality Submissions for $order->ref_number registered successfully"],Response::HTTP_OK);
         }
         catch (\Exception $exception) {
             return response()->json(['message'=> "Failed to register Quality Submissions", 'exception'=>$exception],Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
     }
 
     /**

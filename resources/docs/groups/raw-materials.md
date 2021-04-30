@@ -131,7 +131,7 @@ curl -X POST \
     "http://localhost/api/v1/raw-materials-requirements" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"raw_material_id":7}'
+    -d '{"raw_material_id":3}'
 
 ```
 
@@ -146,7 +146,7 @@ let headers = {
 };
 
 let body = {
-    "raw_material_id": 7
+    "raw_material_id": 3
 }
 
 fetch(url, {
@@ -203,7 +203,7 @@ curl -X POST \
     "http://localhost/api/v1/raw-materials-requirement-submission/create" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"order_id":17,"submissions":[]}'
+    -d '{"order_id":10,"submissions":[]}'
 
 ```
 
@@ -218,7 +218,7 @@ let headers = {
 };
 
 let body = {
-    "order_id": 17,
+    "order_id": 10,
     "submissions": []
 }
 
@@ -282,7 +282,7 @@ curl -X POST \
     "http://localhost/api/v1/raw-materials-requirement-submission/view" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"order_id":11}'
+    -d '{"order_id":8}'
 
 ```
 
@@ -297,7 +297,7 @@ let headers = {
 };
 
 let body = {
-    "order_id": 11
+    "order_id": 8
 }
 
 fetch(url, {

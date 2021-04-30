@@ -17,7 +17,7 @@ class CreateOrderRegionsTable extends Migration
             $table->id();
             $table->foreignId('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->foreignId('region_id')->references('id')->on('regions')->onDelete('restrict');
-            $table->foreignId('buying_center_id')->references('id')->on('buying_centers')->onDelete('restrict');
+            $table->foreignId('buying_center_id')->nullable()->references('id')->on('buying_centers')->onDelete('restrict');
             $table->double('latitude',15,8)->nullable();
             $table->double('longitude',15,8)->nullable();
             $table->timestamp('created_at')->nullable()->useCurrent();

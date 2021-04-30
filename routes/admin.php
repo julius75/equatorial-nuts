@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\PriceListController;
 use App\Http\Controllers\Admin\RawMaterialController;
+use App\Http\Controllers\Admin\AccountBalanceController;
+use App\Http\Controllers\Admin\UtilityBalanceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -92,5 +94,10 @@ Route::prefix('datatables')->group(function () {
 Route::prefix('charts')->group(function () {
     //
 });
+
+
+
+Route::get('/utility-balances', [UtilityBalanceController::class, 'index'])->name('utility-balances');
+Route::get('/mpesa-account-balance/post', [AccountBalanceController::class, 'mpesa_balance'])->name('mpesa.post-account-balance');
 
 require __DIR__.'/admin_auth.php';

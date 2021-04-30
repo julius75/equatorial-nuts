@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRawMaterialRequirementSubmissionsTable extends Migration
+class CreateMpesaDisbursementTransactionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class CreateRawMaterialRequirementSubmissionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('raw_material_requirement_submissions', function (Blueprint $table) {
+        Schema::create('mpesa_disbursement_transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->references('id')->on('orders')->onDelete('restrict');
-            $table->foreignId('raw_material_requirement_id')->references('id')->on('raw_material_requirements')->onDelete('restrict');
-            $table->string('value');
+            $table->string('transaction_receipt')->index();
+            $table->decimal('amount',8,2);
+            $table->string('channel')->default("MPESA-B2C");
+            $table->timestamp('disbursed_at');
             $table->timestamp('created_at')->nullable()->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrentOnUpdate();
         });
@@ -30,6 +32,6 @@ class CreateRawMaterialRequirementSubmissionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('raw_material_requirement_submissions');
+        Schema::dropIfExists('mpesa_disbursement_transactions');
     }
 }

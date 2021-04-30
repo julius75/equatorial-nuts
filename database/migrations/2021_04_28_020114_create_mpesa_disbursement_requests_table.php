@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRawMaterialRequirementSubmissionsTable extends Migration
+class CreateMpesaDisbursementRequestsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,16 @@ class CreateRawMaterialRequirementSubmissionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('raw_material_requirement_submissions', function (Blueprint $table) {
+        Schema::create('mpesa_disbursement_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->references('id')->on('orders')->onDelete('restrict');
-            $table->foreignId('raw_material_requirement_id')->references('id')->on('raw_material_requirements')->onDelete('restrict');
-            $table->string('value');
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete('restrict');
+            $table->string('ConversationID')->index();
+            $table->string('OriginatorConversationID')->index();
+            $table->string('ResponseCode');
+            $table->string('ResponseDescription');
+            $table->boolean('issued')->default(false);
+            $table->json('response')->nullable();
             $table->timestamp('created_at')->nullable()->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrentOnUpdate();
         });
@@ -30,6 +35,6 @@ class CreateRawMaterialRequirementSubmissionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('raw_material_requirement_submissions');
+        Schema::dropIfExists('mpesa_disbursement_requests');
     }
 }

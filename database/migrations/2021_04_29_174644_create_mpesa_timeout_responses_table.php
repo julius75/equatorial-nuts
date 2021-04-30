@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRawMaterialRequirementSubmissionsTable extends Migration
+class CreateMpesaTimeoutResponsesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateRawMaterialRequirementSubmissionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('raw_material_requirement_submissions', function (Blueprint $table) {
+        Schema::create('mpesa_timeout_responses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->references('id')->on('orders')->onDelete('restrict');
-            $table->foreignId('raw_material_requirement_id')->references('id')->on('raw_material_requirements')->onDelete('restrict');
-            $table->string('value');
+            $table->json('response')->nullable();
             $table->timestamp('created_at')->nullable()->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrentOnUpdate();
         });
@@ -30,6 +28,6 @@ class CreateRawMaterialRequirementSubmissionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('raw_material_requirement_submissions');
+        Schema::dropIfExists('mpesa_timeout_responses');
     }
 }

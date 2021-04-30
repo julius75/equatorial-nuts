@@ -8,6 +8,10 @@ use App\Http\Controllers\Api\FarmerController;
 use App\Http\Controllers\Api\RegionController;
 use App\Http\Controllers\Api\RawMaterialController;
 use App\Http\Controllers\Api\BagTypeController;
+use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\DisbursementController;
+use App\Http\Controllers\Admin\AccountBalanceController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +42,7 @@ Route::prefix('v1')->group(function () {
             Route::post('update', [PasswordResetController::class, 'updatePassword']);
         });
     });
+
     Route::middleware(['auth:api', 'ensure.otp.auth'])->group(function (){
         //farmers
         Route::resource('farmers', FarmerController::class)->except(['create', 'edit', 'update', 'destroy']);
@@ -55,5 +60,15 @@ Route::prefix('v1')->group(function () {
         Route::post('/raw-materials-requirement-submission/create', [RawMaterialController::class, 'create_raw_material_requirements_submission']);
         Route::post('/raw-materials-requirement-submission/view', [RawMaterialController::class, 'view_raw_material_requirements_submission']);
 
+        Route::post('/orders', [OrderController::class, 'list_orders']);
+        Route::post('/orders-create-new', [OrderController::class, 'create_order']);
+
+        Route::post('/initiate-mpesa-disbursement', [DisbursementController::class, 'post_disbursement']);
     });
+
+    Route::post('/mpesa-disbursement-result-url', [DisbursementController::class, 'result'])->name('mpesa_disbursement.result');
+    Route::post('/mpesa-disbursement-timeout-url', [DisbursementController::class, 'timeout'])->name('mpesa_disbursement.timeout');
+    Route::post('/mpesa-account-balance/result', [AccountBalanceController::class, 'mpesa_balance_result'])->name('mpesa_account_balance.result');
+    Route::post('/mpesa-account-balance/timeout', [AccountBalanceController::class, 'mpesa_balance_timeout'])->name('mpesa_account_balance.timeout');
+
 });
