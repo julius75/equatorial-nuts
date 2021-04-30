@@ -7,12 +7,12 @@
     <div class="card card-custom" style="margin-top: -5%;">
         <div class="card-header flex-wrap border-0 pt-6 pb-0">
             <div class="card-title">
-                <h3 class="card-label">Registered Equitorial Nuts Regions
+                <h3 class="card-label">Registered Equitorial Nuts Buying Centre
                 </h3>
             </div>
             <div class="card-toolbar">
                 <!--begin::Button-->
-                <a href="{{ route('admin.app-regions.create') }}" type="button" class="btn btn-primary font-weight-bolder">
+                <a href="{{ route('admin.app-buying-centre.create') }}" type="button" class="btn btn-primary font-weight-bolder">
                     <span class="svg-icon svg-icon-md">
                         <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -23,7 +23,7 @@
                             </g>
                         </svg>
                         <!--end::Svg Icon-->
-                    </span>Register New Region
+                    </span>Register New Buying Centre
                 </a>
                 <!--end::Button-->
             </div>
@@ -34,11 +34,9 @@
                 <thead>
                 <tr>
                     <th>#</th>
+                    <th>Region</th>
                     <th>Name</th>
-                    <th>County</th>
-                    <th>Sub County</th>
-                    <th>Buying Centers</th>
-                    <th>Created</th>
+                    <th>Date</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -48,59 +46,6 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="smallModal" role="dialog">
-        <div class="modal-dialog" style="min-height: 800px">
-            <div class="modal-content">
-                <form method="POST" action="" id="editStatus">
-                    {{csrf_field()}}
-                    <input type="hidden" name="_method" value="POST">
-                    <div class="modal-header">
-                        <div class="modal-title h4">Status update for selected Farmer</div>
-                    </div>
-
-                    <div class="modal-body overlay overlay-block cursor-default">
-                        <div class="table-responsive">
-                            <!--Table-->
-                            <table class="table table-head-custom table-vertical-center overflow-hidden">
-                                <thead>
-                                <tr>
-                                    <th>FULL NAME</th>
-                                    <th>ID NUMBER</th>
-                                    <th>STATUS</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {{--                                @foreach ($users as $user)--}}
-                                <tr>
-                                    <td id="fullname"></td>
-                                    <td id="id_number"></td>
-                                    <td id="status">
-                                        <span class="label label-lg label-inline label-light-danger"></span>
-                                    </td>
-                                </tr>
-                                {{--                                @endforeach--}}
-                                </tbody>
-                                <!--Table body-->
-                            </table>
-                        </div>
-                    </div>
-                    <div class="form modal-footer">
-                        <div class="form-group mr-2">
-                            <select class="form-control" name="status" id="statusValue">
-                                <option value="true">Active</option>
-                                <option value="false">Suspended</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <button type="button" class="btn btn-light btn-elevate mr-3" data-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary btn-elevate">Update Status</button>
-                        </div>
-                    </div>
-
-                </form>
-            </div>
-        </div>
-    </div>
     <div id="confirmModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             {{ csrf_field() }}
@@ -120,41 +65,44 @@
         </div>
     </div>
     <!--end::Card-->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
+    <!-- Modal HTML Markup -->
+    <div id="modal" class="modal fade">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Add Raw Material Details</h4>
+                    <h1 class="modal-title">Attach Raw Material To The Centre</h1>
                 </div>
                 <div class="modal-body">
-                    <form id="frmProducts" name="frmProducts" class="form-horizontal" novalidate="">
-                        <div class="form-group error">
-                            <label for="inputName" class="col-sm-3 control-label">Name</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control has-error" id="name" name="name" placeholder="Product Name" value="">
+                    <form class="form-horizontal">
+                        {{csrf_field()}}
+                        <input type="hidden" name="_method" value="POST">
+                        <div class="form-group row">
+                            <label class="col-form-label col-xl-3 col-lg-3">Raw Material</label>
+                            <div class="col-xl-9 col-lg-9">
+                                <select required class="form-control form-control-lg form-control-solid selectpicker" name="name" id="elementId">
+                                    <option disabled value="">Select Material</option>
+                                    @foreach($materials as $material)
+                                        <option  value="{{$material->id}}">{{ucfirst($material->name)}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="inputDetail" class="col-sm-3 control-label">Details</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" id="details" name="details" placeholder="details" value="">
+                                <span class="text-muted"> attach the raw material
+                                    </span>
+                        </div>
+
+                        <div class="form-group">
+                            <div>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary" id="ok_buttons">Save Material</button>
                             </div>
                         </div>
                     </form>
                 </div>
-{{--                <div class="modal-footer">--}}
-{{--                    <button type="button" class="btn btn-primary" id="btn-save" value="add">Save changes</button>--}}
-{{--                    <input type="hidden" id="product_id" name="tour_id" value="0">--}}
-{{--                </div>--}}
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light btn-elevate mr-2" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary btn-elevate">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 @endsection
 @section('scripts')
     <script>
@@ -168,7 +116,7 @@
                 table.DataTable({
                     responsive: true,
                     ajax: {
-                        url: APP_URL +'/admin/datatables/get-app-regions',
+                        url: APP_URL +'/admin/datatables/get-app-buying-centre',
                         type: 'GET',
                         data: {
                             pagination: {
@@ -178,10 +126,8 @@
                     },
                     columns: [
                         {data: 'id', name: 'id'},
+                        {data: 'region', name: 'region'},
                         {data: 'name', name: 'name'},
-                        {data: 'county', name: 'county'},
-                        {data: 'sub_county', name: 'sub_county'},
-                        {data: 'buying_center_count', name: 'buying_center_count'},
                         {data: 'created_at', name: 'created_at'},
                         {data: 'action', name: 'action'},
                     ],
@@ -230,25 +176,62 @@
             }
         });
     </script>
+{{--    <script>--}}
+{{--        var user_id;--}}
+{{--        $(document).ready(function(event){--}}
+{{--            var table = $( "#kt_datatable" ).DataTable();--}}
+{{--            table.on('click', '.delete', function(){--}}
+{{--                jQuery.noConflict();--}}
+{{--                user_id = $(this).attr('id');--}}
+{{--                $('#confirmModal').modal('show');--}}
+{{--            });--}}
+{{--            $('#ok_button').click(function(){--}}
+{{--                $.ajax({--}}
+{{--                    method: 'POST',--}}
+{{--                    url:"delete-farmers/"+user_id,--}}
+{{--                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},--}}
+{{--                    beforeSend:function(){--}}
+{{--                        $('#ok_button').text('Deleting...');--}}
+{{--                    },--}}
+{{--                    success:function(data)--}}
+{{--                    {--}}
+{{--                        setTimeout(function(){--}}
+{{--                            $('#confirmModal').modal('hide');--}}
+{{--                            table.draw();--}}
+{{--                        }, 2000);--}}
+{{--                    }--}}
+{{--                })--}}
+{{--            });--}}
+
+{{--        });--}}
+{{--    </script>--}}
     <script>
         var user_id;
         $(document).ready(function(event){
             var table = $( "#kt_datatable" ).DataTable();
-            table.on('click', '.delete', function(){
+            table.on('click', '.materials', function(){
                 jQuery.noConflict();
                 user_id = $(this).attr('id');
-                $('#confirmModal').modal('show');
+                $('#modal').modal('show');
+
             });
-            $('#ok_button').click(function(){
+            var e = document.getElementById("elementId");
+            var value = e.options[e.selectedIndex].value;
+            $('#ok_buttons').click(function(){
+
                 $.ajax({
                     method: 'POST',
-                   // url:"delete-regions/"+user_id,
+                    url:"buying-centre/"+user_id,
+                    data:{
+                        name:value,
+                    },
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                     beforeSend:function(){
                         $('#ok_button').text('Deleting...');
                     },
                     success:function(data)
                     {
+                        alert(data.success)
                         setTimeout(function(){
                             $('#confirmModal').modal('hide');
                             table.draw();

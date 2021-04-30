@@ -33,7 +33,8 @@ class FarmerController extends Controller
      */
     public function index()
     {
-        return view('admin.farmers.index');
+        $regions = Region::all();
+        return view('admin.farmers.index',compact('regions'));
     }
 
     /**
@@ -49,8 +50,37 @@ class FarmerController extends Controller
 
         return view('admin.farmers.create',compact('regions','materials'));
     }
-    public function getAdminFarmers()
+    public function getAdminFarmers(Request $request)
     {
+        if($request->region_id) {
+            $farmer = Farmer::with(['region:id,name','raw_materials:id,name']);
+            $users = $farmer->WhereHas('region', function( $query ) use ( $request ){
+                $query->where('region_id', $request->region_id);
+            });
+            $data = $users->where('status', '=', true)
+                ->orderByDesc('created_at')->get();
+            return Datatables::of($users)
+                ->addColumn('region', function ($users){
+                    return $users->region->name;
+                })
+                ->addColumn('action', function ($users) {
+                    return '<div class="dropdown dropdown-inline">
+								<a href="" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">
+	                                <i class="la la-cog"></i>
+	                            </a>
+							  	<div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+									<ul class="nav nav-hoverable flex-column">
+							    		<li class="nav-item"><a class="nav-link" href="'.route('admin.app-farmers.show',Crypt::encrypt($users->id)).'"><i class="nav-icon la la-user"></i><span class="nav-text">View Farmer Details</span></a></li>
+							    		<li class="nav-item"><a class="nav-link" href="'.route('admin.app-farmers.edit',Crypt::encrypt($users->id)).'"><i class="nav-icon la la-edit"></i><span class="nav-text">Edit Details</span></a></li>
+							    		<li class="btn btn-light font-size-sm mr-5"data-toggle="modal"data-target="#smallModal" id="smallButton"><i class="nav-icon la la-sync-alt"></i><span class="nav-text">Update Status</span></li>
+							    	</ul>
+							  	</div>
+							</div>
+
+						';
+                })
+                ->make(true);
+        }
         $users = Farmer::with(['region:id,name','raw_materials:id,name'])
         ->where('status', '=', true)
         ->orderByDesc('created_at')->get();

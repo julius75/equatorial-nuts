@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Mail\BuyerCreated;
+use App\Models\BuyingCenter;
 use App\Models\County;
 use App\Models\Farmer;
 use App\Models\RawMaterial;
@@ -170,14 +171,87 @@ class RegionController extends Controller
         try {
             $id = Crypt::decrypt($id);
             $region = Region::findOrFail($id);
-            $buying_centers = $region->buying_centers()->get() ?? '--';
-            $materials = RawMaterial::all();
-            return view('admin.regions.show',compact('region','buying_centers','materials'));
+            return view('admin.regions.show',compact('region'));
         } catch (ModelNotFoundException $e) {
             return $e;
         }
     }
+    public function getRegions($id)
+    {
+        try {
+            $region = Region::findOrFail($id);
+            $buying_centers = $region->buying_centers()->get() ?? '--';
+          //  return $buying_centers;
+            return Datatables::of($buying_centers)
+                ->editColumn('created_at', function ($buying_centers){
+                    return Carbon::parse($buying_centers->created_at)->isoFormat('MMM D YYYY');
+                })
+                ->make(true);
+        } catch (ModelNotFoundException $e) {
+            return $e;
+        }
 
+    }
+
+    public function test(){
+        $users = BuyingCenter::where(function ($query) {
+            $query->select('id')
+                ->from('buying_center_raw_materials')
+                ->whereColumn('buying_center_raw_materials.buying_center_id', 'buying_centers.id');
+        }, 'Pro')->get();
+
+        return $users;
+        $test =  DB::table('buying_centres')
+            ->join('buying_center_raw_materials', 'buying_centres.id', '=', 'buying_center_raw_materials.buying_centre_id')
+           // ->join('raw_materials', 'price_lists.raw_material_id', '=', 'raw_materials.id')
+            ->select('buying_centres.*', 'buying_center_raw_materials.*')
+            ->where('buying_centres.region_id', 1,
+            )->get();
+        return $test;
+        $centers = BuyingCenter::where('region_id', 1)->pluck('id')->toArray();
+        $buying_center = DB::table('buying_center_raw_materials')
+            ->whereIn('raw_material_id', $centers)
+            ->pluck('id')->toArray();
+        $raw_materials = DB::table('raw_materials')
+            ->whereIn('id', $buying_center)
+            ->get();
+
+        $users = DB::table('buying_center_id')->where('votes', 100)->get();
+
+
+        $postComment = array();
+
+        foreach($materials->id as $id){
+            return $id;
+        }
+        return $postComment;
+
+
+    }
+    public function getMaterials($id)
+        {
+         try {
+             $materials = BuyingCenter::where('region_id', $id)->get();
+             $centers = BuyingCenter::where('region_id', 1)->pluck('id')->toArray();
+             $buying_center = DB::table('buying_center_raw_materials')
+                 ->whereIn('raw_material_id', $centers)
+                 ->pluck('id')->toArray();
+             $raw_materials = DB::table('raw_materials')
+                 ->whereIn('id', $buying_center)
+                 ->get();
+        return Datatables::of($materials,)
+            ->editColumn('materials', function ($materials){
+                return Carbon::parse($materials->created_at)->isoFormat('MMM D YYYY');
+            })
+            ->editColumn('buying', function ($raw_materials){
+                return $raw_materials->name;
+            })
+            ->make(true);
+    } catch (ModelNotFoundException $e) {
+        return $e;
+    }
+
+}
     /**
      * Show the form for editing the specified resource.
      *
