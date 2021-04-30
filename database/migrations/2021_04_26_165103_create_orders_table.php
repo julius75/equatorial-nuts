@@ -24,6 +24,7 @@ class CreateOrdersTable extends Migration
             $table->boolean('disbursed')->default(false);
             $table->timestamp('created_at')->nullable()->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrentOnUpdate();
+            $table->timestamp('disbursed_at')->nullable();
         });
     }
 

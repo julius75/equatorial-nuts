@@ -19,6 +19,7 @@ class Order extends Model
         'disbursed',
         'created_at',
         'updated_at',
+        'disbursed_at',
     ];
     protected $casts = [
         'created_at' => 'datetime:Y-m-d h:i:s',
@@ -52,6 +53,10 @@ class Order extends Model
     public function mpesa_disbursement_request()
     {
         return $this->hasOne(MpesaDisbursementRequest::class);
+    }
+    public function mpesa_disbursement_transaction()
+    {
+        return $this->hasOne(MpesaDisbursementTransaction::class);
     }
     public function scopeDisbursed($query){
         $query->where('disbursed', true);
