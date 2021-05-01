@@ -22,7 +22,7 @@
     <link href="{{asset('assets/plugins/global/plugins.bundle.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/plugins/custom/prismjs/prismjs.bundle.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/css/style.bundle.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('assets/css/styles.css')}}" rel="stylesheet" type="text/css" />
+{{--    <link href="{{asset('assets/css/styles.css')}}" rel="stylesheet" type="text/css" />--}}
     <link href="{{asset('assets/css/toastr.min.css')}}" rel="stylesheet" type="text/css" />
 
     <!--end::Global Theme Styles-->
@@ -965,10 +965,18 @@
 <script src="{{asset('assets/plugins/custom/prismjs/prismjs.bundle.js')}}"></script>
 <script src="{{asset('assets/js/scripts.bundle.js')}}"></script>
 <script src="{{asset('assets/js/pages/features/miscellaneous/toastr.js')}}"></script>
-<script src="{{asset('assets/js/jquery.min.js')}}"></script>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+<!-------Removed Due To Console Error----------->
+{{--<script src="{{asset('assets/js/jquery.min.js')}}"></script>--}}
 
 <script src="{{asset('assets/js/toastr.min.js')}}"></script>
-<script src="{{asset('assets/js/bootstrap-confirmation.min.js')}}"></script>
+
+<!-------Removed Due To Console Error----------->
+{{--<script src="{{asset('assets/js/bootstrap-confirmation.min.js')}}"></script>--}}
 
 <!--end::Global Theme Bundle-->
 <!--begin::Page Vendors(used by this page)-->

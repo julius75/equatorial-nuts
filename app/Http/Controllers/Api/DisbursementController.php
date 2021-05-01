@@ -241,7 +241,8 @@ class DisbursementController extends Controller
 
                 $order->update([
                     "disbursed" => true,
-                    "completed" => true
+                    "completed" => true,
+                    "disbursed_at"=>now()
                 ]);
 
                 //notify farmer and user
