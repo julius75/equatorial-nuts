@@ -84,51 +84,12 @@ class PriceListController extends Controller
         return Redirect::back()->withInput()->with('error', 'Something Went Wrong, refresh page and try again');
     }
 
-
     /**
      * Get All PriceLists
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function test(Request $request){
-        $raw_material_id=1;
-        $region=1;
-        $users = PriceList::with(['region:id,name','raw_material:id,name','approvedBy:id,first_name,last_name','createdBy:id,first_name,last_name']);
-        if ($raw_material_id) {
-            $userss = $users->whereHas('raw_material', function( $query ) use ( $raw_material_id ){
-                $query->where('raw_material_id', 3);
-            })->orWhereHas('region', function( $query ) use ( $region ){
-                $query->where('region_id', 1);
-            });
-            $user = $userss->get();
-            return $user;
-        }
-        if ($request->has('material')) {
-            $userss = $users->whereHas('raw_material', function( $query ) use (  $request ){
-                $query->where('id', $request->material);
-            })->WhereHas('region', function( $query ) use (  $request ){
-                $query->where('region_id', 1);
-            });
-            $user = $userss->get();
-            return $user;
-        }
-        $data = PriceList::withAndWhereHas('raw_material', function($query) use ($id){
-            $query->where('taskid', $id);
-        })->get();
-        return $data;
-        $data = PriceList::query()
-            ->with(['region:id,name','raw_material'=> function ($query) {
-                $query->where('id', 1);
-            },'approvedBy:id,first_name,last_name','createdBy:id,first_name,last_name'])
-            ->get();
-        return $data;
-        $data = PriceList::query()
-            ->with(['region:id,name','raw_material:id,name','approvedBy:id,first_name,last_name','createdBy:id,first_name,last_name'])
-            ->get();
-        return $data;
-
-    }
     public function get_all_pricelists(Request $request)
     {
 
@@ -184,7 +145,6 @@ class PriceListController extends Controller
         }
 
         }
-
 
     /**
      * Get Current PriceLists

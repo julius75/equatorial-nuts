@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\PriceListController;
 use App\Http\Controllers\Admin\RawMaterialController;
 use App\Http\Controllers\Admin\AccountBalanceController;
 use App\Http\Controllers\Admin\UtilityBalanceController;
+use App\Http\Controllers\Admin\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,7 +75,10 @@ Route::resource('app-farmers', FarmerController::class);
 Route::resource('app-regions', RegionController::class);
 //buying centre
 Route::resource('app-buying-centre', BuyingCentreController::class);
-
+//orders
+Route::prefix('orders')->group(function () {
+    Route::get('/', [OrderController::class, 'index'])->name('orders.index');
+});
 //default list
 Route::get('/default', [UserController::class, 'default'])->name('default');
 Route::get('get-all-pricelists', [PriceListController::class, 'get_all_pricelists'])->name('get-all-pricelists');
@@ -93,6 +97,7 @@ Route::prefix('datatables')->group(function () {
     Route::get('get-app-regions-buying-centers/{id}', [RegionController::class, 'getRegions'])->name('get-app-regions-buying-centers');
     Route::get('get-app-regions-raw/{id}', [RegionController::class, 'getMaterials'])->name('get-app-regions-raw');
     Route::get('get-app-buying-centre', [BuyingCentreController::class, 'getCentres'])->name('get-app-buying-centre');
+    Route::get('get-orders', [OrderController::class, 'get_orders'])->name('get-orders');
     //Route::get('get-all-pricelists-filter', [PriceListController::class, 'get_all_pricelists'])->name('get-all-pricelists-filter');
 
 });
