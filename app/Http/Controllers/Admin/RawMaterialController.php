@@ -7,6 +7,7 @@ use App\Models\PriceList;
 use App\Models\RawMaterial;
 use App\Models\RawMaterialRequirement;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Redirect;
@@ -118,6 +119,63 @@ class RawMaterialController extends Controller
     }
 
     /**
+     * Get Raw Materials with Requirement counts
+     *
+     * @return \Illuminate\Http\Response
+     * @throws \Exception
+     */
+    public function raw_material_requirements($raw_material, $id){
+        $where = array('id' => $id,'raw_material_id'=>$raw_material);
+        $user = RawMaterialRequirement::where($where)->first();
+        return Response::json($user);
+    }
+    public function test($id,$raw){
+        $where = array('id' =>$id,'raw_material_id'=>$raw);
+        $user = RawMaterialRequirement::where($where)->first();
+        return response()->json(['data'=>$user]);
+
+    }
+    /**
+     * Store a newly created Requirement.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update_materials(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'raw_material' => 'required|exists:raw_materials,id',
+            'parameter' => 'required',
+            'type' => 'required|in:percentage,integer,text',
+            'value' => 'required|in:MAX,MIN,null',
+            'requirement' => 'required',
+            'user_id' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return Redirect::back()->withErrors($validator)->withInput()->with('error', $validator->errors()->first());
+        }
+        try{
+            $where = array('id' =>$request->user_id,'raw_material_id'=>$request->raw_material);
+            $material = RawMaterialRequirement::where($where)->first();
+            if (!is_null($material)) {
+                $material->update([
+                    'parameter' => $request->parameter,
+                    'type' => $request->type,
+                    'value' =>$request->value,
+                    'requirement' => $request->requirement,
+                    'unit' => $request->unit,
+                ]);
+            }
+            return Redirect::back()->with('message','Raw Material Requirement updated Successfully');
+
+        }catch (\Exception $exception) {
+            //return Redirect::back()->with('error','Something Went Wrong, refresh page and try again');
+            return Redirect::back()->withInput()->with('error', 'Something Went Wrong, refresh page and try again');
+        }
+
+
+    }
+    /**
      * Get Pending Approval PriceLists
      *
      * @param  int  $id
@@ -142,10 +200,7 @@ class RawMaterialController extends Controller
 	                            </a>
 							  	<div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
 									<ul class="nav nav-hoverable flex-column">
-							    		<li class="nav-item"><a class="nav-link"  href="'.route('admin.edit-requirement', $data->id).'"><i class="nav-icon la la-edit"></i><span class="nav-text">Edit Details</span></a></li>
-		<li class="nav-item"><a class="nav-link"  href="'.route('admin.edit-requirement', $data->id).'"><i class="nav-icon la la-edit"></i><span class="nav-text">Edit Details</span></a></li>
-
-							    		<li class="btn btn-light font-size-sm mr-5"data-toggle="modal"data-target="#smallModal" id="smallButton"><i class="nav-icon la la-sync-alt"></i><span class="nav-text">Update Status</span></li>
+							    	<li class="nav-item delete" style=" cursor: pointer;"  data-id='.$data->id.' data-parameter='.$data->parameter.'><span class="nav-link"><i class="nav-icon la la-edit"></i><span class="nav-text">Edit Details</span></span></li>
 							    	</ul>
 							  	</div>
 							</div>

@@ -44,6 +44,8 @@ Route::get('raw-material-requirements/{id}/view', [RawMaterialController::class,
 Route::get('raw-material-requirements/{id}/create', [RawMaterialController::class,'create_new_requirement'])->name('raw-materials.create.requirement');
 Route::post('raw-material-requirements/store', [RawMaterialController::class,'store_new_requirement'])->name('raw-materials.store.requirement');
 Route::get('edit-requirement/{id}/', [RawMaterialController::class,'edit_requirement'])->name('edit-requirement');
+Route::get('raw/{raw_material}/{id}', [RawMaterialController::class,'raw_material_requirements'])->name('raw');
+
 
 //admin status
 Route::post('update-status-admin/{id}', [AdminController::class,'statusUpdate']);
@@ -58,7 +60,9 @@ Route::get('/getchart/{month?}/{year?}', [HomeController::class, 'getMonthlyPost
 
 //app-admins
 Route::resource('app-admins', AdminController::class);
-Route::get('/test', [RegionController::class, 'test'])->name('test');
+Route::get('test/{id}/{ids}', [RawMaterialController::class, 'test'])->name('test');
+Route::post('update-materials', [RawMaterialController::class,'update_materials'])->name('update-materials');
+
 Route::get('/getSubCounty/{id}', [RegionController::class, 'getSubCounty'])->name('getSubCounty');
 //app-admins
 Route::resource('app-admins', AdminController::class);
