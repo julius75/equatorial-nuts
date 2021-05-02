@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\OrderRegion;
 use App\Models\RawMaterial;
+use App\Models\RawMaterialRequirementSubmission;
 use App\Models\Region;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Yajra\DataTables\Facades\DataTables;
 
 class OrderController extends Controller
@@ -18,6 +21,18 @@ class OrderController extends Controller
         $data['raw_materials'] = RawMaterial::all();
         $data['buyers'] = User::query()->where('status', '=', true)->get();
         return view('admin.orders.index', $data);
+    }
+
+    public function map()
+    {
+        $data['regions'] = Region::all();
+        $data['raw_materials'] = RawMaterial::all();
+        $data['buyers'] = User::query()->where('status', '=', true)->get();
+        //$data['orders'] = Order::query()->with('order_region')->get();
+        $data['latitude'] = 0.17687; //default set to kenya's gps coordinates
+        $data['longitude'] = 37.90833;
+        $data['mapOrders'] = OrderRegion::query()->with(['order', 'region'])->get();
+        return view('admin.orders.map', $data);
     }
 
     public function get_orders(Request $request)
@@ -101,11 +116,52 @@ class OrderController extends Controller
         }
         return Datatables::of($data)
             ->addColumn('action', function ($data) {
-                return '<a href="'.route('admin.price-lists.approve', encrypt($data->id)).'" class="btn btn-secondary btn-sm">
+                return '<a href="'.route('admin.orders.show', $data->ref_number).'" class="btn btn-secondary btn-sm">
                             <i class="flaticon2-pie-chart"></i> View
                         </a>
 						';
             })
             ->make(true);
+    }
+
+    public function show($ref_number){
+        $order = Order::query()
+            ->where('ref_number', '=', $ref_number)
+            ->with([
+                'order_region.region',
+                'order_region.buying_center',
+                'order_region.region.county',
+                'order_region.region.sub_county',
+                'order_raw_material.raw_material',
+                'order_raw_material.bag_type',
+                'user',
+                'farmer',
+                'price_list',
+                'mpesa_disbursement_transaction'
+            ])
+            ->first();
+        if (!$order)
+            return Redirect::back()->with('error', "Order Ref: $ref_number not found!");
+//        dd($order);
+        $data['order'] = $order;
+        $data['page_title'] = $order->ref_number;
+        $data['page_description'] = "Order Details";
+        return view('admin.orders.show', $data);
+    }
+
+    public function get_order_raw_material_requirement_submissions($ref_number){
+        $order = Order::query()->where('ref_number', '=', $ref_number)->first();
+        $data = $order->raw_material_requirement_submissions()
+            ->whereHas('active_raw_material_requirement')
+            ->with('active_raw_material_requirement')
+            ->get();
+        return Datatables::of($data)->make(true);
+    }
+
+    public function get_order_mpesa_transaction($ref_number){
+        $order = Order::query()->where('ref_number', '=', $ref_number)->first();
+        $data = $order->mpesa_disbursement_transaction()
+            ->get();
+        return Datatables::of($data)->make(true);
     }
 }

@@ -13,10 +13,10 @@
                 <!--begin::Actions-->
                 <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
                 <a href="#" class="btn btn-light-warning font-weight-bolder btn-sm">Reference Number: {{$page_title}}</a>
-                @if($transaction->status == true)
-                    <a href="#" class="ml-3 btn btn-light-success font-weight-bolder btn-sm">Transaction Status: Complete</a>
+                @if($order->disbursed == true)
+                    <a href="#" class="ml-3 btn btn-light-success font-weight-bolder btn-sm">Order Status: Complete</a>
                 @else
-                        <a href="#" class="ml-3 btn btn-light-warning font-weight-bolder btn-sm">Transaction Status: Pending Vendor Assignment</a>
+                        <a href="#" class="ml-3 btn btn-light-danger font-weight-bolder btn-sm">Order Status: Pending Buyer Disbursement</a>
                 @endif
                 <!--end::Actions-->
             </div>
@@ -25,182 +25,365 @@
     <!--end::Subheader-->
 @endsection
 @section('content')
-
-
     <div class="row">
-        <div class="col-md-4">
-            <div class="card card-custom gutter-b">
-                <!--begin::Header-->
-                <div class="card-header border-0 py-5">
-                    <h3 class="card-title align-items-start flex-column">
-                        <span class="card-label font-weight-bolder text-dark">User Details</span>
-                    </h3>
-                </div>
-                <!--end::Header-->
-                <div class="card-body">
-                    <!--begin::Top-->
-                    <div class="d-flex">
-                        <!--begin::Pic-->
-                        <div class="flex-shrink-0 mr-7">
-                            <div class="symbol symbol-50 symbol-lg-120 symbol-light-danger">
-                                <span class="font-size-h3 symbol-label font-weight-boldest">{{ucfirst(substr($transaction->user->first_name, 0, 1)).' '.ucfirst(substr($transaction->user->last_name, 0, 1))}}</span>
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-xl-4 col-md-4">
+                    <div class="mb-3 card">
+                        <div class="card-body">
+                            <ul class="list-group list-contacts">
+                                <li class="list-group-item active"><a href="#" style="color: white">Buyer Details: </a></li>
+                                <li class="list-group-item"><b>Name:</b> {{$order->user->full_name}}</li>
+                                <li class="list-group-item"><b>Phone:</b> {{$order->user->phone_number}}</li>
+                                <li class="list-group-item"><b>Email:</b> {{$order->user->email}}</li>
+                            </ul>
+                        </div>
+                        <div class="card-body groups-contact mt-0">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><a href="#" style="color: white">Farmer Details</a></li>
+                                <li class="list-group-item justify-content-between">
+                                    <b>Name:</b> {{$order->farmer->full_name}}
+                                </li>
+                                <li class="list-group-item justify-content-between">
+                                    <b>Phone:</b>
+                                    {{$order->farmer->phone_number}}
+                                </li>
+                                <li class="list-group-item justify-content-between">
+                                    <b>ID Number:</b>
+                                    {{$order->farmer->id_number}}
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="card-body groups-contact mt-0">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><a href="#" style="color: white">Raw Material Details</a></li>
+                                <li class="list-group-item justify-content-between">
+                                    <b>Name:</b> {{$order->order_raw_material->raw_material->name}}
+                                </li>
+                                <li class="list-group-item justify-content-between">
+                                    <b>Bag Type:</b>
+                                    {{$order->order_raw_material->bag_type->name}}
+                                </li>
+                                <li class="list-group-item justify-content-between">
+                                    <b>Number of Bags:</b>
+                                    {{$order->order_raw_material->bags}}
+                                </li>
+                                <li class="list-group-item justify-content-between">
+                                    <b>Net Weight:</b>
+                                    {{$order->order_raw_material->net_weight}} Kg
+                                </li>
+                                <li class="list-group-item justify-content-between">
+                                    <b>Gross Weight:</b>
+                                    {{$order->order_raw_material->gross_weight}} Kg
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card card-custom">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <h3 class="card-label"> Order Region Details </h3>
+                            </div>
+                            <div class="card-toolbar">
+                                <ul class="nav nav-light-danger nav-bold nav-pills">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" data-toggle="tab" href="#kt_tab_pane_5_1">
+                                            <span class="nav-icon"><i class="flaticon2-pin"></i></span>
+                                            <span class="nav-text">Region</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_5_2">
+                                            <span class="nav-icon"><i class="flaticon2-map"></i></span>
+                                            <span class="nav-text">Map</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="card-toolbar">
+
                             </div>
                         </div>
-                        <!--end::Pic-->
-                        <!--begin: Info-->
-                        <div class="flex-grow-1">
-                            <!--begin::Title-->
-                            <div class="d-flex align-items-center justify-content-between flex-wrap mt-2">
-                                <!--begin::User-->
-                                <div class="mr-3">
-                                    <input type="hidden" id="user_id" value="{{$transaction->user->id}}" style="display: none">
-                                    <!--begin::Name-->
-                                    <a href="#" class="d-flex align-items-center text-dark text-hover-primary font-size-h5 font-weight-bold mr-3">{{$transaction->user->first_name.' '.$transaction->user->last_name}}
-                                        <i class="flaticon2-correct text-success icon-md ml-2"></i></a>
-                                    <!--end::Name-->
-                                    <!--begin::Contacts-->
-                                    <div class="d-flex flex-wrap my-2">
-                                        <a href="#" class="text-muted text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
-															<span class="svg-icon svg-icon-md svg-icon-gray-500 mr-1">
-																<!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Mail-notification.svg-->
-																<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-																	<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-																		<rect x="0" y="0" width="24" height="24" />
-																		<path d="M21,12.0829584 C20.6747915,12.0283988 20.3407122,12 20,12 C16.6862915,12 14,14.6862915 14,18 C14,18.3407122 14.0283988,18.6747915 14.0829584,19 L5,19 C3.8954305,19 3,18.1045695 3,17 L3,8 C3,6.8954305 3.8954305,6 5,6 L19,6 C20.1045695,6 21,6.8954305 21,8 L21,12.0829584 Z M18.1444251,7.83964668 L12,11.1481833 L5.85557487,7.83964668 C5.4908718,7.6432681 5.03602525,7.77972206 4.83964668,8.14442513 C4.6432681,8.5091282 4.77972206,8.96397475 5.14442513,9.16035332 L11.6444251,12.6603533 C11.8664074,12.7798822 12.1335926,12.7798822 12.3555749,12.6603533 L18.8555749,9.16035332 C19.2202779,8.96397475 19.3567319,8.5091282 19.1603533,8.14442513 C18.9639747,7.77972206 18.5091282,7.6432681 18.1444251,7.83964668 Z" fill="#000000" />
-																		<circle fill="#000000" opacity="0.3" cx="19.5" cy="17.5" r="2.5" />
-																	</g>
-																</svg>
-                                                                <!--end::Svg Icon-->
-															</span>{{$transaction->user->email}}</a>
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="kt_tab_pane_5_1" role="tabpanel" aria-labelledby="kt_tab_pane_5_1">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Region</th>
+                                            <th scope="col">Buying Center</th>
+                                            <th scope="col">County</th>
+                                            <th scope="col">Sub County</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <th scope="row">{{$order->order_region->region->name}}</th>
+                                            <td>{{$order->order_region->buying_center->name}}</td>
+                                            @if($order->order_region->region->county != null)
+                                                <td>{{$order->order_region->region->county->name}}</td>
+                                            @else
+                                                <td>--</td>
+                                            @endif
+                                            @if($order->order_region->region->sub_county != null)
+                                                <td>{{$order->order_region->region->sub_county->name}}</td>
+                                            @else
+                                                <td>--</td>
+                                            @endif
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane fade" id="kt_tab_pane_5_2" role="tabpanel" aria-labelledby="kt_tab_pane_5_2">
+                                    <h6>Map</h6>
+                                    <p>Coordinates at which the transaction was initiated</p>
+                                    <div id="map-canvas" style="height: 425px; width: 100%; position: relative; overflow: hidden;">
                                     </div>
-                                    <!--end::Contacts-->
                                 </div>
-                                <!--begin::User-->
-                                <!--begin::Actions-->
-                                <div class="my-lg-0 my-1">
-                                    {{--                                <a href="#" class="btn btn-sm btn-light-primary font-weight-bolder text-uppercase mr-2">Ask</a>--}}
-                                    {{--                                <a href="#" class="btn btn-sm btn-primary font-weight-bolder text-uppercase">Hire</a>--}}
-                                </div>
-                                <!--end::Actions-->
                             </div>
-                            <!--end::Title-->
-                            <!--begin::Content-->
-                            <div class="d-flex align-items-center flex-wrap justify-content-between">
-                                <!--begin::Description-->
-                                <div class="flex-grow-1 font-weight-bold text-dark-50 py-2 py-lg-2">
-                            <span class="text-muted text-hover-primary font-weight-bold mr-lg-8 mb-lg-0 mb-2">
-                                    <span class="svg-icon svg-icon-md svg-icon-gray-500 mr-1">
-                                        <!--begin::Svg Icon | path:assets/media/svg/icons/General/Lock.svg-->
-                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                <mask fill="white">
-                                                    <use xlink:href="#path-1" />
-                                                </mask>
-                                                <g />
-                                                <path d="M7,10 L7,8 C7,5.23857625 9.23857625,3 12,3 C14.7614237,3 17,5.23857625 17,8 L17,10 L18,10 C19.1045695,10 20,10.8954305 20,12 L20,18 C20,19.1045695 19.1045695,20 18,20 L6,20 C4.8954305,20 4,19.1045695 4,18 L4,12 C4,10.8954305 4.8954305,10 6,10 L7,10 Z M12,5 C10.3431458,5 9,6.34314575 9,8 L9,10 L15,10 L15,8 C15,6.34314575 13.6568542,5 12,5 Z" fill="#000000" />
-                                            </g>
-                                        </svg>
-                                        <!--end::Svg Icon-->
-                                    </span>{{$transaction->transactionable->customer_msisdn}}</span>
-                                </div>
-                                <!--end::Description-->
-                            </div>
-                            <!--end::Content-->
                         </div>
-                        <!--end::Info-->
                     </div>
-                    <!--end::Top-->
-                    <!--begin::Separator-->
-                    <div class="separator separator-solid my-7"></div>
-                    <!--end::Separator-->
+                </div>
+                <div class="col-xl-8 col-md-8">
+                    <div class="card card-custom">
+                        <div class="card-header flex-wrap border-0 pt-6 pb-0">
+                            <div class="card-title">
+                                <h3 class="card-label">Order Transaction</h3>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered table-hover table-checkable mt-10" id="kt_datatable_02" style="margin-top: 13px !important">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Amount</th>
+                                    <th>Date Disbursed</th>
+                                    <th>Mpesa Receipt</th>
+                                    <th>Channel</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="mt-5 card card-custom">
+                        <div class="card-header flex-wrap border-0 pt-6 pb-0">
+                            <div class="card-title">
+                                <h3 class="card-label">Order Quality Requirement Submission</h3>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered table-hover table-checkable mt-10" id="kt_datatable" style="margin-top: 13px !important">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Value</th>
+                                    <th>Required Value</th>
+                                    <th>Submitted Value</th>
+                                    <th>Time Posted</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+            <div class="row">
+                <div class="col-xl-4 col-md-4">
 
-        <div class="col-md-8">
-        <!--begin::Advance Table Widget 4-->
-        <div class="card card-custom card-stretch gutter-b">
-            <!--begin::Header-->
-            <div class="card-header border-0 py-5">
-                <h3 class="card-title align-items-start flex-column">
-                    <span class="card-label font-weight-bolder text-dark">Assign to Vendor</span>
-                </h3>
-            </div>
-            <!--end::Header-->
-            <!--begin::Body-->
-            <div class="card-body pt-0 pb-3">
-                <div class="tab-content">
-                    <!--begin::Table-->
-                    <div class="table-responsive">
-                        <table class="table table-head-custom table-head-bg table-borderless table-vertical-center">
-                            <thead>
-                            <tr class="text-left text-uppercase">
-                                <th style="min-width: 250px" class="pl-7">
-                                    <span class="text-dark-75">vendor name</span>
-                                </th>
-                                <th style="min-width: 100px">transactions(today)</th>
-                                <th style="min-width: 100px">phone numbers</th>
-                                <th style="min-width: 80px"></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @forelse($vendors as $vendor)
-                            <tr>
-                                <td class="pl-0 py-8">
-                                    <div class="d-flex align-items-center">
-                                        <div class="symbol symbol-50 symbol-light-info mr-4">
-                                            <span class="font-size-h3 symbol-label font-weight-boldest">
-                                                {{ucfirst(substr($vendor->first_name, 0, 1)).ucfirst(substr($vendor->last_name, 0, 1))}}</span>
-                                        </div>
-                                        <div>
-                                            <a href="{{route('admin.vendors.show', \Illuminate\Support\Facades\Crypt::encrypt($vendor->id))}}" class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg">{{$vendor->first_name.' '.$vendor->last_name}}</a>
-                                            <span class="text-muted font-weight-bold d-block">{{$vendor->email}}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">CFA Franc. {{$vendor->vendor_transactions()->where(['status'=>true, 'created_at'=>now()])->sum('amount')}}</span>
-                                    <span class="text-muted font-weight-bold">count: {{$vendor->vendor_transactions()->where(['status'=>true, 'created_at'=>now()])->count()}}</span>
-                                </td>
-                                @foreach($vendor->phone_numbers as $phone_number)
-                                <td>
-                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$phone_number->phone_number}}</span>
-
-                                    <span class="text-muted font-weight-bold d-block font-size-sm"><img src="{{$phone_number->provider()->first()->logo}}" alt="image" style="width: 20px" />{{$phone_number->provider()->first()->name}}</span>
-                                </td>
-                                @endforeach
-                                <td class="pr-0 text-right">
-                                    @if($transaction->status == true)
-                                         <a href="#" disabled="" class="btn btn-light-warning font-weight-bolder font-size-sm">Complete</a>
-                                    @else
-                                        <a href="#" disabled="" class="btn btn-light-success font-weight-bolder font-size-sm">Assign</a>
-                                    @endif
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td class="pl-0 py-0">
-                                    <b>No active vendors found</b>
-                                </td>
-                            </tr>
-                            @endforelse
-                        {{--{{ $vendors->links() }}--}}
-                            </tbody>
-
-
-                        </table>
-                    </div>
-                    <!--end::Table-->
                 </div>
             </div>
-            <!--end::Body-->
+
         </div>
-        <!--end::Advance Table Widget 4-->
-    </div>
     </div>
     <!--end::Row-->
 @endsection
 @section('scripts')
+    <script>
+        'use strict';
+        var KTDatatablesDataSourceAjaxClient = function() {
+            var initTable1 = function() {
+                var table = $('#kt_datatable');
+                // begin first table
+                table.DataTable({
+                    dom: 'Bfrtip',
+                    buttons: [{extend: 'copyHtml5'}, {
+                        extend: 'excelHtml5',
+                        exportOptions: {columns: ':visible'},
+                    },
+                        {
+                            extend: 'pdfHtml5',
+                            exportOptions: {columns: ':visible'},
+                            orientation: 'landscape',
+                            pageSize: 'TABLOID'
+                        },
+                        'colvis','pageLength'],
+                    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                    responsive: true,
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: '{{route('admin.get-order-raw-material-requirement-submissions', $order->ref_number)}}',
+                        type: 'GET',
+                    },
+                    columns: [
+                        {data: 'id', name: 'id'},
+                        {data: 'active_raw_material_requirement.parameter', name: 'parameter'},
+                        {data: 'active_raw_material_requirement.type', name: 'type'},
+                        {data: 'active_raw_material_requirement.value', name: 'value'},
+                        {data: 'active_raw_material_requirement.requirement', name: 'requirement'},
+                        {data: 'value', name: 'value'},
+                        {data: 'created_at', name: 'created_at'},
+                        // {data: 'action', name: 'action'},
+                    ],
+                    columnDefs: [],
+                });
+            };
+            return {
+                //main function to initiate the module
+                init: function() {
+                    initTable1();
+                },
+            };
+        }();
+        jQuery(document).ready(function() {
+            KTDatatablesDataSourceAjaxClient.init();
+        });
+    </script>
 
+    <script>
+        'use strict';
+        var KTDatatablesDataSourceAjaxClient2 = function() {
+            var initTable2 = function() {
+                var table2 = $('#kt_datatable_02');
+                // begin first table
+                table2.DataTable({
+                    dom: 'Bfrtip',
+                    buttons: [{extend: 'copyHtml5'},
+                        {
+                        extend: 'excelHtml5',
+                        exportOptions: {columns: ':visible'},
+                    },
+                        {
+                            extend: 'pdfHtml5',
+                            exportOptions: {columns: ':visible'},
+                            orientation: 'landscape',
+                            pageSize: 'TABLOID'
+                        }],
+                    responsive: true,
+                    processing: true,
+                    serverSide: true,
+                    searching:false,
+                    ajax: {
+                        url: '{{route('admin.get-order-mpesa-transaction', $order->ref_number)}}',
+                        type: 'GET',
+                    },
+                    columns: [
+                        {data: 'id', name: 'id'},
+                        {data: 'amount', name: 'amount'},
+                        {data: 'disbursed_at', name: 'disbursed_at'},
+                        {data: 'transaction_receipt', name: 'transaction_receipt'},
+                        {data: 'channel', name: 'channel'},
+                    ],
+                    columnDefs: [],
+                });
+            };
+            return {
+                //main function to initiate the module
+                init: function() {
+                    initTable2();
+                },
+            };
+        }();
+        jQuery(document).ready(function() {
+            KTDatatablesDataSourceAjaxClient2.init();
+        });
+    </script>
+    @if($order->order_region->latitude && $order->order_region->longitude)
+{{--    <script type='text/javascript' src='https://maps.google.com/maps/api/js?language=en&key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places&region=GB'></script>--}}
+    <script defer>
+        function initialize() {
+            var latLng = new google.maps.LatLng({{ $order->order_region->latitude }}, {{ $order->order_region->longitude }});
+            var mapOptions = {
+                zoom: 14,
+                minZoom: 6,
+                maxZoom: 17,
+                zoomControl:true,
+                zoomControlOptions: {
+                    style:google.maps.ZoomControlStyle.DEFAULT
+                },
+                center: latLng,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                scrollwheel: false,
+                panControl:false,
+                mapTypeControl:false,
+                scaleControl:false,
+                overviewMapControl:false,
+                rotateControl:false
+            }
+            var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+            var image = new google.maps.MarkerImage("{{ asset('assets/media/pin.png') }}", null, null, null, new google.maps.Size(40,52));
+            var content = `
+            <div class="gd-bubble" style="">
+                <div class="gd-bubble-inside">
+                    <div class="geodir-bubble_desc">
+                    <div class="geodir-bubble_image">
+                        <div class="geodir-post-slider">
+                            <div class="geodir-image-container geodir-image-sizes-medium_large ">
+                                <div id="geodir_images_5de53f2a45254_189" class="geodir-image-wrapper" data-controlnav="1">
+                                    <ul class="geodir-post-image geodir-images clearfix">
+                                        <li>
+                                            <div class="geodir-post-title">
+                                                <h4 class="geodir-entry-title">
+                                                    <a href="{{ route('admin.orders.show', $order->ref_number) }}" title="View: {{ $order->ref_number }}">{{ $order->ref_number }}</a>
+                                                </h4>
+                                            </div>
+                                            <a href="{{ route('admin.orders.show', $order->ref_number) }}"><img src="{{ asset('logo.jpeg') }}" alt="{{ $order->ref_number }}" class="align size-medium_large" width="120" height="120"></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <div class="geodir-bubble-meta-side">
+                    <div class="geodir-output-location">
+                    <div class="geodir-output-location geodir-output-location-mapbubble">
+                        <div class="geodir_post_meta  geodir-field-post_title"><span class="geodir_post_meta_icon geodir-i-text">
+                            <i class="fas fa-minus" aria-hidden="true"></i>
+                            <span class="geodir_post_meta_title">Order Ref Number: </span></span>{{ $order->ref_number }}</div>
+                        <div class="geodir_post_meta  geodir-field-address" itemscope="" itemtype="http://schema.org/PostalAddress">
+                            <span class="geodir_post_meta_icon geodir-i-address"><i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                            <span class="geodir_post_meta_title">Region: </span></span><span itemprop="streetAddress">{{ $order->order_region->region->name }}</span>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            </div>`;
+            var marker = new google.maps.Marker({
+                position: latLng,
+                icon:image,
+                map: map,
+                title: 'Order Ref:'+'{{ $order->ref_number }}'
+            });
+            var infowindow = new google.maps.InfoWindow();
+            google.maps.event.addListener(marker, 'click', (function (marker) {
+                return function () {
+                    infowindow.setContent(content)
+                    infowindow.open(map, marker);
+                }
+            })(marker));
+        }
+        google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+    @endif
 @endsection
 

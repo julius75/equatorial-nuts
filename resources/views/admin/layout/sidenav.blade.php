@@ -79,7 +79,12 @@
                         <span class="menu-text">Buyers</span>
                     </a>
                 </li>
-                <!---Vendors---->
+                <li class="menu-section mt-0 mb-0">
+                    <h4 class="menu-text">Management</h4>
+                    <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
+                </li>
+                @hasanyrole('admin|general_management')
+                <!---Farmers---->
                 <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
                     <a href="{{route('admin.app-farmers.index')}}" class="menu-link menu-toggle">
                         <span class="svg-icon menu-icon"><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-02-01-052524/theme/html/demo1/dist/../src/media/svg/icons/Communication/Add-user.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -93,44 +98,43 @@
                         <span class="menu-text">Farmers</span>
                     </a>
                 </li>
+                <!---Regions---->
                 <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
-                    <a href="{{route('admin.app-regions.index')}}" class="menu-link menu-toggle">
-                     	<span class="svg-icon menu-icon">
-											<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->
-											<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-												<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-													<rect x="0" y="0" width="24" height="24" />
-													<rect fill="#000000" x="4" y="4" width="7" height="7" rx="1.5" />
-													<path d="M5.5,13 L9.5,13 C10.3284271,13 11,13.6715729 11,14.5 L11,18.5 C11,19.3284271 10.3284271,20 9.5,20 L5.5,20 C4.67157288,20 4,19.3284271 4,18.5 L4,14.5 C4,13.6715729 4.67157288,13 5.5,13 Z M14.5,4 L18.5,4 C19.3284271,4 20,4.67157288 20,5.5 L20,9.5 C20,10.3284271 19.3284271,11 18.5,11 L14.5,11 C13.6715729,11 13,10.3284271 13,9.5 L13,5.5 C13,4.67157288 13.6715729,4 14.5,4 Z M14.5,13 L18.5,13 C19.3284271,13 20,13.6715729 20,14.5 L20,18.5 C20,19.3284271 19.3284271,20 18.5,20 L14.5,20 C13.6715729,20 13,19.3284271 13,18.5 L13,14.5 C13,13.6715729 13.6715729,13 14.5,13 Z" fill="#000000" opacity="0.3" />
-												</g>
-											</svg>
-                            <!--end::Svg Icon-->
-										</span>
-                        <span class="menu-text">All Regions</span>
+                    <a href="javascript:;" class="menu-link menu-toggle">
+                        <span class="svg-icon menu-icon"><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-04-19-122603/theme/html/demo1/dist/../src/media/svg/icons/Cooking/Shovel.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <rect x="0" y="0" width="24" height="24"/>
+                                <path d="M8.52512627,14.5606602 L9.93933983,15.9748737 C10.3298641,16.365398 10.3298641,16.998563 9.93933983,17.3890873 L4.98959236,22.3388348 C4.59906807,22.7293591 3.96590309,22.7293591 3.5753788,22.3388348 L2.16116524,20.9246212 C1.77064094,20.5340969 1.77064094,19.9009319 2.16116524,19.5104076 L7.1109127,14.5606602 C7.501437,14.1701359 8.13460197,14.1701359 8.52512627,14.5606602 Z" fill="#000000" opacity="0.3"/>
+                                <path d="M11.3535534,11.732233 L9.23223305,9.6109127 C8.45118446,8.82986412 8.45118446,7.56353416 9.23223305,6.78248558 L13.4748737,2.53984489 C14.2559223,1.75879631 15.5222523,1.75879631 16.3033009,2.53984489 L21.9601551,8.19669914 C22.7412037,8.97774772 22.7412037,10.2440777 21.9601551,11.0251263 L17.7175144,15.267767 C16.9364658,16.0488155 15.6701359,16.0488155 14.8890873,15.267767 L12.767767,13.1464466 L10.6464466,15.267767 L9.23223305,13.8535534 L11.3535534,11.732233 Z M15.2426407,4.30761184 L11,8.55025253 L11.7071068,9.25735931 L15.9497475,5.01471863 L15.2426407,4.30761184 Z M17.363961,6.42893219 L13.1213203,10.6715729 L13.8284271,11.3786797 L18.0710678,7.13603897 L17.363961,6.42893219 Z M19.4852814,8.55025253 L15.2426407,12.7928932 L15.9497475,13.5 L20.1923882,9.25735931 L19.4852814,8.55025253 Z" fill="#000000"/>
+                            </g>
+                        </svg><!--end::Svg Icon-->
+                        </span>
+                        <span class="menu-text">Regions</span>
+                        <i class="menu-arrow"></i>
                     </a>
+                    <div class="menu-submenu" kt-hidden-height="120" style="display: none; overflow: hidden;">
+                        <i class="menu-arrow"></i>
+                        <ul class="menu-subnav">
+                            <li class="menu-item" aria-haspopup="true">
+                                <a href="{{route('admin.app-regions.index')}}" class="menu-link">
+                                    <i class="menu-bullet menu-bullet-dot">
+                                        <span></span>
+                                    </i>
+                                    <span class="menu-text">List Regions</span>
+                                </a>
+                            </li>
+                            <li class="menu-item" aria-haspopup="true">
+                                <a href="{{route('admin.app-buying-centre.index')}}" class="menu-link">
+                                    <i class="menu-bullet menu-bullet-dot">
+                                        <span></span>
+                                    </i>
+                                    <span class="menu-text">List Buying Centers</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
-                <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
-                    <a href="{{route('admin.app-buying-centre.index')}}" class="menu-link menu-toggle">
-                     	<span class="svg-icon menu-icon">
-											<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->
-											<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-												<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-													<rect x="0" y="0" width="24" height="24" />
-													<rect fill="#000000" x="4" y="4" width="7" height="7" rx="1.5" />
-													<path d="M5.5,13 L9.5,13 C10.3284271,13 11,13.6715729 11,14.5 L11,18.5 C11,19.3284271 10.3284271,20 9.5,20 L5.5,20 C4.67157288,20 4,19.3284271 4,18.5 L4,14.5 C4,13.6715729 4.67157288,13 5.5,13 Z M14.5,4 L18.5,4 C19.3284271,4 20,4.67157288 20,5.5 L20,9.5 C20,10.3284271 19.3284271,11 18.5,11 L14.5,11 C13.6715729,11 13,10.3284271 13,9.5 L13,5.5 C13,4.67157288 13.6715729,4 14.5,4 Z M14.5,13 L18.5,13 C19.3284271,13 20,13.6715729 20,14.5 L20,18.5 C20,19.3284271 19.3284271,20 18.5,20 L14.5,20 C13.6715729,20 13,19.3284271 13,18.5 L13,14.5 C13,13.6715729 13.6715729,13 14.5,13 Z" fill="#000000" opacity="0.3" />
-												</g>
-											</svg>
-                            <!--end::Svg Icon-->
-										</span>
-                        <span class="menu-text">Buying Centres</span>
-                    </a>
-                </li>
-                <!---Teleco Providers---->
-                <li class="menu-section mt-0 mb-0">
-                    <h4 class="menu-text">Management</h4>
-                    <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
-                </li>
-                @hasanyrole('admin|general_management')
+
                 <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
                     <a href="javascript:;" class="menu-link menu-toggle">
 										<span class="svg-icon menu-icon">
@@ -218,7 +222,7 @@
                 @endhasanyrole
                 <!---Orders---->
                 <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
-                    <a href="{{route('admin.orders.index')}}" class="menu-link menu-toggle">
+                    <a href="javascript:;" class="menu-link menu-toggle">
                         <span class="svg-icon menu-icon"><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-04-19-122603/theme/html/demo1/dist/../src/media/svg/icons/Navigation/Check.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                 <polygon points="0 0 24 0 24 24 0 24"/>
@@ -226,10 +230,31 @@
                             </g>
                         </svg><!--end::Svg Icon-->
                         </span>
-                        <span class="menu-text">Orders </span>
+                        <span class="menu-text">Orders</span>
+                        <i class="menu-arrow"></i>
                     </a>
+                    <div class="menu-submenu" kt-hidden-height="120" style="display: none; overflow: hidden;">
+                        <i class="menu-arrow"></i>
+                        <ul class="menu-subnav">
+                            <li class="menu-item" aria-haspopup="true">
+                                <a href="{{route('admin.orders.index')}}" class="menu-link">
+                                    <i class="menu-bullet menu-bullet-dot">
+                                        <span></span>
+                                    </i>
+                                    <span class="menu-text">List Orders</span>
+                                </a>
+                            </li>
+                            <li class="menu-item" aria-haspopup="true">
+                                <a href="{{route('admin.orders.map')}}" class="menu-link">
+                                    <i class="menu-bullet menu-bullet-dot">
+                                        <span></span>
+                                    </i>
+                                    <span class="menu-text">Map Overview</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
-
 
                 <li class="menu-section mt-0 mb-0">
                     <h4 class="menu-text">Finance</h4>
