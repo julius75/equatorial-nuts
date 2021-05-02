@@ -305,7 +305,7 @@
         });
     </script>
     @if($order->order_region->latitude && $order->order_region->longitude)
-{{--    <script type='text/javascript' src='https://maps.google.com/maps/api/js?language=en&key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places&region=GB'></script>--}}
+    <script type='text/javascript' src='https://maps.google.com/maps/api/js?language=en&key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places&region=GB'></script>
     <script defer>
         function initialize() {
             var latLng = new google.maps.LatLng({{ $order->order_region->latitude }}, {{ $order->order_region->longitude }});
