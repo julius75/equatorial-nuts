@@ -123,6 +123,21 @@
                         {data: 'action', name: 'action', searchable:false, orderable:false},
                     ],
                     columnDefs: [
+                        {
+                            width: '75px',
+                            targets: -3,
+                            render: function(data) {
+                                var disbursed = {
+                                    false: {'title': 'Pending Disbursal', 'state': 'warning'},
+                                    true: {'title': 'Disbursed', 'state': 'success'}
+                                };
+                                if (typeof disbursed[data] === 'undefined') {
+                                    return data;
+                                }
+                                return '<span class="label label-' + disbursed[data].state + ' label-dot mr-2"></span>' +
+                                    '<span class="font-weight-bold text-' + disbursed[data].state + '">' + disbursed[data].title + '</span>';
+                            },
+                        }
                     ],
                 });
                 $('#filter_form').on('submit', function(e) {

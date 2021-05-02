@@ -78,6 +78,8 @@ Route::resource('app-buying-centre', BuyingCentreController::class);
 //orders
 Route::prefix('orders')->group(function () {
     Route::get('/', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/map', [OrderController::class, 'map'])->name('orders.map');
+    Route::get('/{ref_number}', [OrderController::class, 'show'])->name('orders.show');
 });
 //default list
 Route::get('/default', [UserController::class, 'default'])->name('default');
@@ -98,6 +100,9 @@ Route::prefix('datatables')->group(function () {
     Route::get('get-app-regions-raw/{id}', [RegionController::class, 'getMaterials'])->name('get-app-regions-raw');
     Route::get('get-app-buying-centre', [BuyingCentreController::class, 'getCentres'])->name('get-app-buying-centre');
     Route::get('get-orders', [OrderController::class, 'get_orders'])->name('get-orders');
+    Route::get('get-order-raw-material-requirement-submissions/{ref_number}', [OrderController::class, 'get_order_raw_material_requirement_submissions'])->name('get-order-raw-material-requirement-submissions');
+    Route::get('get-order-mpesa-transaction/{ref_number}', [OrderController::class, 'get_order_mpesa_transaction'])->name('get-order-mpesa-transaction');
+
     //Route::get('get-all-pricelists-filter', [PriceListController::class, 'get_all_pricelists'])->name('get-all-pricelists-filter');
 
 });
