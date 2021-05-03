@@ -23,7 +23,7 @@ class OrderController extends Controller
         return view('admin.orders.index', $data);
     }
 
-    public function map()
+    public function map(Request $request)
     {
         $data['regions'] = Region::all();
         $data['raw_materials'] = RawMaterial::all();
@@ -31,7 +31,105 @@ class OrderController extends Controller
         //$data['orders'] = Order::query()->with('order_region')->get();
         $data['latitude'] = 0.17687; //default set to kenya's gps coordinates
         $data['longitude'] = 37.90833;
-        $data['mapOrders'] = OrderRegion::query()->with(['order', 'region'])->get();
+        //when page loads
+        if ($request->all() == []){
+            $orderData = OrderRegion::query()
+                ->with(['order', 'region'])->get();
+            $data['current_region'] = "all";
+            $data['current_raw_material'] = "all";
+            $data['current_buyer'] = "all";
+        }
+        //region specified rest are "all"
+        elseif ($request->region_id and $request->region_id != "all" and $request->buyer_id == "all" and $request->raw_material_id == "all"){
+            $orderData = OrderRegion::query()
+                ->where('region_id', '=', $request->region_id)
+                ->with(['order', 'region'])->get();
+            $data['current_region'] = $request->region_id;
+            $data['current_raw_material'] = $request->raw_material_id;
+            $data['current_buyer'] = $request->buyer_id;
+        }
+        //raw material specified rest are "all"
+        elseif ($request->raw_material_id and $request->raw_material_id != "all" and $request->buyer_id == "all" and $request->region_id == "all"){
+            $orderData = OrderRegion::query()
+                ->whereHas('order.order_raw_material', function ($q) use ($request){
+                    $q->where('raw_material_id', '=', $request->raw_material_id);
+                })->with(['order', 'region'])->get();
+            $data['current_region'] = $request->region_id;
+            $data['current_raw_material'] = $request->raw_material_id;
+            $data['current_buyer'] = $request->buyer_id;
+        }
+        //buyer specified
+        elseif ($request->buyer_id and $request->buyer_id != "all" and $request->raw_material_id == "all" and $request->region_id == "all"){
+            $orderData = OrderRegion::query()
+                ->whereHas('order', function ($q) use ($request){
+                    $q->where('user_id', '=', $request->buyer_id);
+                })->with(['order', 'region'])->get();
+            $data['current_region'] = $request->region_id;
+            $data['current_raw_material'] = $request->raw_material_id;
+            $data['current_buyer'] = $request->buyer_id;
+        }
+        //region and raw material specified
+        elseif ($request->region_id != "all" and $request->raw_material_id != "all" and $request->buyer_id == "all"){
+            $orderData = OrderRegion::query()
+                ->where('region_id', '=', $request->region_id)
+                ->whereHas('order.order_raw_material', function ($q) use ($request){
+                    $q->where('raw_material_id', '=', $request->raw_material_id);
+                })
+                ->with(['order', 'region'])->get();
+            $data['current_region'] = $request->region_id;
+            $data['current_raw_material'] = $request->raw_material_id;
+            $data['current_buyer'] = "all";
+        }
+        //region and buyer specified
+        elseif ($request->region_id != "all" and $request->buyer_id != "all" and $request->raw_material_id == "all"){
+            $orderData = OrderRegion::query()
+                ->whereHas('order', function ($q) use ($request){
+                    $q->where('user_id', '=', $request->buyer_id);
+                })
+                ->where('region_id', '=', $request->region_id)
+                ->with(['order', 'region'])->get();
+            $data['current_region'] = $request->region_id;
+            $data['current_raw_material'] = "all";
+            $data['current_buyer'] = $request->buyer_id;
+
+        }
+        //raw material and buyer specified
+        elseif ($request->region_id == "all" and $request->buyer_id != "all" and $request->raw_material_id != "all"){
+            $orderData = OrderRegion::query()
+                ->whereHas('order', function ($q) use ($request){
+                    $q->where('user_id', '=', $request->buyer_id);
+                })
+                ->whereHas('order.order_raw_material', function ($q) use ($request){
+                    $q->where('raw_material_id', '=', $request->raw_material_id);
+                })
+                ->with(['order', 'region'])->get();
+            $data['current_region'] = "all";
+            $data['current_raw_material'] = $request->raw_material_id;
+            $data['current_buyer'] = $request->buyer_id;
+        }
+        //everything specified
+        elseif ($request->region_id != "all" and $request->buyer_id != "all" and $request->raw_material_id != "all"){
+            $orderData = OrderRegion::query()
+                ->where('region_id', '=', $request->region_id)
+                ->whereHas('order', function ($q) use ($request){
+                    $q->where('user_id', '=', $request->buyer_id);
+                })
+                ->whereHas('order.order_raw_material', function ($q) use ($request){
+                    $q->where('raw_material_id', '=', $request->raw_material_id);
+                })
+                ->with(['order', 'region'])->get();
+            $data['current_region'] = $request->region_id;
+            $data['current_raw_material'] = $request->raw_material_id;
+            $data['current_buyer'] = $request->buyer_id;
+        }
+        else{
+            $orderData = OrderRegion::query()
+                ->with(['order', 'region'])->get();
+            $data['current_region'] = "all";
+            $data['current_raw_material'] = "all";
+            $data['current_buyer'] = "all";
+        }
+        $data['mapOrders'] = $orderData;
         return view('admin.orders.map', $data);
     }
 
@@ -85,15 +183,10 @@ class OrderController extends Controller
                 ->get();
         }
         //raw material and buyer specified
-        elseif ($request->region_id != "all" and $request->buyer_id != "all" and $request->raw_material_id == "all"){
+        elseif ($request->region_id == "all" and $request->buyer_id != "all" and $request->raw_material_id != "all"){
             $data = Order::query()
-                ->where(function($q) use($request){
-                    $q->whereHas('order_raw_material', function ($q) use ($request){
-                        $q->where('raw_material_id', '=', $request->raw_material_id);
-                    });
-                    $q->whereHas('order_region', function ($q) use ($request){
-                        $q->where('region_id', '=', $request->region_id);
-                    });
+                ->whereHas('order_raw_material', function ($q) use ($request){
+                    $q->where('raw_material_id', '=', $request->raw_material_id);
                 })
                 ->where('user_id', '=', $request->buyer_id)
                 ->with(['order_region.region', 'order_raw_material.raw_material', 'user'])
@@ -102,8 +195,13 @@ class OrderController extends Controller
         //everything specified
         elseif ($request->region_id != "all" and $request->buyer_id != "all" and $request->raw_material_id != "all"){
             $data = Order::query()
-                ->whereHas('order_raw_material', function ($q) use ($request){
-                    $q->where('raw_material_id', '=', $request->raw_material_id);
+                ->where(function($q) use($request){
+                    $q->whereHas('order_raw_material', function ($query) use ($request){
+                        $query->where('raw_material_id', '=', $request->raw_material_id);
+                    });
+                    $q->whereHas('order_region', function ($query) use ($request){
+                        $query->where('region_id', '=', $request->region_id);
+                    });
                 })
                 ->where('user_id', '=', $request->buyer_id)
                 ->with(['order_region.region', 'order_raw_material.raw_material', 'user'])

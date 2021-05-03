@@ -79,6 +79,7 @@ Route::resource('app-buying-centre', BuyingCentreController::class);
 Route::prefix('orders')->group(function () {
     Route::get('/', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/map', [OrderController::class, 'map'])->name('orders.map');
+    Route::post('/map', [OrderController::class, 'map'])->name('orders.map.post');
     Route::get('/{ref_number}', [OrderController::class, 'show'])->name('orders.show');
 });
 //default list

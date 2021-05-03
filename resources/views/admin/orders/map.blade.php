@@ -5,7 +5,53 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card card-custom">
+                <div class="card-header flex-wrap border-0 pt-6 pb-0">
+                    <div class="card-title">
+                        <h3 class="card-label">Geographical depiction of All Orders</h3>
+                    </div>
+                    <div class="card-toolbar">
+
+                    </div>
+                </div>
                 <div class="card-body">
+                    <h5>Filter Orders</h5>
+                    <form id="filter_form" method="post" action="{{route('admin.orders.map.post')}}">
+                        @csrf
+                        <div class="form-group row">
+                            <label class="col-md-1 col-form-label text-lg-right font-weight-bolder" for="region_id">Region:</label>
+                            <div class="col-md-2" style="margin-left: -20px;">
+                                <select class="js-example-basic-single form-control{{ $errors->has('region_id') ? ' is-invalid' : '' }}" name="region_id" required>
+                                    <option value="all">All</option>
+                                    @foreach($regions as $region)
+                                        <option  value="{{$region->id}}" {{($region->id == $current_region ) ? 'selected' : ''}}>{{ucfirst($region->name)}}</option>
+                                    @endforeach
+
+                                </select>
+                            </div>
+                            <label class="col-md-2 col-form-label text-lg-right font-weight-bolder" for="material">Raw Materials:</label>
+                            <div class="col-md-2" style="margin-left: -20px;">
+                                <select class="js-example-basic-single form-control" name="raw_material_id" required>
+                                    <option value="all">All</option>
+                                    @foreach($raw_materials as $raw_material)
+                                        <option value="{{$raw_material->id}}" {{($raw_material->id == $current_raw_material) ? 'selected' : ''}}>{{ucfirst($raw_material->name)}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <label class="col-md-1 col-form-label text-lg-right font-weight-bolder" for="buyer_id">Buyer:</label>
+                            <div class="col-md-2" style="margin-left: -20px;">
+                                <select class="js-example-basic-single form-control{{ $errors->has('buyer_id') ? ' is-invalid' : '' }}" name="buyer_id" required>
+                                    <option value="all">All</option>
+                                    @foreach($buyers as $buyer)
+                                        <option  value="{{$buyer->id}}" {{($buyer->id == $current_buyer) ? 'selected' : ''}}>{{ucfirst($buyer->first_name.' '.$buyer->last_name)}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-1">
+                                <button class="btn btn-success font-weight-bolder mr-2" id="">Filter</button>
+                            </div>
+                        </div>
+                    </form>
+
                     <div id="map-canvas" style="height: 425px; width: 100%; position: relative; overflow: hidden;">
                     </div>
                 </div>

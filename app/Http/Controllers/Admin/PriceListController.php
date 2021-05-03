@@ -93,40 +93,48 @@ class PriceListController extends Controller
     public function get_all_pricelists(Request $request)
     {
 
-        if($request->region_id) {
-            $users = PriceList::with(['region:id,name','raw_material:id,name','approvedBy:id,first_name,last_name','createdBy:id,first_name,last_name']);
-            $userss = $users->whereHas('raw_material', function( $query ) use ( $request ){
-                $query->where('raw_material_id', $request->raw_material_id);
-            })->WhereHas('region', function( $query ) use ( $request ){
-                $query->where('region_id', $request->region_id);
-            });
-            $data = $userss->get();
-            return Datatables::of($data)
-                ->addColumn('action', function ($data) {
-                    return '<div class="dropdown dropdown-inline">
-								<a href="" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">
-	                                <i class="la la-cog"></i>
-	                            </a>
-							  	<div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-									<ul class="nav nav-hoverable flex-column">
-							    		<li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-user"></i><span class="nav-text">View User Details</span></a></li>
-							    		<li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-edit"></i><span class="nav-text">Edit Details</span></a></li>
-							    		<li class="btn btn-light font-size-sm mr-5"data-toggle="modal"data-target="#smallModal" id="smallButton"><i class="nav-icon la la-sync-alt"></i><span class="nav-text">Update Status</span></li>
-							    	</ul>
-							  	</div>
-							</div>
-
-						';
-                })
-                ->make(true);
-        }
-        if ($request->region_id == null){
+        //display everything
+        if ($request->region_id == "all" and $request->raw_material_id=="all")
+        {
             $data = PriceList::query()
                 ->with(['region:id,name','raw_material:id,name','approvedBy:id,first_name,last_name','createdBy:id,first_name,last_name'])
                 ->get();
-            return Datatables::of($data)
-                ->addColumn('action', function ($data) {
-                    return '<div class="dropdown dropdown-inline">
+        }
+        //region specified
+        elseif($request->region_id != "all" and $request->raw_material_id == "all") {
+            $data = PriceList::query()
+                ->with(['region:id,name','raw_material:id,name','approvedBy:id,first_name,last_name','createdBy:id,first_name,last_name'])
+                ->whereHas('region', function( $query ) use ( $request ){
+                    $query->where('region_id', $request->region_id);
+                })->get();
+        }
+        //raw material specified
+        elseif($request->region_id == "all" and $request->raw_material_id != "all") {
+            $data = PriceList::query()
+                ->with(['region:id,name','raw_material:id,name','approvedBy:id,first_name,last_name','createdBy:id,first_name,last_name'])
+                ->whereHas('raw_material', function( $query ) use ( $request ){
+                    $query->where('raw_material_id', $request->raw_material_id);
+                })->get();
+        }
+        //everything specified
+        elseif($request->region_id != "all" and $request->raw_material_id != "all") {
+            $data = PriceList::query()
+                ->with(['region:id,name','raw_material:id,name','approvedBy:id,first_name,last_name','createdBy:id,first_name,last_name'])
+                ->whereHas('raw_material', function( $query ) use ( $request ){
+                    $query->where('raw_material_id', $request->raw_material_id);
+                })
+                ->whereHas('region', function( $query ) use ( $request ){
+                    $query->where('region_id', $request->region_id);
+                })
+                ->get();
+        }else{
+            $data = PriceList::query()
+                ->with(['region:id,name','raw_material:id,name','approvedBy:id,first_name,last_name','createdBy:id,first_name,last_name'])
+                ->get();
+        }
+        return Datatables::of($data)
+            ->addColumn('action', function ($data) {
+                return '<div class="dropdown dropdown-inline">
 								<a href="" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">
 	                                <i class="la la-cog"></i>
 	                            </a>
@@ -140,10 +148,8 @@ class PriceListController extends Controller
 							</div>
 
 						';
-                })
-                ->make(true);
-        }
-
+            })
+            ->make(true);
         }
 
     /**
