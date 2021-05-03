@@ -9,33 +9,6 @@
             <div class="card-title" style="margin-top: 0px !important;">
                 <h3 class="card-label">Price Lists</h3>
             </div>
-            <form id="filter_form" method="post" action="">
-                @csrf
-                <div class="form-group row">
-                    <label class="col-md-2 col-form-label text-lg-right font-weight-bolder" for="region_id">Region:</label>
-                    <div class="col-md-3" style="margin-left: -20px;">
-                        <select class="js-example-basic-single form-control{{ $errors->has('region_id') ? ' is-invalid' : '' }}" name="region_id" required>
-{{--                            <option selected disabled value="">Region</option>--}}
-                            @foreach($regions as $region)
-                                <option  value="{{$region->id}}">{{ucfirst($region->name)}}</option>
-                            @endforeach
-                            <option value="">All</option>
-                        </select>                        </div>
-                    <label class="col-lg-2 col-form-label text-lg-right font-weight-bolder" for="material">Materials:</label>
-                    <div class="col-md-4" style="margin-left: -20px;">
-                        <select class="js-example-basic-single form-control" name="raw_material_id" required>
-{{--                            <option selected disabled value="">Material</option>--}}
-                            @foreach($raw_materials as $raw_material)
-                                <option value="{{$raw_material->id}}">{{ucfirst($raw_material->name)}}</option>
-                            @endforeach
-                            <option value="">All</option>
-                        </select>
-                    </div>
-                    <div class="col-md-1">
-                        <button class="btn btn-success font-weight-bolder mr-2" id="">Filter</button>
-                    </div>
-                </div>
-            </form>
 
             <div class="card-toolbar">
                 @hasanyrole('admin|general_management')
@@ -58,6 +31,32 @@
             </div>
         </div>
         <div class="card-body">
+            <form id="filter_form" method="post" action="">
+                @csrf
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label text-lg-right font-weight-bolder" for="region_id">Region:</label>
+                    <div class="col-md-3" style="margin-left: -20px;">
+                        <select class="js-example-basic-single form-control{{ $errors->has('region_id') ? ' is-invalid' : '' }}" name="region_id" required>
+                            <option value="all">All</option>
+                            @foreach($regions as $region)
+                                <option value="{{$region->id}}">{{ucfirst($region->name)}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <label class="col-lg-2 col-form-label text-lg-right font-weight-bolder" for="material">Materials:</label>
+                    <div class="col-md-4" style="margin-left: -20px;">
+                        <select class="js-example-basic-single form-control" id="material" name="raw_material_id" required>
+                            <option selected value="all">All</option>
+                            @foreach($raw_materials as $raw_material)
+                                <option value="{{$raw_material->id}}">{{ucfirst($raw_material->name)}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-1">
+                        <button class="btn btn-success font-weight-bolder mr-2" id="">Filter</button>
+                    </div>
+                </div>
+            </form>
             <!--begin: Datatable-->
             <table class="table table-bordered table-hover table-checkable mt-10" id="kt_datatable" style="margin-top: 13px !important">
                 <thead>

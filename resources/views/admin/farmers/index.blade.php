@@ -10,24 +10,6 @@
                 <h3 class="card-label">Registered Equitorial Nuts Farmers
                 </h3>
             </div>
-            <form id="filter_form" method="post" action="">
-                @csrf
-                <div class="form-group row">
-                    <label class="col-lg-5 col-form-label text-lg-right font-weight-bolder"  for="region_id">Region:</label>
-                    <div class="col-md-5" style="margin-left: -20px;">
-                        <select class="js-example-basic-single form-control{{ $errors->has('region_id') ? ' is-invalid' : '' }}" name="region_id" required>
-                            {{--                            <option selected disabled value="">Region</option>--}}
-                            @foreach($regions as $region)
-                                <option  value="{{$region->id}}">{{ucfirst($region->name)}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-1">
-                        <button class="btn btn-success font-weight-bolder mr-2" id="">Filter</button>
-                    </div>
-                </div>
-            </form>
-
             <div class="card-toolbar">
                 <!--begin::Button-->
                 <a href="{{ route('admin.app-farmers.create') }}" type="button" class="btn btn-primary font-weight-bolder">
@@ -47,6 +29,25 @@
             </div>
         </div>
         <div class="card-body">
+            <div class="row">
+                <form id="filter_form" method="post" action="">
+                    @csrf
+                    <div class="form-group row">
+                        <label class="col-lg-5 col-form-label text-lg-right font-weight-bolder"  for="region_id">Region:</label>
+                        <div class="col-md-6" style="margin-left: -20px;">
+                            <select id="region_id" class="js-example-basic-single form-control{{ $errors->has('region_id') ? ' is-invalid' : '' }}" name="region_id" required>
+                                <option selected value="all">All Regions</option>
+                                @foreach($regions as $region)
+                                    <option  value="{{$region->id}}">{{ucfirst($region->name)}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-1">
+                            <button class="btn btn-success font-weight-bolder mr-2" id="">Filter</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
             <!--begin: Datatable-->
             <table class="table table-bordered table-hover table-checkable mt-10 datatable" id="kt_datatable" style="margin-top: 13px !important">
                 <thead>
