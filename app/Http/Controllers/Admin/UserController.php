@@ -169,6 +169,7 @@ class UserController extends Controller
             $data['user'] = $buyer;
             $data['id'] =$id;
             $data['regions'] = Region::all();
+            $data['raw_materials'] = RawMaterial::all();
             $data['current_region'] = "all";
             $data['buyers'] = User::query()->where('status', '=', true)->get();
             $data['current_buyer'] = 'all';
@@ -624,6 +625,65 @@ class UserController extends Controller
             ]);
 
         return Redirect::back()->with('success', 'Buyer Assignment updated successfully');
+    }
+
+    /**
+     * Get Buyer Orders
+     *
+     * @param Request $request
+     * @param string $encryptedId
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function get_orders(Request $request, string $encryptedId)
+    {
+        $buyer = User::query()->find(Crypt::decrypt($encryptedId));
+        //region specified rest are "all"
+        if ($request->region_id != "all" and $request->raw_material_id == "all"){
+            $data = Order::query()
+                ->where('user_id', '=', $buyer->id)
+                ->whereHas('order_region', function ($q) use ($request){
+                    $q->where('region_id', '=', $request->region_id);
+                })->with(['order_region.region', 'order_raw_material.raw_material', 'user'])
+                ->get();
+        }
+        //raw material specified rest are "all"
+        elseif ($request->raw_material_id != "all" and $request->region_id == "all"){
+            $data = Order::query()
+                ->where('user_id', '=', $buyer->id)
+                ->whereHas('order_raw_material', function ($q) use ($request){
+                    $q->where('raw_material_id', '=', $request->raw_material_id);
+                })->with(['order_region.region', 'order_raw_material.raw_material', 'user'])
+                ->get();
+        }
+        //region and raw material specified
+        elseif ($request->region_id != "all" and $request->raw_material_id != "all"){
+            $data = Order::query()
+                ->where('user_id', '=', $buyer->id)
+                ->where(function($q) use($request){
+                    $q->whereHas('order_raw_material', function ($q) use ($request){
+                        $q->where('raw_material_id', '=', $request->raw_material_id);
+                    });
+                    $q->whereHas('order_region', function ($q) use ($request){
+                        $q->where('region_id', '=', $request->region_id);
+                    });
+                })
+                ->with(['order_region.region', 'order_raw_material.raw_material', 'user'])
+                ->get();
+        }
+        else{
+            $data = Order::query()
+                ->where('user_id', '=', $buyer->id)
+                ->with(['order_region.region', 'order_raw_material.raw_material', 'user'])
+                ->get();
+        }
+        return Datatables::of($data)
+            ->addColumn('action', function ($data) {
+                return '<a href="'.route('admin.orders.show', $data->ref_number).'" class="btn btn-secondary btn-sm">
+                            <i class="flaticon2-pie-chart"></i> View
+                        </a>
+						';
+            })
+            ->make(true);
     }
 
 }

@@ -27,7 +27,7 @@
                     </a>
                     <!--end::Button-->
                 <!--begin::Button-->
-                    <a href="{{ route('admin.price-lists.create') }}" type="button" class="btn btn-primary font-weight-bolder">
+                    <a href="{{ route('admin.price-lists.index') }}" type="button" class="btn btn-primary font-weight-bolder">
                             <span class="svg-icon svg-icon-md">
                                 <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -58,6 +58,7 @@
                     <th>Unit</th>
                     <th>Status</th>
                     <th>Approved By</th>
+                    <th>Action</th>
                 </tr>
                 </thead>
             </table>
@@ -89,11 +90,12 @@
                         {data: 'unit', name: 'unit'},
                         {data: 'approved', name: 'approved'},
                         {data: 'approved_by.first_name', name: 'approved_by'},
+                        {data: 'action', name: 'action'},
                     ],
                     columnDefs: [
                         {
                             width: '75px',
-                            targets: -2,
+                            targets: -3,
                             render: function(data) {
                                 var approved = {
                                     false: {'title': 'Pending Approval', 'state': 'warning'},

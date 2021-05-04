@@ -68,6 +68,7 @@
                     <th>Value</th>
                     <th>Unit</th>
                     <th>Current</th>
+                    <th>Approval Status</th>
                     <th>Status</th>
                     <th>Created By</th>
                 </tr>
@@ -117,12 +118,28 @@
                         {data: 'unit', name: 'unit'},
                         {data: 'current', name: 'current'},
                         {data: 'approved', name: 'approved'},
+                        {data: 'status', name: 'status'},
                         {data: 'created_by.first_name', name: 'created_by'},
                     ],
                     columnDefs: [
                         {
                             width: '75px',
                             targets: -2,
+                            render: function(data) {
+                                var approved = {
+                                    true: {'title': 'Active', 'state': 'success'},
+                                    false: {'title': 'Suspended Price', 'state': 'danger'},
+                                };
+                                if (typeof approved[data] === 'undefined') {
+                                    return data;
+                                }
+                                return '<span class="label label-' + approved[data].state + ' label-dot mr-2"></span>' +
+                                    '<span class="font-weight-bold text-' + approved[data].state + '">' + approved[data].title + '</span>';
+                            },
+                        },
+                        {
+                            width: '75px',
+                            targets: -3,
                             render: function(data) {
                                 var approved = {
                                     false: {'title': 'Pending Approval', 'state': 'warning'},
@@ -136,7 +153,7 @@
                             },
                         }, {
                             width: '75px',
-                            targets: -3,
+                            targets: -4,
                             render: function(data) {
                                 var approved = {
                                     false: {'title': 'Previous Price', 'state': 'warning'},
