@@ -1,7 +1,7 @@
 @extends('admin.layout.master')
 @section('content')
     <!--begin::Card-->
-    <div class="card card-custom card-transparent">
+    <div class="card card-custom card-transparent" style="margin-top: -5%;">
         <div class="card-body p-0">
             <!--begin::Wizard-->
             <div class="wizard wizard-4" id="kt_wizard" data-wizard-state="step-first" data-wizard-clickable="true">
