@@ -187,7 +187,7 @@
                 jQuery.noConflict();
                 //raw_material= document.getElementById( "raw_material" ).value;
                 var user_id  =  $(this).data('id');
-                var url = '{{ url("/admin/test", ["id",$raw_material->id]) }}';
+                var url = '{{ url("/admin/edit-raw-material", ["id",$raw_material->id]) }}';
                 url = url.replace('id', user_id);
                 $.get( url, function (data) {
                     $('#confirmModal').modal('show');

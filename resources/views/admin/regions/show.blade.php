@@ -3,13 +3,13 @@
     <!--begin::Card-->
     <div class="d-flex flex-row" style="margin-top: -5%;">
         <!--begin::Aside-->
-        <div class="flex-row-auto offcanvas-mobile w-300px w-xl-325px" id="kt_profile_aside">
+        <div class="flex-row-auto offcanvas-mobile" id="kt_profile_aside">
             <!--begin::Nav Panel Widget 2-->
             <div class="card card-custom gutter-b">
                 <!--begin::Body-->
                 <div class="card-body">
                     <!--begin::Wrapper-->
-                    <div class="d-flex justify-content-between flex-column pt-4 h-100">
+                    <div class="d-flex justify-content-between flex-column">
                         <!--begin::Container-->
                         <div class="pb-5">
                             <!--begin::Header-->
@@ -99,11 +99,6 @@
                             </div>
                             <!--end::Body-->
                         </div>
-                        <!--eng::Container-->
-                        <!--begin::Footer-->
-                        <div class="d-flex flex-center" id="kt_sticky_toolbar_chat_toggler_1" data-toggle="tooltip" title="" data-placement="right" data-original-title="Chat Example">
-                        </div>
-                        <!--end::Footer-->
                     </div>
                     <!--end::Wrapper-->
                 </div>
@@ -115,18 +110,18 @@
         <!--begin::Content-->
         <div class="flex-row-fluid ml-lg-8">
             <!--begin::Card-->
-            <div class="card card-custom gutter-bs">
+            <div class="card card-custom">
                 <!--Begin::Header-->
                 <!--end::Header-->
                 <!--Begin::Body-->
                 <div class="card-header flex-wrap border-0 pt-6 pb-0">
                     <div class="card-title">
-                        <h3 class="card-label">Regions Raw Materials
+                        <h3 class="card-label">Region's Buying Centres and Raw Materials
                         </h3>
                     </div>
                     <div class="card-toolbar">
                         <!--begin::Button-->
-                        <a href="{{ route('admin.app-regions.create') }}" type="button" class="btn btn-primary font-weight-bolder">
+                        <button data-toggle="modal" data-target="#exampleModalLong" type="button" class="btn btn-primary font-weight-bolder">
                     <span class="svg-icon svg-icon-md">
                         <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -137,8 +132,8 @@
                             </g>
                         </svg>
                         <!--end::Svg Icon-->
-                    </span>Register New Region
-                        </a>
+                    </span>New Buying Centre
+                        </button>
                         <!--end::Button-->
                     </div>
                 </div>
@@ -161,6 +156,78 @@
         <!--end::Content-->
     </div>
     <!--end::Education-->
+    <div id="exampleModalLong" class="modal fade" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+        <div class="modal-dialog  modal-lg">
+            <div class="modal-content">
+                <form method="POST" method="POST" action="{{route('admin.updateRegionsDetails', $region->id )}}" id="editStatus">
+                    <input type="hidden" name="region_id" value="{{$region->id}}" >
+                    {{csrf_field()}}
+                    <div class="modal-header">
+                        <div class="modal-title h4">New Buying Centre</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-lg-6">
+                                <label> Buying Centre Name:</label>
+                                <input id="name" name="name" type="text" class="form-control form-control-lg form-control-solid"/>
+                                @error('name')
+                                <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                          </span>
+                                @enderror
+                            </div>
+                            <div class="col-lg-6">
+                                <label>Region:</label>
+                                <input id="region" name="region" value="{{$region->name}}" type="text" class="form-control form-control-lg form-control-solid" readonly/>
+                                @error('type')
+                                <span class="invalid-feedback" role="alert">
+                                 <strong>{{ $message }}</strong>
+                                  </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-6">
+                                <div class="checkbox-inline">
+                                    <label class="checkbox checkbox-lg">
+                                        <input type="checkbox" name="Checkboxes3_1" id="myCheck" onclick="myFunction()"/>
+                                        <span></span>
+                                        Attach Raw Material:
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row" id="text" style="display:none">
+                            <div class="col-lg-6">
+                                <label>Raw Material:</label>
+                                <select required class="form-control form-control-lg form-control-solid" name="material_id" >
+                                    <option selected disabled value="">Select Raw Material</option>
+                                    @foreach($materials as $material)
+                                        <option  value="{{$material->id}}">{{ucfirst($material->name)}}</option>
+                                    @endforeach
+                                </select>
+                                @error('type')
+                                <span class="invalid-feedback" role="alert">
+                                 <strong>{{ $message }}</strong>
+                                  </span>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-lg-4"></div>
+                            <div class="col-lg-8">
+                                <button type="button" class="btn btn-danger font-weight-bolder border-top px-9 py-4" data-dismiss="modal">Cancel</button>
+                                <button id="ok_button" type="submit" class="btn btn-success font-weight-bolder border-top px-9 py-4">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 @endsection
 @section('scripts')
     <script src="{{asset('assets/js/pages/custom/education/student/profile.js')}}"></script>
@@ -186,8 +253,8 @@
                     "bDestroy": true,
                     columns: [
                         {data: 'id', name: 'id'},
-                        {data: 'materials', name: 'materials'},
                         {data: 'buying', name: 'buying'},
+                        {data: 'materials', name: 'materials'},
                     ],
                     columnDefs: [
                         {
@@ -227,6 +294,21 @@
             KTDatatablesDataSourceAjaxClient.init();
         });
 
+    </script>
+    <script>
+        function myFunction() {
+            // Get the checkbox
+            var checkBox = document.getElementById("myCheck");
+            // Get the output text
+            var text = document.getElementById("text");
+
+            // If the checkbox is checked, display the output text
+            if (checkBox.checked == true){
+                text.style.display = "block";
+            } else {
+                text.style.display = "none";
+            }
+        }
     </script>
 @endsection
 
