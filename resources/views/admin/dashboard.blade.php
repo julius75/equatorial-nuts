@@ -273,7 +273,6 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card card-custom">
-
                     <div class="card-header flex-wrap border-0 pt-6 pb-0">
                         <div class="card-title">
                             <h3 class="card-label">Monthly Transacted Amount : {{\Carbon\Carbon::now()->format('F - Y')}}</h3>

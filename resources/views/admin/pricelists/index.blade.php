@@ -9,7 +9,6 @@
             <div class="card-title" style="margin-top: 0px !important;">
                 <h3 class="card-label">Price Lists</h3>
             </div>
-
             <div class="card-toolbar">
                 @hasanyrole('admin|general_management')
                 <!--begin::Button-->
