@@ -154,6 +154,7 @@ class HomeController extends Controller
 
     public function disbursed_payments_filter(Request $request)
     {
+       // return $request->all();
         $this->data['page_title'] = "Monthly Payments";
         $this->data['page_description'] = "Monthly Payments Filter";
         $this->data['regions'] = Region::all();

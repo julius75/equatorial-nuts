@@ -33,6 +33,9 @@ Route::get('/dashboard/monthly-purchases-filter', [HomeController::class, 'disbu
 Route::post('/dashboard/monthly-purchases-filter', [HomeController::class, 'disbursed_payments_filter'])->name('dashboard.disbursed_payments_filter.post');
 //buyers
 Route::resource('app-users', UserController::class);
+
+Route::get('/app-users/monthly-purchases-filter-buyer/{region?}/{month?}/{id?}', [UserController::class, 'disbursed_payments_filter_buyer'])->name('monthly-purchases-filter-buyer');
+
 //app-admins
 Route::resource('app-admins', AdminController::class);
 

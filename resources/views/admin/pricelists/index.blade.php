@@ -20,8 +20,9 @@
                                 <option  value="{{$region->id}}">{{ucfirst($region->name)}}</option>
                             @endforeach
                             <option value="">All</option>
-                        </select>                        </div>
-                    <label class="col-lg-2 col-form-label text-lg-right font-weight-bolder" for="material">Materials:</label>
+                        </select>
+                    </div>
+                    <label class="col-form-label text-lg-right font-weight-bolder" for="material" style="margin-right: 8px">Materials:</label>
                     <div class="col-md-4" style="margin-left: -20px;">
                         <select class="js-example-basic-single form-control" name="raw_material_id" required>
 {{--                            <option selected disabled value="">Material</option>--}}
