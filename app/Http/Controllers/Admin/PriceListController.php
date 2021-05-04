@@ -9,6 +9,7 @@ use App\Models\RawMaterial;
 use App\Models\Region;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
@@ -172,9 +173,7 @@ class PriceListController extends Controller
 	                            </a>
 							  	<div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
 									<ul class="nav nav-hoverable flex-column">
-							    		<li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-user"></i><span class="nav-text">View User Details</span></a></li>
-							    		<li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-edit"></i><span class="nav-text">Edit Details</span></a></li>
-							    		<li class="btn btn-light font-size-sm mr-5"data-toggle="modal"data-target="#smallModal" id="smallButton"><i class="nav-icon la la-sync-alt"></i><span class="nav-text">Update Status</span></li>
+							    		<li class="nav-item"><a class="nav-link" href="'.route('admin.price-lists.suspend', Crypt::encrypt($data->id)).'"><i class="nav-icon la la-user"></i><span class="nav-text">Suspend Price</span></a></li>
 							    	</ul>
 							  	</div>
 							</div>
@@ -248,6 +247,24 @@ class PriceListController extends Controller
         }
         else
             return Redirect::back()->with('warning', 'Price already approved');
+
+    }
+
+    /**
+     * Suspend PriceList
+     *
+     * @param string $priceListID
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function suspend(string $priceListID)
+    {
+        $pricelist = PriceList::query()
+            ->findOrFail(decrypt($priceListID));
+        $pricelist->update([
+            'status'=>false,
+            'current'=>false,
+        ]);
+        return Redirect::back()->with('success', 'Price Suspended Successfully');
 
     }
 

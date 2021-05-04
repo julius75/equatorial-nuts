@@ -47,6 +47,7 @@ Route::resource('price-lists', PriceListController::class);
 Route::get('price-lists-current', [PriceListController::class,'current'])->name('price-lists.current');
 Route::get('price-lists-pending-approval', [PriceListController::class,'pending_approval'])->name('price-lists.pending-approval');
 Route::get('price-lists-approve/{priceListID}', [PriceListController::class,'approve'])->name('price-lists.approve');
+Route::get('price-lists-suspend/{priceListID}', [PriceListController::class,'suspend'])->name('price-lists.suspend');
 
 Route::get('raw-material-requirements', [RawMaterialController::class,'requirements'])->name('raw-materials.requirements');
 Route::get('raw-material-requirements/{id}/view', [RawMaterialController::class,'view_requirements'])->name('raw-materials.view.requirement');
@@ -89,9 +90,7 @@ Route::prefix('orders')->group(function () {
     Route::post('/map', [OrderController::class, 'map'])->name('orders.map.post');
     Route::get('/{ref_number}', [OrderController::class, 'show'])->name('orders.show');
 });
-//default list
-Route::get('/default', [UserController::class, 'default'])->name('default');
-Route::get('get-all-pricelists', [PriceListController::class, 'get_all_pricelists'])->name('get-all-pricelists');
+
 
 
 //datatable routes
@@ -100,6 +99,8 @@ Route::prefix('datatables')->group(function () {
     Route::get('get-admin-users', [AdminController::class, 'getAdminUsers'])->name('get-admin-users');
     Route::get('get-current-pricelists', [PriceListController::class, 'get_current_pricelists'])->name('get-current-pricelists');
     Route::get('get-pending-approval-pricelists', [PriceListController::class, 'get_pending_approval'])->name('get-pending-approval-pricelists');
+    Route::get('get-all-pricelists', [PriceListController::class, 'get_all_pricelists'])->name('get-all-pricelists');
+
     Route::get('get-raw-material-requirements', [RawMaterialController::class, 'get_requirements'])->name('get-raw-material-requirements');
     Route::get('get-raw-material-requirements/{id}', [RawMaterialController::class, 'get_requirements_single'])->name('get-raw-material-requirement-single');
     Route::get('get-app-farmers', [FarmerController::class, 'getAdminFarmers'])->name('get-app-farmers');
@@ -107,12 +108,14 @@ Route::prefix('datatables')->group(function () {
     Route::get('get-app-regions-buying-centers/{id}', [RegionController::class, 'getRegions'])->name('get-app-regions-buying-centers');
     Route::get('get-app-regions-raw/{id}', [RegionController::class, 'getMaterials'])->name('get-app-regions-raw');
     Route::get('get-app-buying-centre', [BuyingCentreController::class, 'getCentres'])->name('get-app-buying-centre');
+
     Route::get('get-orders', [OrderController::class, 'get_orders'])->name('get-orders');
     Route::get('get-order-raw-material-requirement-submissions/{ref_number}', [OrderController::class, 'get_order_raw_material_requirement_submissions'])->name('get-order-raw-material-requirement-submissions');
     Route::get('get-order-mpesa-transaction/{ref_number}', [OrderController::class, 'get_order_mpesa_transaction'])->name('get-order-mpesa-transaction');
-    Route::get('get-buyer-assignments/{encryptedID}', [UserController::class, 'view_buyer_assignments_data'])->name('get-buyer-assignments');
 
-    //Route::get('get-all-pricelists-filter', [PriceListController::class, 'get_all_pricelists'])->name('get-all-pricelists-filter');
+    Route::get('get-buyer-assignments/{encryptedID}', [UserController::class, 'view_buyer_assignments_data'])->name('get-buyer-assignments');
+    Route::get('get-buyer-orders/{encryptedID}', [UserController::class, 'get_orders'])->name('get-buyer-orders');
+
 
 });
 //charts routes
