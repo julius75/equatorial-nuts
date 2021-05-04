@@ -41,6 +41,5 @@ class RevokeUserLoginTokens implements ShouldQueue
                'revoked'=>true
            ]);
        }
-       SendSMS::dispatch('254725730055', count($tokens).' tokens have been revoked successfully'); //testing
     }
 }

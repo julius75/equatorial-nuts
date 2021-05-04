@@ -35,7 +35,7 @@
                         <!--begin::Title-->
                         <div class="d-flex align-items-center justify-content-between flex-wrap mt-2">
                             <!--begin::User-->
-                            <div class="mr-3">
+                            <div class="">
                                 <input type="hidden" id="user_id" value="{{$user->id}}" style="display: none">
                                 <!--begin::Name-->
                                 <a href="#" class="d-flex align-items-center text-dark text-hover-primary font-size-h5 font-weight-bold mr-3">{{$user->first_name}}  {{$user->last_name}}
@@ -86,6 +86,12 @@
                         <div class="d-flex align-items-center flex-wrap justify-content-between">
                             <!--begin::Description-->
                             <div class="flex-grow-1 font-weight-bold text-dark-50 py-2 py-lg-2">
+                                @if(isset($current_assignment))
+                                    <p>Current Region: <span class="label label-lg label-light-primary label-inline font-weight-bold py-4">{{$current_assignment['region']->name}}</span>
+                                        | Current tasked Raw Material: <span class="label label-lg label-light-primary label-inline font-weight-bold py-4">{{$current_assignment['raw_material']->name}}</span>
+                                    <small>Change current assignment details <a href="{{route('admin.view-buyer-assignments', \Illuminate\Support\Facades\Crypt::encrypt($user->id))}}" >here</a></small></p>
+                                @endif
+                                   <p>Change current assignment details <a href="{{route('admin.view-buyer-assignments', \Illuminate\Support\Facades\Crypt::encrypt($user->id))}}" >here</a></p>
                             </div>
                             <!--end::Description-->
                         </div>

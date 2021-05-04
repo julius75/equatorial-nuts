@@ -62,7 +62,7 @@ class User extends Authenticatable
 
     public function regions(){
         return $this->belongsToMany(Region::class, 'region_users')
-            ->withPivot(['current', 'assigned_by', 'assigned_at', 'created_at', 'updated_at'])
+            ->withPivot(['current', 'assigned_by', 'assigned_at', 'created_at', 'updated_at', 'raw_material_id'])
             ->withTimestamps();
     }
 

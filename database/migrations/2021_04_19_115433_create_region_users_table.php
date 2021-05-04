@@ -17,6 +17,7 @@ class CreateRegionUsersTable extends Migration
             $table->id();
             $table->foreignId('region_id')->references('id')->on('regions')->onDelete('cascade');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('raw_material_id')->references('id')->on('raw_materials')->onDelete('set null');
             $table->foreignId('assigned_by')->nullable()->references('id')->on('admins')->onDelete('set null');
             $table->boolean('current')->default(false);
             $table->timestamp('assigned_at')->nullable();

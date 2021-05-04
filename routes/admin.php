@@ -34,6 +34,9 @@ Route::get('/dashboard/monthly-purchases-filter', [HomeController::class, 'disbu
 Route::post('/dashboard/monthly-purchases-filter', [HomeController::class, 'disbursed_payments_filter'])->name('dashboard.disbursed_payments_filter.post');
 //buyers
 Route::resource('app-users', UserController::class);
+Route::get('view-buyer-assignments/{encryptedID}', [UserController::class, 'view_buyer_assignments'])->name('view-buyer-assignments');
+Route::post('update-buyer-assignment/{encryptedID}', [UserController::class, 'update_buyer_assignments'])->name('update-buyer-assignment');
+
 
 Route::get('/app-users/monthly-purchases-filter-buyer/{region?}/{month?}/{id?}', [UserController::class, 'disbursed_payments_filter_buyer'])->name('monthly-purchases-filter-buyer');
 
@@ -59,6 +62,7 @@ Route::post('update-status-admin/{id}', [AdminController::class,'statusUpdate'])
 //status update
 Route::post('update-status/{id}', [UserController::class,'statusUpdate']);
 Route::post('update-status-farmers/{id}', [FarmerController::class,'statusUpdate']);
+
 Route::post('delete-farmers/{id}', [FarmerController::class,'DeleteFarmer']);
 Route::post('buying-centre/{id}', [BuyingCentreController::class,'AttachCentre']);
 
@@ -106,6 +110,7 @@ Route::prefix('datatables')->group(function () {
     Route::get('get-orders', [OrderController::class, 'get_orders'])->name('get-orders');
     Route::get('get-order-raw-material-requirement-submissions/{ref_number}', [OrderController::class, 'get_order_raw_material_requirement_submissions'])->name('get-order-raw-material-requirement-submissions');
     Route::get('get-order-mpesa-transaction/{ref_number}', [OrderController::class, 'get_order_mpesa_transaction'])->name('get-order-mpesa-transaction');
+    Route::get('get-buyer-assignments/{encryptedID}', [UserController::class, 'view_buyer_assignments_data'])->name('get-buyer-assignments');
 
     //Route::get('get-all-pricelists-filter', [PriceListController::class, 'get_all_pricelists'])->name('get-all-pricelists-filter');
 
