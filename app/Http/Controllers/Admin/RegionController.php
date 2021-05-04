@@ -159,7 +159,39 @@ class RegionController extends Controller
             return Redirect::route('admin.app-regions.create')->with('error', 'Something went wrong');
         }
     }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateRegionsDetails(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' =>  'required|min:4|max:20',
+            'region' => 'required',
+            'material_id' => 'required',
+            'region_id' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return Redirect::back()->withErrors($validator)->withInput()->with('error', $validator->errors()->first());
+        }
+        try {
+            $center = BuyingCenter::query()->create([
+                'region_id' => $request->region_id,
+                'name' => $request->name,
+            ]);
+            DB::table('buying_center_raw_materials')
+                ->updateOrInsert(
+                    ['buying_center_id' => $center->id],
+                    ['raw_material_id' => $request->material_id,]
+                );
+            return Redirect::route('admin.app-regions.index')->with('message','Raw Material attached Successfully To The Centre');
 
+        } catch (\Exception $exception) {
+            return Redirect::route('admin.app-regions.index')->with('error', 'Something went wrong');
+        }
+    }
     /**
      * Display the specified resource.
      *
@@ -171,7 +203,8 @@ class RegionController extends Controller
         try {
             $id = Crypt::decrypt($id);
             $region = Region::findOrFail($id);
-            return view('admin.regions.show',compact('region'));
+            $materials = RawMaterial::all();
+            return view('admin.regions.show',compact('region','materials'));
         } catch (ModelNotFoundException $e) {
             return $e;
         }
@@ -194,58 +227,40 @@ class RegionController extends Controller
     }
 
     public function test(){
-        $users = BuyingCenter::where(function ($query) {
-            $query->select('id')
-                ->from('buying_center_raw_materials')
-                ->whereColumn('buying_center_raw_materials.buying_center_id', 'buying_centers.id');
-        }, 'Pro')->get();
-
+        $centers = BuyingCenter::join('buying_center_raw_materials', 'buying_center_raw_materials.buying_center_id', '=', 'buying_centers.id')
+            ->join('raw_materials', 'raw_materials.id', '=', 'buying_center_raw_materials.raw_material_id')
+            ->where('buying_centers.region_id',1)
+            ->get(['buying_centers.*', 'buying_center_raw_materials.raw_material_id as raw_material_id','raw_materials.name as raw_material_name']);
+        //$materials = BuyingCenter::where('region_id', 1)->get();
         return $users;
-        $test =  DB::table('buying_centres')
-            ->join('buying_center_raw_materials', 'buying_centres.id', '=', 'buying_center_raw_materials.buying_centre_id')
-           // ->join('raw_materials', 'price_lists.raw_material_id', '=', 'raw_materials.id')
-            ->select('buying_centres.*', 'buying_center_raw_materials.*')
-            ->where('buying_centres.region_id', 1,
-            )->get();
-        return $test;
         $centers = BuyingCenter::where('region_id', 1)->pluck('id')->toArray();
         $buying_center = DB::table('buying_center_raw_materials')
             ->whereIn('raw_material_id', $centers)
             ->pluck('id')->toArray();
-        $raw_materials = DB::table('raw_materials')
-            ->whereIn('id', $buying_center)
-            ->get();
+        $centers = BuyingCenter::where('region_id', 1)->pluck('id')->toArray();
+        $buying_center = DB::table('buying_center_raw_materials')
+            ->whereIn('raw_material_id', $centers)
+            ->pluck('id')->toArray();
 
-        $users = DB::table('buying_center_id')->where('votes', 100)->get();
 
-
-        $postComment = array();
-
-        foreach($materials->id as $id){
-            return $id;
-        }
-        return $postComment;
 
 
     }
     public function getMaterials($id)
         {
          try {
-             $materials = BuyingCenter::where('region_id', $id)->get();
-             $centers = BuyingCenter::where('region_id', 1)->pluck('id')->toArray();
-             $buying_center = DB::table('buying_center_raw_materials')
-                 ->whereIn('raw_material_id', $centers)
-                 ->pluck('id')->toArray();
-             $raw_materials = DB::table('raw_materials')
-                 ->whereIn('id', $buying_center)
-                 ->get();
-        return Datatables::of($materials,)
-            ->editColumn('materials', function ($materials){
-                return Carbon::parse($materials->created_at)->isoFormat('MMM D YYYY');
-            })
+             $centers = BuyingCenter::join('buying_center_raw_materials', 'buying_center_raw_materials.buying_center_id', '=', 'buying_centers.id')
+                 ->join('raw_materials', 'raw_materials.id', '=', 'buying_center_raw_materials.raw_material_id')
+                 ->where('buying_centers.region_id',$id)
+                 ->get(['buying_centers.*', 'buying_center_raw_materials.raw_material_id as raw_material_id','raw_materials.name as raw_material_name']);
+
+             return Datatables::of($centers,)
             ->editColumn('buying', function ($raw_materials){
                 return $raw_materials->name;
             })
+                 ->editColumn('materials', function ($materials){
+                     return $materials->raw_material_name;
+                 })
             ->make(true);
     } catch (ModelNotFoundException $e) {
         return $e;

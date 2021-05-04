@@ -71,11 +71,14 @@ Route::get('/getchart/{month?}/{year?}', [HomeController::class, 'getMonthlyPost
 
 //app-admins
 Route::resource('app-admins', AdminController::class);
-Route::get('test/{id}/{ids}', [RawMaterialController::class, 'test'])->name('test');
+Route::get('edit-raw-material/{id}/{ids}', [RawMaterialController::class, 'test'])->name('edit-raw-material');
 Route::post('update-materials', [RawMaterialController::class,'update_materials'])->name('update-materials');
 
 Route::get('/getSubCounty/{id}', [RegionController::class, 'getSubCounty'])->name('getSubCounty');
 //app-admins
+//new region
+Route::post('updateRegionsDetails/{id}', [RegionController::class, 'updateRegionsDetails'])->name('updateRegionsDetails');
+
 Route::resource('app-admins', AdminController::class);
 //farmers
 Route::resource('app-farmers', FarmerController::class);
