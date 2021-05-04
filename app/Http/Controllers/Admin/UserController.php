@@ -8,6 +8,7 @@ use App\Models\Admin;
 use App\Models\BuyingCenter;
 use App\Models\Farmer;
 use App\Models\Order;
+use App\Models\RawMaterial;
 use App\Models\Region;
 use App\Models\User;
 use Carbon\Carbon;
@@ -24,6 +25,10 @@ use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 
+/**
+ * This controller has all the ENP Buyer Logic
+ *
+ */
 class UserController extends Controller
 {
 
@@ -43,18 +48,11 @@ class UserController extends Controller
         return view('admin.users.index');
     }
 
-    public function test()
-    {
-        $users = User::role('buyer')->get();
-        return $users;
-    }
-
     /**
      * Get Users DataTable
      *
      * @return \Illuminate\Http\Response
      */
-
     public function getUsers()
     {
         $users = User::role('buyer')->get();
@@ -68,6 +66,7 @@ class UserController extends Controller
 									<ul class="nav nav-hoverable flex-column">
 							    		<li class="nav-item"><a class="nav-link" href="'.route('admin.app-users.show',Crypt::encrypt($users->id)).'"><i class="nav-icon la la-user"></i><span class="nav-text">View User Details</span></a></li>
 							    		<li class="nav-item"><a class="nav-link" href="'.route('admin.app-users.edit',Crypt::encrypt($users->id)).'"><i class="nav-icon la la-edit"></i><span class="nav-text">Edit Details</span></a></li>
+							    		<li class="nav-item"><a class="nav-link" href="'.route('admin.view-buyer-assignments',Crypt::encrypt($users->id)).'"><i class="nav-icon la la-address-book"></i><span class="nav-text">View Assignments</span></a></li>
 							    		<li class="btn btn-light font-size-sm mr-5"data-toggle="modal"data-target="#smallModal" id="smallButton"><i class="nav-icon la la-sync-alt"></i><span class="nav-text">Update Status</span></li>
 							    	</ul>
 							  	</div>
@@ -77,17 +76,18 @@ class UserController extends Controller
             })
             ->make(true);
     }
+
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-
     public function create()
     {
         $regions = Region::all();
         return view('admin.users.create', compact('regions'));
     }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -95,7 +95,6 @@ class UserController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -104,7 +103,8 @@ class UserController extends Controller
             'email' => 'required|email|unique:users',
             'phone_number' => 'required|unique:users',
             'password' => 'required',
-            'region_id' => 'required',
+            'region_id' => 'required|exists:regions,id',
+            'raw_material_id' => 'required|exists:raw_materials,id',
         ]);
         if ($validator->fails()) {
             return Redirect::back()->withErrors($validator)->withInput()->with('error', $validator->errors()->first());
@@ -121,7 +121,7 @@ class UserController extends Controller
         // remove non digits including spaces, - and +
         try {
 
-            $user = User::create([
+            $user = User::query()->create([
                 'first_name' => $input['first_name'],
                 'last_name' => $input['last_name'],
                 'email' => $input['email'],
@@ -130,12 +130,15 @@ class UserController extends Controller
                 'status' => true,
                 'passcode' => mt_rand(1000,9999)
             ]);
-            $region = DB::table('region_users')->insert([
-                'region_id' => $request->region_id,
-                'user_id' => $user->id,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ]);
+
+            $user->regions()
+                ->attach($request->region_id,[
+                    'current'=> true,
+                    'assigned_by'=> Auth::id(),
+                    'assigned_at'=> now(),
+                    'raw_material_id'=>$request->raw_material_id
+                ]);
+
             $user->assignRole('buyer');
 
             $details = [
@@ -151,20 +154,21 @@ class UserController extends Controller
             return Redirect::route('admin.app-users.create')->with('error', 'Something went wrong');
         }
     }
+
     /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\RedirectResponse
      */
-
     public function show(Request $request,$id)
     {
         try {
             $id = Crypt::decrypt($id);
-            $data['user'] = User::query()->findOrFail($id);
-            $data['regions'] = Region::all();
+            $buyer = User::query()->findOrFail($id);
+            $data['user'] = $buyer;
             $data['id'] =$id;
+            $data['regions'] = Region::all();
             $data['current_region'] = "all";
             $data['buyers'] = User::query()->where('status', '=', true)->get();
             $data['current_buyer'] = 'all';
@@ -173,6 +177,17 @@ class UserController extends Controller
             $complete_orders_amount = Order::query()->where(['disbursed' => true,'user_id' => $id])->sum('amount');
             $complete_orders_count = Order::query()->where(['disbursed' => true,'user_id' => $id])->count();
 
+            $get_current_assignment = DB::table('region_users')
+                ->where('current', '=', true)
+                ->where('user_id', '=', $buyer->id)
+                ->first();
+            if ($get_current_assignment){
+                $current_assignment['region'] = Region::query()->find($get_current_assignment->region_id);
+                $current_assignment['raw_material'] = RawMaterial::query()->find($get_current_assignment->raw_material_id);
+                $current_assignment['query_data'] = $get_current_assignment;
+                $data['current_assignment'] = $current_assignment;
+            }
+
             $data['transactionsAmount'] = $complete_orders_amount;
             $data['transactionsCount'] = $complete_orders_count;
             $data['monthly_payments_data_array'] = $this->paymentsChartData($request,$id);
@@ -180,8 +195,13 @@ class UserController extends Controller
         } catch (ModelNotFoundException $e) {
             return Redirect::back()->with('error', 'Something went wrong');
         }
-
     }
+
+    /**
+     * Loads the chart once the page is opened
+     *
+     * @return array
+     */
     protected function paymentsChartData($request,$id)
     {
         $order_dates = Order::query()
@@ -258,7 +278,7 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Filter the chart
      *
      * @return array
      */
@@ -450,64 +470,72 @@ class UserController extends Controller
         return $monthly_loan_data_array;
     }
 
+    /**
+     * Form for editing Buyer Details
+     *
+     */
     public function edit($id)
     {
-        try {
-            $id = Crypt::decrypt($id);
-            $user = User::findOrFail($id);
-            return view('admin.users.edit',compact('user'));
-        } catch (ModelNotFoundException $e) {
-            return $e;
-        }
+        $id = Crypt::decrypt($id);
+        $user = User::query()->findOrFail($id);
+        return view('admin.users.edit',compact('user'));
     }
+
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
-
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         $validator = Validator::make($request->all(), [
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required',
+            'phone_number' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return back()->with('error', 'User Not Found');
+            return Redirect::back()->withErrors($validator)->withInput()->with('error', $validator->errors()->first());
         }
 
         try {
-            $user = User::findOrFail($id);
+            $user = User::query()->findOrFail($id);
             $user->first_name = $request->first_name;
             $user->last_name = $request->last_name;
             $user->email = $request->email;
+            $user->phone_number = $request->phone_number;
             $user->save();
 
-            return redirect()->route('admin.app-users.index')->with('message', 'User Updated successfully');
+            return Redirect::route('admin.app-users.index')->with('message', 'User Updated successfully');
         }
         catch (ModelNotFoundException $e) {
-            return back()->with('error', 'User Not Found');
+            return Redirect::back()->with('error', 'User Not Found');
         }
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function statusUpdate(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
             'status' => 'required',
         ]);
         if ($validator->fails()) {
-            return back()->with('error', 'User Not Found');
+            return Redirect::back()->with('error', 'Status required');
         }
-
         try {
-            $user = User::findOrFail($id);
+            $user = User::query()->findOrFail($id);
             $user->status = $request->status;
             $user->save();
-            return redirect()->route('admin.app-users.index')->with('message', 'User Status Updated successfully');
+            return Redirect::route('admin.app-users.index')->with('message', 'User Status Updated successfully');
         }
         catch (ModelNotFoundException $e) {
             return back()->with('error', 'Error Try Again...');
@@ -524,4 +552,78 @@ class UserController extends Controller
     {
         //
     }
+
+    /**
+     * View page for changing a users assigned region
+     *
+     * @param  string  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function view_buyer_assignments(string $id)
+    {
+        $buyer = User::query()->find(Crypt::decrypt($id));
+        $regions = Region::all();
+        $raw_materials = RawMaterial::all();
+        return view('admin.users.view_buyer_assignments', compact('buyer', 'regions', 'raw_materials'));
+    }
+    /**
+     * Data Table for user assignments
+     *
+     * @param  string  $encryptedId
+     * @return \Illuminate\Http\Response
+     */
+    public function view_buyer_assignments_data(string $encryptedId)
+    {
+        $data = DB::table('region_users')->where('user_id', '=', Crypt::decrypt($encryptedId))->get();
+        return Datatables::of($data)
+            ->addColumn('region', function ($data) {
+                return Region::query()->find($data->region_id)->name;
+            })
+            ->addColumn('raw_material', function ($data) {
+                return RawMaterial::query()->find($data->raw_material_id)->name;
+            })
+            ->addColumn('assigner', function ($data) {
+                return Admin::query()->find($data->assigned_by)->full_name;
+            })
+            ->make(true);
+    }
+
+    /**
+     * Update Buyer Region/Raw Material Assignment
+     *
+     * @param Request $request
+     * @param string $encryptedId
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update_buyer_assignments(Request $request, string $encryptedId)
+    {
+        $validator = Validator::make($request->all(), [
+            'region_id' => 'required|exists:regions,id',
+            'raw_material_id' => 'required|exists:raw_materials,id',
+        ]);
+        if ($validator->fails()) {
+            return Redirect::back()->withErrors($validator)->withInput()->with('error', $validator->errors()->first());
+        }
+        $buyer = User::query()->find(Crypt::decrypt($encryptedId));
+        $check_for_previous = DB::table('region_users')
+            ->where('user_id', '=', Crypt::decrypt($encryptedId))
+            ->where('current', '=', true)
+            ->exists();
+        if ($check_for_previous){
+            DB::table('region_users')
+                ->where('user_id', '=', Crypt::decrypt($encryptedId))
+                ->where('current', '=', true)
+                ->update(['current'=>false]);
+        }
+        $buyer->regions()
+            ->attach($request->region_id,[
+                'current'=> true,
+                'assigned_by'=> Auth::id(),
+                'assigned_at'=> now(),
+                'raw_material_id' => $request->raw_material_id
+            ]);
+
+        return Redirect::back()->with('success', 'Buyer Assignment updated successfully');
+    }
+
 }

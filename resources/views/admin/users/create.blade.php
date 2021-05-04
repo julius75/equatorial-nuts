@@ -49,7 +49,7 @@
                                                     <label class="col-xl-3 col-lg-3 col-form-label">Email Address</label>
                                                     <div class="col-lg-9 col-xl-9">
                                                         <div class="input-group input-group-solid input-group-lg">
-                                                            <input type="email" class="form-control form-control-solid form-control-lg is-invalid  @error('email') is-invalid @enderror" value="{{ old('email') }}"
+                                                            <input type="email" class="form-control form-control-solid form-control-lg @error('email') is-invalid @enderror" value="{{ old('email') }}"
                                                                     name="email"  id="email" required  autocomplete="off"/>
                                                             @error('email')
                                                             <span class="invalid-feedback" role="alert">

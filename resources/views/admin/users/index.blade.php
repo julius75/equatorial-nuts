@@ -7,7 +7,7 @@
     <div class="card card-custom" style="margin-top: -5%;">
         <div class="card-header flex-wrap border-0 pt-6 pb-0">
             <div class="card-title">
-                <h3 class="card-label">Registered Equitorial Nuts Buyers
+                <h3 class="card-label">Buyers
                 </h3>
             </div>
             <div class="card-toolbar">
