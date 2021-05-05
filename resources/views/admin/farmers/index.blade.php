@@ -58,6 +58,8 @@
                     <th>ID</th>
                     <th>Gender</th>
                     <th>Region</th>
+                    <th>Date Registered</th>
+                    <th>Status</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -167,14 +169,8 @@
                         data: function (d) {
                             d.region_id = $('select[name=region_id]').val();
                         }
-                        // url: APP_URL +'/admin/datatables/get-app-farmers',
-                        // type: 'GET',
-                        // data: {
-                        //     pagination: {
-                        //         perpage: 50,
-                        //     },
-                        // },
                     },
+
                     columns: [
                         {data: 'id', name: 'id'},
                         {data: 'full_name', name: 'full_name'},
@@ -182,6 +178,8 @@
                         {data: 'id_number', name: 'id_number'},
                         {data: 'gender', name: 'gender'},
                         {data: 'region', name: 'region'},
+                        {data: 'created_at', name: 'created_at'},
+                        {data: 'status', name: 'status'},
                         {data: 'action', name: 'action'},
                     ],
                     columnDefs: [
@@ -191,8 +189,7 @@
                             render: function(data, type, full, meta) {
                                 var is_active = {
                                     false: {'title': 'Suspended', 'state': 'danger'},
-                                    true: {'title': 'Active', 'state': 'primary'},
-                                    3: {'title': 'Direct', 'state': 'success'},
+                                    true: {'title': 'Active', 'state': 'success'},
                                 };
 
                                 if (typeof is_active[data] === 'undefined') {

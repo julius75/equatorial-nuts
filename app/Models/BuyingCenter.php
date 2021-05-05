@@ -17,6 +17,11 @@ class BuyingCenter extends Model
 
     protected $hidden = ['pivot'];
 
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d h:i',
+        'updated_at' => 'datetime:Y-m-d h:i',
+    ];
+
     public function region()
     {
         return $this->belongsTo(Region::class);

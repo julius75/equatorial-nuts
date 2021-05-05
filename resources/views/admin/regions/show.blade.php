@@ -1,127 +1,191 @@
 @extends('admin.layout.master')
-@section('content')
-    <!--begin::Card-->
-    <div class="d-flex flex-row" style="margin-top: -5%;">
-        <!--begin::Aside-->
-        <div class="flex-row-auto offcanvas-mobile" id="kt_profile_aside">
-            <!--begin::Nav Panel Widget 2-->
-            <div class="card card-custom gutter-b">
-                <!--begin::Body-->
-                <div class="card-body">
-                    <!--begin::Wrapper-->
-                    <div class="d-flex justify-content-between flex-column">
-                        <!--begin::Container-->
-                        <div class="pb-5">
-                            <!--begin::Header-->
-                            <div class="d-flex flex-column flex-center">
-                                <!--begin::Symbol-->
-                                <div class="symbol symbol-120 symbol-circle symbol-success overflow-hidden">
-{{--																<span class="symbol-label">--}}
-{{--																	<img src="{{asset('assets/media/placeholder.svg')}}" class="h-75 align-self-end" alt="" />--}}
-{{--																</span>--}}
-                                </div>
-                                <!--end::Symbol-->
-                                <!--begin::Username-->
-                                <!--end::Username-->
-                                <!--begin::Info-->
-                                <div class="card-title font-weight-bolder text-dark-75 text-hover-primary font-size-h4 m-0 pt-7 pb-1">Region Name: </div>
-                                <!--end::Info-->
-                            </div>
-                            <!--end::Header-->
-                            <!--begin::Body-->
-                            <div class="pt-1">
-                                <!--begin::Text-->
-                                <p class="text-dark-75 font-weight-nirmal font-size-sm m-0 pb-4 ml-14">County: <span class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bolder bg-success">{{$region->county->name}}</span></p>
-                                <!--end::Text-->
-                                <p class="text-dark-75 font-weight-nirmal font-size-sm m-0 pb-4 ml-14">Sub County: <span class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bolder bg-success">{{$region->sub_county->name}}</span></p>
-
-                                <input type="hidden" id="region_id" value="{{$region->id}}" style="display: none">
-                                <!--begin::Item-->
-                                <div class="d-flex align-items-center pb-9">
-                                    <!--begin::Symbol-->
-                                    <div class="symbol symbol-45 symbol-light mr-4">
-																	<span class="symbol-label">
-																		<span class="svg-icon svg-icon-2x svg-icon-dark-50">
-																			<!--begin::Svg Icon | path:assets/media/svg/icons/Media/Equalizer.svg-->
-																			<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-																				<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-																					<rect x="0" y="0" width="24" height="24" />
-																					<rect fill="#000000" opacity="0.3" x="13" y="4" width="3" height="16" rx="1.5" />
-																					<rect fill="#000000" x="8" y="9" width="3" height="11" rx="1.5" />
-																					<rect fill="#000000" x="18" y="11" width="3" height="9" rx="1.5" />
-																					<rect fill="#000000" x="3" y="13" width="3" height="7" rx="1.5" />
-																				</g>
-																			</svg>
-                                                                            <!--end::Svg Icon-->
-																		</span>
-																	</span>
-                                    </div>
-                                    <!--end::Symbol-->
-                                    <!--begin::Text-->
-                                    <div class="d-flex flex-column flex-grow-1">
-                                        <span class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bolder">Buying Center</span>
-                                    </div>
-                                    <!--end::Text-->
-                                    <!--begin::label-->
-                                    <span class="font-weight-bolder label label-xl label-light-success label-inline px-3 py-5 min-w-45px">8</span>
-                                    <!--end::label-->
-                                </div>
-                                <!--end::Item-->
-                                <!--begin::Item-->
-                                <div class="d-flex align-items-center pb-9">
-                                    <!--begin::Symbol-->
-                                    <div class="symbol symbol-45 symbol-light mr-4">
-																	<span class="symbol-label">
-																		<span class="svg-icon svg-icon-2x svg-icon-dark-50">
-																			<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->
-																			<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-																				<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-																					<rect x="0" y="0" width="24" height="24" />
-																					<rect fill="#000000" x="4" y="4" width="7" height="7" rx="1.5" />
-																					<path d="M5.5,13 L9.5,13 C10.3284271,13 11,13.6715729 11,14.5 L11,18.5 C11,19.3284271 10.3284271,20 9.5,20 L5.5,20 C4.67157288,20 4,19.3284271 4,18.5 L4,14.5 C4,13.6715729 4.67157288,13 5.5,13 Z M14.5,4 L18.5,4 C19.3284271,4 20,4.67157288 20,5.5 L20,9.5 C20,10.3284271 19.3284271,11 18.5,11 L14.5,11 C13.6715729,11 13,10.3284271 13,9.5 L13,5.5 C13,4.67157288 13.6715729,4 14.5,4 Z M14.5,13 L18.5,13 C19.3284271,13 20,13.6715729 20,14.5 L20,18.5 C20,19.3284271 19.3284271,20 18.5,20 L14.5,20 C13.6715729,20 13,19.3284271 13,18.5 L13,14.5 C13,13.6715729 13.6715729,13 14.5,13 Z" fill="#000000" opacity="0.3" />
-																				</g>
-																			</svg>
-                                                                            <!--end::Svg Icon-->
-																		</span>
-																	</span>
-                                    </div>
-                                    <!--end::Symbol-->
-                                    <!--begin::Text-->
-                                    <div class="d-flex flex-column flex-grow-1">
-                                        <span class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bolder">Raw Materials</span>
-                                    </div>
-                                    <!--end::Text-->
-                                    <!--begin::label-->
-                                    <span class="font-weight-bolder label label-xl label-light-danger label-inline px-3 py-5 min-w-45px">7</span>
-                                    <!--end::label-->
-                                </div>
-                                <!--end::Item-->
-                            </div>
-                            <!--end::Body-->
-                        </div>
-                    </div>
-                    <!--end::Wrapper-->
-                </div>
-                <!--end::Body-->
+@section('sub-header')
+    <!--begin::Subheader-->
+    <div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+        <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+            <!--begin::Info-->
+            <div class="d-flex align-items-center flex-wrap mr-2">
+                <!--begin::Page Title-->
+                <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Region Details</h5>
+                <!--end::Page Title-->
+                <!--begin::Actions-->
+                <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+                <!--end::Actions-->
             </div>
-            <!--end::Nav Panel Widget 2-->
         </div>
-        <!--end::Aside-->
-        <!--begin::Content-->
-        <div class="flex-row-fluid ml-lg-8">
-            <!--begin::Card-->
-            <div class="card card-custom">
-                <!--Begin::Header-->
-                <!--end::Header-->
-                <!--Begin::Body-->
-                <div class="card-header flex-wrap border-0 pt-6 pb-0">
-                    <div class="card-title">
-                        <h3 class="card-label">Region's Buying Centres and Raw Materials
-                        </h3>
+    </div>
+    <!--end::Subheader-->
+@endsection
+
+@section('content')
+    <div class="card card-custom gutter-b">
+        <div class="card-body">
+            <!--begin::Top-->
+            <div class="d-flex">
+                <!--begin::Pic-->
+                <div class="flex-shrink-0 mr-7">
+                    <div class="symbol symbol-50 symbol-lg-120 symbol-light-danger">
+                        <span class="font-size-h3 symbol-label font-weight-boldest">{{ucfirst(substr($region->name, 0, 2))}}</span>
                     </div>
-                    <div class="card-toolbar">
-                        <!--begin::Button-->
-                        <button data-toggle="modal" data-target="#exampleModalLong" type="button" class="btn btn-primary font-weight-bolder">
+                </div>
+                <!--end::Pic-->
+                <!--begin: Info-->
+                <div class="flex-grow-1">
+                    <!--begin::Title-->
+                    <div class="d-flex align-items-center justify-content-between flex-wrap mt-2">
+                        <!--begin::User-->
+                        <div class="">
+                            <input type="hidden" id="user_id" value="{{$region->id}}" style="display: none">
+                            <!--begin::Name-->
+                            <a href="#" class="d-flex align-items-center text-dark text-hover-primary font-size-h5 font-weight-bold mr-3">{{$region->name}}
+                                <i class="flaticon2-correct text-warning icon-md ml-2"></i></a>
+                            <!--end::Name-->
+                        </div>
+                        <!--begin::User-->
+                    </div>
+                    <!--end::Title-->
+                    <!--begin::Content-->
+                    <div class="d-flex align-items-center flex-wrap justify-content-between">
+                        <!--begin::Description-->
+                        <div class="flex-grow-1 font-weight-bold text-dark-50 py-2 py-lg-2">
+                            <p>County: {{$region->county->name}}</p>
+                            <p>Sub County: {{$region->sub_county->name}}</p>
+                        </div>
+                        <!--end::Description-->
+                    </div>
+                    <!--end::Content-->
+                </div>
+                <!--end::Info-->
+            </div>
+            <!--end::Top-->
+            <!--begin::Separator-->
+            <div class="separator separator-solid my-7"></div>
+            <!--end::Separator-->
+            <!--begin::Bottom-->
+            <div class="d-flex align-items-center flex-wrap">
+                <!--begin: Item-->
+                <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
+												<span class="mr-4">
+													<i class="flaticon-piggy-bank icon-2x text-muted font-weight-bold"></i>
+												</span>
+                    <div class="d-flex flex-column text-dark-75">
+                        <span class="font-weight-bolder font-size-sm">Total Number of Complete Orders (Purchases)</span>
+                        <span class="font-weight-bolder font-size-h5">
+                                <span class="text-dark-50 font-weight-bold"></span>{{number_format($transactionsCount)}}</span>
+                    </div>
+                </div>
+                <!--end: Item-->
+                <!--begin: Item-->
+                <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
+												<span class="mr-4">
+													<i class="flaticon-pie-chart icon-2x text-muted font-weight-bold"></i>
+												</span>
+                    <div class="d-flex flex-column text-dark-75">
+                        <span class="font-weight-bolder font-size-sm">Total Amount of Complete Orders (Purchases)</span>
+                        <span class="font-weight-bolder font-size-h5">
+							<span class="text-dark-50 font-weight-bold"></span>Ksh. {{number_format($transactionsAmount)}}</span>
+                    </div>
+                </div>
+                <!--end: Item-->
+                <!--begin: Item-->
+                {{--                    <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">--}}
+                {{--												<span class="mr-4">--}}
+                {{--													<i class="flaticon-file-2 icon-2x text-muted font-weight-bold"></i>--}}
+                {{--												</span>--}}
+                {{--                        <div class="d-flex flex-column flex-lg-fill">--}}
+                {{--                            <span class="font-weight-bolder font-size-sm">Farmers</span>--}}
+                {{--                            <span class="font-weight-bolder font-size-h5">--}}
+                {{--							<span class="text-dark-50 font-weight-bold"></span>46</span>--}}
+                {{--                        </div>--}}
+                {{--                    </div>--}}
+            </div>
+            <!--end::Bottom-->
+        </div>
+    </div>
+
+    <!--- Order Data Table -->
+
+    <div class="card card-custom">
+            <div class="card-header flex-wrap border-0 pt-6 pb-0">
+                <div class="card-title">
+                    <h3 class="card-label">{{$region->name}} Orders (Purchases)</h3>
+                </div>
+                <div class="card-toolbar">
+
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form id="filter_form_orders" method="post" action="">
+                            @csrf
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label text-lg-right font-weight-bolder" for="region_id">Buying Center:</label>
+                                <div class="col-md-2" style="margin-left: -20px;">
+                                    <select class="js-example-basic-single form-control{{ $errors->has('buying_center_id') ? ' is-invalid' : '' }}" name="buying_center_id" required>
+                                        <option value="all">All</option>
+                                        @foreach($buying_centers as $center)
+                                            <option  value="{{$center->id}}">{{ucfirst($center->name)}}</option>
+                                        @endforeach
+
+                                    </select>
+                                </div>
+                                <label class="col-md-2 col-form-label text-lg-right font-weight-bolder" for="material">Raw Materials:</label>
+                                <div class="col-md-2" style="margin-left: -20px;">
+                                    <select class="js-example-basic-single form-control" name="raw_material_id" required>
+                                        <option value="all">All</option>
+                                        @foreach($materials as $raw_material)
+                                            <option value="{{$raw_material->id}}">{{ucfirst($raw_material->name)}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-1">
+                                    <button class="btn btn-success font-weight-bolder mr-2" id="">Filter</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!--begin: Datatable-->
+                <table class="table table-bordered table-hover table-checkable mt-10" id="kt_datatable_orders" style="margin-top: 13px !important">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Ref Number</th>
+                        <th>Buyer</th>
+                        <th>Buying Center</th>
+                        <th>Amount</th>
+                        <th>Raw Material</th>
+                        <th>Bags</th>
+                        <th>Net Weight</th>
+                        <th>Disbursed</th>
+                        <th>Date Disbursed</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                </table>
+                <!--end: Datatable-->
+            </div>
+        </div>
+
+
+
+        <!--begin::Content-->
+        <div class="mt-5 row">
+            <div class="col-md-7">
+                <!--begin::Card-->
+                <div class="card card-custom">
+                    <!--Begin::Header-->
+                    <!--end::Header-->
+                    <!--Begin::Body-->
+                    <div class="card-header flex-wrap border-0 pt-6 pb-0">
+                        <div class="card-title">
+                            <h3 class="card-label">Region's Buying Centres and Offered Raw Materials
+                            </h3>
+                        </div>
+                        <div class="card-toolbar">
+                            <!--begin::Button-->
+                            <button data-toggle="modal" data-target="#exampleModalLong" type="button" class="btn btn-primary font-weight-bolder">
                     <span class="svg-icon svg-icon-md">
                         <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -132,38 +196,57 @@
                             </g>
                         </svg>
                         <!--end::Svg Icon-->
-                    </span>New Buying Centre
-                        </button>
-                        <!--end::Button-->
+                    </span> Create New Buying Centre
+                            </button>
+                            <!--end::Button-->
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table-hover table-checkable mt-10 datatable" id="kt_datatable" style="margin-top: 13px !important">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Buying Centers</th>
+                                <th>Raw Material</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <!--end::Body-->
+                </div>
+                <!--end::Card-->
+            </div>
+            <div class="col-md-5">
+                <div class="card card-custom">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3 class="card-label"> {{$region->name}} Map Overview</h3>
+                        </div>
+                        <div class="card-toolbar">
+
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h6>Map</h6>
+                        <p>Coordinates at which the transactions were initiated</p>
+                        <div id="map-canvas" style="min-height: 425px; width: 100%; position: relative; overflow: hidden;">
+                        </div>
                     </div>
                 </div>
-                <div class="card-body">
-                 <table class="table table-bordered table-hover table-checkable mt-10 datatable" id="kt_datatable" style="margin-top: 13px !important">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Buying Centers</th>
-                                        <th>Raw Material</th>
-                                    </tr>
-                                    </thead>
-                                </table>
-
-                </div>
-                <!--end::Body-->
             </div>
-            <!--end::Card-->
         </div>
         <!--end::Content-->
-    </div>
-    <!--end::Education-->
+
+
     <div id="exampleModalLong" class="modal fade" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
         <div class="modal-dialog  modal-lg">
             <div class="modal-content">
-                <form method="POST" method="POST" action="{{route('admin.updateRegionsDetails', $region->id )}}" id="editStatus">
+                <form method="POST" action="{{route('admin.create-new-region-buying-center')}}" id="editStatus">
                     <input type="hidden" name="region_id" value="{{$region->id}}" >
                     {{csrf_field()}}
                     <div class="modal-header">
-                        <div class="modal-title h4">New Buying Centre</div>
+                        <div class="modal-title h4">Add new Buying Centre to {{$region->name}}</div>
                     </div>
                     <div class="card-body">
                         <div class="form-group row">
@@ -192,25 +275,23 @@
                                     <label class="checkbox checkbox-lg">
                                         <input type="checkbox" name="Checkboxes3_1" id="myCheck" onclick="myFunction()"/>
                                         <span></span>
-                                        Attach Raw Material:
+                                        Attach Raw Materials:
                                     </label>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group row" id="text" style="display:none">
-                            <div class="col-lg-6">
+                            <div class="col-lg-12">
                                 <label>Raw Material:</label>
-                                <select required class="form-control form-control-lg form-control-solid" name="material_id" >
-                                    <option selected disabled value="">Select Raw Material</option>
+                                <div class="checkbox-inline">
                                     @foreach($materials as $material)
-                                        <option  value="{{$material->id}}">{{ucfirst($material->name)}}</option>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="raw_material_ids[]" value="{{ $material->id }}">
+                                            <span></span>
+                                            {{ $material->name }}
+                                        </label>
                                     @endforeach
-                                </select>
-                                @error('type')
-                                <span class="invalid-feedback" role="alert">
-                                 <strong>{{ $message }}</strong>
-                                  </span>
-                                @enderror
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -231,6 +312,7 @@
 @endsection
 @section('scripts')
     <script src="{{asset('assets/js/pages/custom/education/student/profile.js')}}"></script>
+    <!--centers data table-->
     <script>
         'use strict';
         var KTDatatablesDataSourceAjaxClient = function() {
@@ -240,40 +322,16 @@
                 table.DataTable({
                     responsive: true,
                     ajax: {
-                        url: '{{route('admin.get-app-regions-raw',$region->id)}}',
+                        url: '{{route('admin.get-app-regions-raw-materials', $region->id)}}',
                         type: 'GET',
-                        data: {
-                            pagination: {
-                                perpage: 5,
-                            },
-                        },
-
                     },
-                    stateSave: true,
-                    "bDestroy": true,
                     columns: [
                         {data: 'id', name: 'id'},
-                        {data: 'buying', name: 'buying'},
-                        {data: 'materials', name: 'materials'},
+                        {data: 'name', name: 'name'},
+                        {data: 'materials_offered', name: 'materials_offered'},
+                        {data: 'action', name: 'action'},
                     ],
                     columnDefs: [
-                        {
-                            width: '75px',
-                            targets: -2,
-                            render: function(data, type, full, meta) {
-                                var is_active = {
-                                    false: {'title': 'Suspended', 'state': 'danger'},
-                                    true: {'title': 'Active', 'state': 'primary'},
-                                    3: {'title': 'Direct', 'state': 'success'},
-                                };
-
-                                if (typeof is_active[data] === 'undefined') {
-                                    return data;
-                                }
-                                return '<span class="label label-' + is_active[data].state + ' label-dot mr-2"></span>' +
-                                    '<span class="font-weight-bold text-' + is_active[data].state + '">' + is_active[data].title + '</span>';
-                            },
-                        },
                     ],
                 });
 
@@ -308,6 +366,178 @@
             } else {
                 text.style.display = "none";
             }
+        }
+    </script>
+<!--order data table-->
+    <script>
+        'use strict';
+        var KTDatatablesDataSourceAjaxClient2 = function() {
+            var initTable2 = function() {
+                var table2 = $('#kt_datatable_orders').DataTable({
+                    dom: 'Bfrtip',
+                    "processing": true,
+                    "serverSide": true,
+                    buttons: [{extend: 'copyHtml5'}, {
+                        extend: 'excelHtml5',
+                        exportOptions: {columns: ':visible'},
+                    },
+                        {
+                            extend: 'pdfHtml5',
+                            exportOptions: {columns: ':visible'},
+                            orientation: 'landscape',
+                            pageSize: 'TABLOID'
+                        },
+                        'colvis','pageLength'],
+                    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                    responsive: true,
+                    ajax: {
+                        url: '{!! route('admin.get-region-orders', \Illuminate\Support\Facades\Crypt::encrypt($region->id)) !!}',
+                        data: function (d) {
+                            d.buying_center_id = $('select[name=buying_center_id]').val();
+                            d.raw_material_id = $('select[name=raw_material_id]').val();
+                        }
+                    },
+                    order:[0, 'desc'],
+                    columns: [
+                        {data: 'id', name: 'id'},
+                        {data: 'ref_number', name: 'ref_number'},
+                        {data: 'user.full_name', name: 'buyer'},
+                        {data: 'order_region.buying_center.name', name: 'buying_center'},
+                        {data: 'amount', name: 'amount'},
+                        {data: 'order_raw_material.raw_material.name', name: 'raw_material'},
+                        {data: 'order_raw_material.bags', name: 'bags'},
+                        {data: 'order_raw_material.net_weight', name: 'net_weight'},
+                        {data: 'disbursed', name: 'disbursed'},
+                        {data: 'disbursed_at', name: 'disbursed_at'},
+                        {data: 'action', name: 'action', searchable:false, orderable:false},
+                    ],
+                    columnDefs: [
+                        {
+                            width: '75px',
+                            targets: -3,
+                            render: function(data) {
+                                var disbursed = {
+                                    false: {'title': 'Pending Disbursal', 'state': 'warning'},
+                                    true: {'title': 'Disbursed', 'state': 'success'}
+                                };
+                                if (typeof disbursed[data] === 'undefined') {
+                                    return data;
+                                }
+                                return '<span class="label label-' + disbursed[data].state + ' label-dot mr-2"></span>' +
+                                    '<span class="font-weight-bold text-' + disbursed[data].state + '">' + disbursed[data].title + '</span>';
+                            },
+                        }
+                    ],
+                });
+                $('#filter_form_orders').on('submit', function(e) {
+                    table2.draw();
+                    e.preventDefault();
+                });
+            };
+            return {
+                //main function to initiate the module
+                init: function() {
+                    initTable2();
+                },
+            };
+        }();
+        jQuery(document).ready(function() {
+            KTDatatablesDataSourceAjaxClient2.init();
+        });
+    </script>
+    <!--map-->
+    <script type='text/javascript' src='https://maps.google.com/maps/api/js?language=en&key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places&region=GB'></script>
+    <script defer>
+        function initialize() {
+            var mapOptions = {
+                zoom: 5,
+                minZoom: 6,
+                maxZoom: 17,
+                zoomControl:true,
+                zoomControlOptions: {
+                    style:google.maps.ZoomControlStyle.DEFAULT
+                },
+                center: new google.maps.LatLng({{ $latitude }}, {{ $longitude }}),
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                scrollwheel: true,
+                panControl:false,
+                mapTypeControl:false,
+                scaleControl:false,
+                overviewMapControl:false,
+                rotateControl:false
+            }
+            var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+            var image = new google.maps.MarkerImage("{{ asset('assets/media/pin.png') }}", null, null, null, new google.maps.Size(40,52));
+            var places = @json($mapOrders);
+            console.log(places);
+            for(place in places)
+            {
+                place = places[place];
+                if(place.latitude && place.longitude)
+                {
+                    var marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(place.latitude, place.longitude),
+                        icon:image,
+                        map: map,
+                        title: place.name
+                    });
+                    var infowindow = new google.maps.InfoWindow();
+                    google.maps.event.addListener(marker, 'click', (function (marker, place) {
+                        return function () {
+                            infowindow.setContent(generateContent(place))
+                            infowindow.open(map, marker);
+                        }
+                    })(marker, place));
+                }
+            }
+        }
+        google.maps.event.addDomListener(window, 'load', initialize);
+
+        function generateContent(place)
+        {
+            var content = `
+            <div class="gd-bubble" style="">
+                <div class="gd-bubble-inside">
+                    <div class="geodir-bubble_desc">
+                    <div class="geodir-bubble_image">
+                        <div class="geodir-post-slider">
+                            <div class="geodir-image-container geodir-image-sizes-medium_large ">
+                                <div id="geodir_images_5de53f2a45254_189" class="geodir-image-wrapper" data-controlnav="1">
+                                    <ul class="geodir-post-image geodir-images clearfix">
+                                        <li>
+                                            <div class="geodir-post-title">
+                                                <h4 class="geodir-entry-title">
+                                                    <a href="{{ route('admin.orders.show', '') }}/`+place.order.ref_number+`" title="View: `+place.order.ref_number+`">`+place.order.ref_number+`</a>
+                                                </h4>
+                                            </div>
+                                            <a href="{{ route('admin.orders.show', '') }}/`+place.order.ref_number+`"><img src="{{ asset('logo.jpeg') }}" alt="`+place.order.ref_number+`" class="align size-medium_large" width="120" height="120"></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <div class="geodir-bubble-meta-side">
+                    <div class="geodir-output-location">
+                    <div class="geodir-output-location geodir-output-location-mapbubble">
+                        <div class="geodir_post_meta  geodir-field-post_title"><span class="geodir_post_meta_icon geodir-i-text">
+                            <i class="fas fa-minus" aria-hidden="true"></i>
+                            <span class="geodir_post_meta_title">Order Ref Number: </span></span>`+place.order.ref_number+`</div>
+                        <div class="geodir_post_meta  geodir-field-address" itemscope="" itemtype="http://schema.org/PostalAddress">
+                            <span class="geodir_post_meta_icon geodir-i-address"><i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                            <span class="geodir_post_meta_title">Buying Center Tag: </span></span><span itemprop="streetAddress">`+place.buying_center.name+`</span>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            </div>`;
+
+            return content;
+
         }
     </script>
 @endsection

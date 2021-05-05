@@ -20,8 +20,9 @@
                         <div class="row justify-content-center py-8 px-8 py-lg-15 px-lg-10">
                             <div class="col-xl-12 col-xxl-10">
                                 <!--begin::Wizard Form-->
-                                <form class="form" id="kt_form" method="POST" action="{{route('admin.app-farmers.store')}}">
+                                <form class="form" id="kt_form" method="POST" action="{{route('admin.app-farmers.update', $farmer->id)}}">
                                     {{csrf_field()}}
+                                    <input name="_method" type="hidden" value="put">
                                     <div class="row justify-content-center">
                                         <div class="col-xl-9">
                                             <!--begin::Wizard Step 1-->
@@ -30,7 +31,7 @@
                                                 <div class="form-group row">
                                                     <label class="col-xl-3 col-lg-3 col-form-label">Full Name</label>
                                                     <div class="col-lg-9 col-xl-9">
-                                                        <input class="form-control form-control-solid form-control-lg @error('full_name') is-invalid @enderror" value="{{ $user->full_name }}" id="full_name" name="full_name" type="text" required autocomplete="off"/>
+                                                        <input class="form-control form-control-solid form-control-lg @error('full_name') is-invalid @enderror" value="{{ $farmer->full_name }}" id="full_name" name="full_name" type="text" required autocomplete="off"/>
                                                         @error('full_name')
                                                         <span class="invalid-feedback" role="alert">
                                                      <strong>{{ $message }}</strong>
@@ -44,7 +45,7 @@
                                                     <label class="col-xl-3 col-lg-3 col-form-label">Phone Number</label>
                                                     <div class="col-lg-9 col-xl-9">
                                                         <div class="input-group input-group-solid input-group-lg">
-                                                            <input type="text" class="form-control form-control-solid form-control-lg is-invalid  @error('phone_number') is-invalid @enderror" value="{{ $user->phone_number }}"
+                                                            <input type="text" class="form-control form-control-solid form-control-lg is-invalid  @error('phone_number') is-invalid @enderror" value="{{ $farmer->phone_number }}"
                                                                    name="phone_number"  id="phone_number" required autofocus/>
                                                             @error('phone_number')
                                                             <span class="invalid-feedback" role="alert">
@@ -58,7 +59,7 @@
                                                 <div class="form-group row">
                                                     <label class="col-xl-3 col-lg-3 col-form-label">ID Number</label>
                                                     <div class="col-lg-9 col-xl-9">
-                                                        <input class="form-control form-control-solid form-control-lg @error('id_number') is-invalid @enderror" value="{{ $user->id_number }}" id="id_number" name="id_number" type="text" required autocomplete="off"/>
+                                                        <input class="form-control form-control-solid form-control-lg @error('id_number') is-invalid @enderror" value="{{ $farmer->id_number }}" id="id_number" name="id_number" type="text" required autocomplete="off"/>
                                                         @error('id_number')
                                                         <span class="invalid-feedback" role="alert">
                                                      <strong>{{ $message }}</strong>
@@ -70,16 +71,15 @@
                                                     <label class="col-form-label col-xl-3 col-lg-3">Date of Birth</label>
                                                     <div class="col-xl-9 col-lg-9">
                                                         <input type="text" class="date form-control" name="date_of_birth"
-                                                               placeholder="Enter date of birth" value="{{ $user->date_of_birth }}" required/>
+                                                               placeholder="Enter date of birth" value="{{ $farmer->date_of_birth }}" required/>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-form-label col-xl-3 col-lg-3">Gender</label>
                                                     <div class="col-xl-9 col-lg-9">
                                                         <select required class="form-control form-control-lg form-control-solid" name="gender">
-                                                            <option selected disabled value="{{ $user->gender }}" >Select Gender</option>
-                                                            <option value="MALE">Male</option>
-                                                            <option value="FEMALE">Female</option>
+                                                            <option @if($farmer->gender == 'FEMALE')selected @endif value="FEMALE">Female</option>
+                                                            <option @if($farmer->gender == 'MALE')selected @endif value="MALE">Male</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -89,18 +89,7 @@
                                                         <select required class="form-control form-control-lg form-control-solid" name="region_id" >
                                                             <option selected disabled value="">Select Region</option>
                                                             @foreach($regions as $region)
-                                                                <option  value="{{$region->id}}">{{ucfirst($region->name)}}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-form-label col-xl-3 col-lg-3">Materials</label>
-                                                    <div class="col-xl-9 col-lg-9">
-                                                        <select required class="form-control form-control-lg form-control-solid selectpicker" multiple=""  name="raw_material_ids[]">
-                                                            <option selected disabled value="">Select Material</option>
-                                                            @foreach($materials as $material)
-                                                                <option  value="{{$material->id}}">{{ucfirst($material->name)}}</option>
+                                                                <option  value="{{$region->id}}" {{($region->id == $farmer->region_id ) ? 'selected' : ''}}>{{ucfirst($region->name)}}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>

@@ -22,18 +22,6 @@
                                             <div class="my-5 step" data-wizard-type="step-content" data-wizard-state="current">
                                                 <h5 class="text-dark font-weight-bold">Add Buying Centre's Details:</h5>
                                                 <div class="form-group row">
-                                                    <label class="col-form-label col-xl-3 col-lg-3">Region</label>
-                                                    <div class="col-xl-9 col-lg-9">
-                                                        <select required class="form-control form-control-lg form-control-solid" name="region_id" >
-                                                            <option selected disabled value="">Select Region</option>
-                                                            @foreach($regions as $region)
-                                                                <option  value="{{$region->id}}">{{ucfirst($region->name)}}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <!--end::Group-->
-                                                <div class="form-group row">
                                                     <label class="col-xl-3 col-lg-3 col-form-label">Name</label>
                                                     <div class="col-lg-9 col-xl-9">
                                                         <input class="form-control form-control-solid form-control-lg @error('id_number') is-invalid @enderror" value="{{ old('name') }}" id="name" name="name" type="text" required autocomplete="off"/>
@@ -44,12 +32,37 @@
                                                         @enderror
                                                     </div>
                                                 </div>
-
+                                                <div class="form-group row">
+                                                    <label class="col-form-label col-xl-3 col-lg-3">Region</label>
+                                                    <div class="col-xl-9 col-lg-9">
+                                                        <select required class="form-control form-control-lg form-control-solid" name="region_id" >
+                                                            <option selected disabled value="">Select Region</option>
+                                                            @foreach($regions as $region)
+                                                                <option  value="{{$region->id}}">{{ucfirst($region->name)}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-form-label col-xl-3 col-lg-3">Raw Materials Offered: </label>
+                                                    <div class="col-xl-9 col-lg-9">
+                                                        <div class="checkbox-list">
+                                                            @foreach($raw_materials as $material)
+                                                                <label class="checkbox">
+                                                                    <input type="checkbox" name="raw_material_ids[]" value="{{ $material->id }}">
+                                                                    <span></span>
+                                                                    {{ $material->name }}
+                                                                </label>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <input class="btn btn-success font-weight-bolder border-top px-9 py-4" type="submit" value="Submit"/>
                                             <a href="{{route('admin.app-buying-centre.index')}}" class="btn btn-success font-weight-bolder border-top px-9 py-4">Back</a>
 
                                             <!--end::Wizard Actions-->
                                         </div>
+                                    </div>
                                     </div>
                                 </form>
                                 <!--end::Wizard Form-->

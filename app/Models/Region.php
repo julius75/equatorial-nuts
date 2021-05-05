@@ -18,6 +18,10 @@ class Region extends Model
     protected $hidden = [
         'pivot'
     ];
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d h:i',
+        'updated_at' => 'datetime:Y-m-d h:i',
+    ];
     public function buying_centers()
     {
         return $this->hasMany(BuyingCenter::class);
