@@ -38,7 +38,7 @@
                     <th>County</th>
                     <th>Sub County</th>
                     <th>Buying Centers</th>
-                    <th>Created</th>
+                    <th>Date Created</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -168,13 +168,8 @@
                 table.DataTable({
                     responsive: true,
                     ajax: {
-                        url: APP_URL +'/admin/datatables/get-app-regions',
+                        url: '{{route('admin.get-app-regions')}}',
                         type: 'GET',
-                        data: {
-                            pagination: {
-                                perpage: 50,
-                            },
-                        },
                     },
                     columns: [
                         {data: 'id', name: 'id'},

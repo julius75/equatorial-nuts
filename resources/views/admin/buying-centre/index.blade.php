@@ -2,12 +2,10 @@
 @section('styles')
 @endsection
 @section('content')
-    <!--end::Notice-->
-    <!--begin::Card-->
     <div class="card card-custom" style="margin-top: -5%;">
         <div class="card-header flex-wrap border-0 pt-6 pb-0">
             <div class="card-title">
-                <h3 class="card-label">Registered Equitorial Nuts Buying Centre
+                <h3 class="card-label">Buying Centre
                 </h3>
             </div>
             <div class="card-toolbar">
@@ -29,6 +27,32 @@
             </div>
         </div>
         <div class="card-body">
+            <form id="filter_form" method="post" action="">
+                @csrf
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label text-lg-right font-weight-bolder" for="region_id">Region:</label>
+                    <div class="col-md-3" style="margin-left: -20px;">
+                        <select class="js-example-basic-single form-control{{ $errors->has('region_id') ? ' is-invalid' : '' }}" name="region_id" required>
+                            <option value="all">All</option>
+                            @foreach($regions as $region)
+                                <option value="{{$region->id}}">{{ucfirst($region->name)}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <label class="col-lg-2 col-form-label text-lg-right font-weight-bolder" for="material">Materials:</label>
+                    <div class="col-md-4" style="margin-left: -20px;">
+                        <select class="js-example-basic-single form-control" id="material" name="raw_material_id" required>
+                            <option selected value="all">All</option>
+                            @foreach($raw_materials as $raw_material)
+                                <option value="{{$raw_material->id}}">{{ucfirst($raw_material->name)}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-1">
+                        <button class="btn btn-success font-weight-bolder mr-2" id="">Filter</button>
+                    </div>
+                </div>
+            </form>
             <!--begin: Datatable-->
             <table class="table table-bordered table-hover table-checkable mt-10 datatable" id="kt_datatable" style="margin-top: 13px !important">
                 <thead>
@@ -36,7 +60,8 @@
                     <th>#</th>
                     <th>Region</th>
                     <th>Name</th>
-                    <th>Date</th>
+                    <th>Raw Materials</th>
+                    <th>Created At</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -44,90 +69,41 @@
             <!--end: Datatable-->
         </div>
     </div>
-
-    <!-- Modal -->
-    <div id="confirmModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            {{ csrf_field() }}
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h2 class="modal-title">Confirmation</h2>
-                </div>
-                <div class="modal-body">
-                    <h4 align="center" style="margin:0;">Are you sure you want to remove this data?</h4>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" name="ok_button" id="ok_button" class="btn btn-danger">OK</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--end::Card-->
-    <!-- Modal HTML Markup -->
-    <div id="modal" class="modal fade">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title">Attach Raw Material To The Centre</h1>
-                </div>
-                <div class="modal-body">
-                    <form class="form-horizontal">
-                        {{csrf_field()}}
-                        <input type="hidden" name="_method" value="POST">
-                        <div class="form-group row">
-                            <label class="col-form-label col-xl-3 col-lg-3">Raw Material</label>
-                            <div class="col-xl-9 col-lg-9">
-                                <select required class="form-control form-control-lg form-control-solid selectpicker" name="name" id="elementId">
-                                    <option disabled value="">Select Material</option>
-                                    @foreach($materials as $material)
-                                        <option  value="{{$material->id}}">{{ucfirst($material->name)}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                                <span class="text-muted"> attach the raw material
-                                    </span>
-                        </div>
-
-                        <div class="form-group">
-                            <div>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-primary" id="ok_buttons">Save Material</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
 @endsection
 @section('scripts')
     <script>
         'use strict';
         var KTDatatablesDataSourceAjaxClient = function() {
-
             var initTable1 = function() {
-                var table = $('#kt_datatable');
-
-                // begin first table
-                table.DataTable({
+                var table = $('#kt_datatable').DataTable({
+                    dom: 'Bfrtip',
+                    "processing": true,
+                    "serverSide": true,
+                    buttons: [{extend: 'copyHtml5'}, {
+                        extend: 'excelHtml5',
+                        exportOptions: {columns: ':visible'},
+                    },
+                        {
+                            extend: 'pdfHtml5', /*exportOptions: {columns: ':visible'}*/
+                            orientation: 'landscape',
+                            pageSize: 'TABLOID'
+                        },
+                        'colvis','pageLength'],
+                    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                     responsive: true,
                     ajax: {
-                        url: APP_URL +'/admin/datatables/get-app-buying-centre',
+                        url: '{{route('admin.get-app-buying-centre')}}',
                         type: 'GET',
-                        data: {
-                            pagination: {
-                                perpage: 50,
-                            },
-                        },
+                        data: function (d) {
+                            d.region_id = $('select[name=region_id]').val();
+                            d.raw_material_id = $('select[name=raw_material_id]').val();
+                        }
                     },
                     columns: [
                         {data: 'id', name: 'id'},
                         {data: 'region', name: 'region'},
                         {data: 'name', name: 'name'},
+                        {data: 'materials_offered', name: 'materials_offered'},
                         {data: 'created_at', name: 'created_at'},
                         {data: 'action', name: 'action'},
                     ],
@@ -151,95 +127,20 @@
                         },
                     ],
                 });
+                $('#filter_form').on('submit', function(e) {
+                    table.draw();
+                    e.preventDefault();
+                });
             };
-
             return {
-
                 //main function to initiate the module
                 init: function() {
                     initTable1();
                 },
-
             };
-
         }();
-
         jQuery(document).ready(function() {
             KTDatatablesDataSourceAjaxClient.init();
-        });
-
-    </script>
-    <script type="text/javascript">
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-    </script>
-{{--    <script>--}}
-{{--        var user_id;--}}
-{{--        $(document).ready(function(event){--}}
-{{--            var table = $( "#kt_datatable" ).DataTable();--}}
-{{--            table.on('click', '.delete', function(){--}}
-{{--                jQuery.noConflict();--}}
-{{--                user_id = $(this).attr('id');--}}
-{{--                $('#confirmModal').modal('show');--}}
-{{--            });--}}
-{{--            $('#ok_button').click(function(){--}}
-{{--                $.ajax({--}}
-{{--                    method: 'POST',--}}
-{{--                    url:"delete-farmers/"+user_id,--}}
-{{--                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},--}}
-{{--                    beforeSend:function(){--}}
-{{--                        $('#ok_button').text('Deleting...');--}}
-{{--                    },--}}
-{{--                    success:function(data)--}}
-{{--                    {--}}
-{{--                        setTimeout(function(){--}}
-{{--                            $('#confirmModal').modal('hide');--}}
-{{--                            table.draw();--}}
-{{--                        }, 2000);--}}
-{{--                    }--}}
-{{--                })--}}
-{{--            });--}}
-
-{{--        });--}}
-{{--    </script>--}}
-    <script>
-        var user_id;
-        $(document).ready(function(event){
-            var table = $( "#kt_datatable" ).DataTable();
-            table.on('click', '.materials', function(){
-                jQuery.noConflict();
-                user_id = $(this).attr('id');
-                $('#modal').modal('show');
-
-            });
-            var e = document.getElementById("elementId");
-            var value = e.options[e.selectedIndex].value;
-            $('#ok_buttons').click(function(){
-
-                $.ajax({
-                    method: 'POST',
-                    url:"buying-centre/"+user_id,
-                    data:{
-                        name:value,
-                    },
-                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                    beforeSend:function(){
-                        $('#ok_button').text('Deleting...');
-                    },
-                    success:function(data)
-                    {
-                        alert(data.success)
-                        setTimeout(function(){
-                            $('#confirmModal').modal('hide');
-                            table.draw();
-                        }, 2000);
-                    }
-                })
-            });
-
         });
     </script>
 

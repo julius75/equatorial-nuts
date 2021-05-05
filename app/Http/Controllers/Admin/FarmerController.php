@@ -42,7 +42,6 @@ class FarmerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
     public function create()
     {
         $regions = Region::all();
@@ -50,6 +49,7 @@ class FarmerController extends Controller
 
         return view('admin.farmers.create',compact('regions','materials'));
     }
+
     public function getAdminFarmers(Request $request)
     {
         //region specified
@@ -57,14 +57,13 @@ class FarmerController extends Controller
             $data = Farmer::with(['region:id,name','raw_materials:id,name'])
                 ->whereHas('region', function( $query ) use ( $request ){
                 $query->where('region_id', $request->region_id);
-            })->where('status', '=', true)
+            })
                 ->orderByDesc('created_at')->get();
         }
         //default
         else {
             $data = Farmer::with(['region:id,name','raw_materials:id,name'])
-               ->where('status', '=', true)
-                ->orderByDesc('created_at')->get();
+               ->orderByDesc('created_at')->get();
         }
         return Datatables::of($data)
             ->addColumn('region', function ($users){
@@ -123,21 +122,13 @@ class FarmerController extends Controller
 
             $farmer->raw_materials()->sync($request->raw_material_ids, true);
 
-            $code = $farmer->verification_codes()->create([
+            $farmer->verification_codes()->create([
                 'passcode'=>$this->generate_OTP(),
                 'issued'=>true,
                 'verified'=>true,
                 'expires_at'=>Carbon::now()->addMinutes(10),
             ]);
 
-            //send otp
-//            SendSMS::dispatch($farmer->phone_number, "Your Equatorial Nut Farmer Verification Token is: $code->passcode");
-//            $farmer_details = [
-//                'id'=>$farmer->id,
-//                'full_name'=>$farmer->full_name,
-//                'id_number'=>$farmer->id_number,
-//                'phone_number'=>$farmer->phone_number
-//            ];
             return Redirect::route('admin.app-farmers.index')->with('message','Farmer created Successfully');
         }catch (\Exception $e){
             return Redirect::route('admin.app-farmers.create')->with('error', 'Something went wrong');
@@ -185,24 +176,24 @@ class FarmerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $id
      *
      *
      */
-    public function edit($id)
+    public function edit(string $id)
     {
-        try {
-            $id = Crypt::decrypt($id);
-            $user = Farmer::findOrFail($id);
-            $regions = Region::all();
-            $materials = RawMaterial::all();
-            return view('admin.farmers.edit',compact('user','materials','regions'));
-        } catch (ModelNotFoundException $e) {
-            return Redirect::back()->with('error', 'Farmer Not Found');
-
-        }
+        $farmer = Farmer::query()->with(['region'])->findOrFail(Crypt::decrypt($id));
+        $regions = Region::all();
+        return view('admin.farmers.edit',compact('farmer','regions'));
     }
 
+    /**
+     * Update Farmer Status
+     *
+     * @param Request $request
+     * @param  $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function statusUpdate(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -228,36 +219,40 @@ class FarmerController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(),
+            [
+                'full_name'=>'required',
+                'phone_number' => 'required',
+                'id_number' => 'required',
+                'gender' => 'required',
+                'date_of_birth' => 'required',
+                'region_id' => 'required|exists:regions,id'
+            ]);
+        if ($validator->fails()) {
+            return Redirect::back()->withErrors($validator)->withInput()->with('error', $validator->errors()->first());
+        }
+        try{
+            $farmer = Farmer::query()->find($id);
+            $farmer->update([
+                'full_name'=>$request->full_name,
+                'phone_number'=>'254'.substr($request->phone_number, -9),
+                'id_number'=>$request->id_number,
+                'gender'=>strtoupper($request->gender),
+                'region_id'=>$request->region_id,
+                'date_of_birth'=>$request->date_of_birth,
+            ]);
+            return Redirect::route('admin.app-farmers.index')->with('message',"$farmer->full_name's details have been updated successfullly");
+        }catch (\Exception $e){
+            return Redirect::route('admin.app-farmers.index')->with('error', 'Something went wrong');
+        }
     }
 
     public function destroy($id)
     {
-        try {
-            $id = Crypt::decrypt($id);
-            return $id;
-            $user = Farmer::findOrFail($id);
-            $user->delete();
-            return redirect()->back()->with('message', 'Farmer Record Deleted successfully');
-
-        } catch (ModelNotFoundException $e) {
-            return $e;
-        }
+        // do nothing
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function DeleteFarmer($id)
-    {
-        Farmer::find($id)->delete();
-        return response()->json(['success'=>'Farmer deleted successfully.']);
-    }
-
 }

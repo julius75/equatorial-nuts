@@ -64,7 +64,6 @@ Route::post('update-status-admin/{id}', [AdminController::class,'statusUpdate'])
 Route::post('update-status/{id}', [UserController::class,'statusUpdate']);
 Route::post('update-status-farmers/{id}', [FarmerController::class,'statusUpdate']);
 
-Route::post('delete-farmers/{id}', [FarmerController::class,'DeleteFarmer']);
 Route::post('buying-centre/{id}', [BuyingCentreController::class,'AttachCentre']);
 
 Route::get('/getchart/{month?}/{year?}', [HomeController::class, 'getMonthlyPostDataWeekly'])->name('discussions-analytics');
@@ -75,17 +74,17 @@ Route::get('edit-raw-material/{id}/{ids}', [RawMaterialController::class, 'test'
 Route::post('update-materials', [RawMaterialController::class,'update_materials'])->name('update-materials');
 
 Route::get('/getSubCounty/{id}', [RegionController::class, 'getSubCounty'])->name('getSubCounty');
+//new region buying center
+Route::post('create-new-region-buying-center', [RegionController::class, 'create_new_region_buying_center'])->name('create-new-region-buying-center');
 //app-admins
-//new region
-Route::post('updateRegionsDetails/{id}', [RegionController::class, 'updateRegionsDetails'])->name('updateRegionsDetails');
-
 Route::resource('app-admins', AdminController::class);
 //farmers
 Route::resource('app-farmers', FarmerController::class);
 //regions
 Route::resource('app-regions', RegionController::class);
 //buying centre
-Route::resource('app-buying-centre', BuyingCentreController::class);
+Route::resource('app-buying-centre', BuyingCentreController::class)->except('show');
+
 //orders
 Route::prefix('orders')->group(function () {
     Route::get('/', [OrderController::class, 'index'])->name('orders.index');
@@ -108,8 +107,7 @@ Route::prefix('datatables')->group(function () {
     Route::get('get-raw-material-requirements/{id}', [RawMaterialController::class, 'get_requirements_single'])->name('get-raw-material-requirement-single');
     Route::get('get-app-farmers', [FarmerController::class, 'getAdminFarmers'])->name('get-app-farmers');
     Route::get('get-app-regions', [RegionController::class, 'getAdminRegions'])->name('get-app-regions');
-    Route::get('get-app-regions-buying-centers/{id}', [RegionController::class, 'getRegions'])->name('get-app-regions-buying-centers');
-    Route::get('get-app-regions-raw/{id}', [RegionController::class, 'getMaterials'])->name('get-app-regions-raw');
+    Route::get('get-app-regions-raw-materials/{id}', [RegionController::class, 'get_region_buying_centers'])->name('get-app-regions-raw-materials');
     Route::get('get-app-buying-centre', [BuyingCentreController::class, 'getCentres'])->name('get-app-buying-centre');
 
     Route::get('get-orders', [OrderController::class, 'get_orders'])->name('get-orders');
@@ -118,6 +116,8 @@ Route::prefix('datatables')->group(function () {
 
     Route::get('get-buyer-assignments/{encryptedID}', [UserController::class, 'view_buyer_assignments_data'])->name('get-buyer-assignments');
     Route::get('get-buyer-orders/{encryptedID}', [UserController::class, 'get_orders'])->name('get-buyer-orders');
+
+    Route::get('get-region-orders/{encryptedID}', [RegionController::class, 'get_orders'])->name('get-region-orders');
 
 
 });

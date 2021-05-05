@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use phpseclib3\Crypt\DSA\Formats\Keys\Raw;
 use Yajra\DataTables\Facades\DataTables;
 
 class BuyingCentreController extends Controller
@@ -22,6 +23,7 @@ class BuyingCentreController extends Controller
         $this->middleware('auth:admin');
 
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -29,42 +31,84 @@ class BuyingCentreController extends Controller
      */
     public function index()
     {
-        $materials = RawMaterial::all();
-        return view('admin.buying-centre.index',compact('materials'));
+        $data['raw_materials'] = RawMaterial::all();
+        $data['regions'] = Region::all();
+        return view('admin.buying-centre.index', $data);
     }
-    public function getCentres()
-    {
-        try {
-            $centres = BuyingCenter::all();
-            return Datatables::of($centres)
-                ->editColumn('region', function ($centres){
-                    return $centres->region->name;
-                })
-                ->editColumn('created_at', function ($centres){
-                    return Carbon::parse($centres->created_at)->isoFormat('MMM D YYYY');
-                })
-                ->addColumn('action', function ($centres) {
-                    return '<div class="dropdown dropdown-inline">
-								<a href="" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">
-	                                <i class="la la-cog"></i>
-	                            </a>
-							  	<div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-									<ul class="nav nav-hoverable flex-column">
-							    		<li class="nav-item"><a class="nav-link" href="'.route('admin.app-buying-centre.show',Crypt::encrypt($centres->id)).'"><i class="nav-icon la la-user"></i><span class="nav-text">View Region Details</span></a></li>
-							    		<li class="nav-item"><a class="nav-link" href="'.route('admin.app-buying-centre.edit',Crypt::encrypt($centres->id)).'"><i class="nav-icon la la-edit"></i><span class="nav-text">Edit Details</span></a></li>
-							    		<li class="btn btn-light font-size-sm mr-5 materials" id="'.$centres->id.'"><i class="nav-icon la flaticon-attachment"></i><span class="nav-text">Raw Materials</span></li>
-							    	</ul>
-							  	</div>
-							</div>
 
-						';
+    /**
+     * Fetch all buying centers
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getCentres(Request $request)
+    {
+        if ($request->region_id == "all" and $request->raw_material_id == "all") {
+            $centres = BuyingCenter::query()
+                    ->with('raw_materials')
+                    ->get();
+        }
+        //region specified
+        elseif ($request->region_id != "all"and $request->raw_material_id == "all") {
+            $centres = BuyingCenter::query()
+                ->where('region_id', '=', $request->region_id)
+                ->withCount('raw_materials')
+                ->with('raw_materials')
+                ->get();;
+        }
+        //raw material specified
+        elseif ($request->region_id == "all" and $request->raw_material_id != "all") {
+            $centres = BuyingCenter::query()
+                ->whereHas('raw_materials', function ($query) use ($request){
+                    $query->where('raw_materials.id', '=', $request->raw_material_id);
                 })
-                ->make(true);
-        } catch (ModelNotFoundException $e) {
-            return $e;
+                ->with('raw_materials')
+                ->get();;
+        }
+        //raw material and region specified
+        elseif ($request->region_id != "all" and $request->raw_material_id != "all") {
+            $centres = BuyingCenter::query()
+                ->whereHas('raw_materials', function ($query) use ($request){
+                    $query->where('raw_materials.id', '=', $request->raw_material_id);
+                })
+                ->where('region_id', '=', $request->region_id)
+                ->with('raw_materials')
+                ->get();;
+        }
+        else {
+            $centres = BuyingCenter::query()
+                ->with('raw_materials')
+                ->get();
         }
 
+        return Datatables::of($centres)
+            ->editColumn('region', function ($centres){
+                return $centres->region->name;
+            })
+            ->addColumn('materials_offered', function ($centres){
+                $materials_offered = [];
+                foreach ($centres->raw_materials as $raw_material) {
+                    array_push($materials_offered, $raw_material->name);
+                }
+                return  implode(", ", $materials_offered);
+            })
+            ->addColumn('action', function ($centres) {
+                return '<div class="dropdown dropdown-inline">
+                            <a href="" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">
+                                <i class="la la-cog"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                                <ul class="nav nav-hoverable flex-column">
+                                    <li class="nav-item"><a class="nav-link" href="'.route('admin.app-buying-centre.edit',Crypt::encrypt($centres->id)).'"><i class="nav-icon la la-edit"></i><span class="nav-text">Edit Details</span></a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    ';
+            })
+            ->make(true);
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -73,8 +117,8 @@ class BuyingCentreController extends Controller
     public function create()
     {
         $regions = Region::all();
-
-        return view('admin.buying-centre.create', compact('regions'));
+        $raw_materials = RawMaterial::all();
+        return view('admin.buying-centre.create', compact('regions', 'raw_materials'));
     }
 
     /**
@@ -88,65 +132,25 @@ class BuyingCentreController extends Controller
         $validator = Validator::make($request->all(), [
             'region_id' => 'required',
             'name' =>  'required|min:4|max:20',
+            'raw_material_ids' =>  'required',
+            'raw_material_ids.*' => 'required|exists:raw_materials,id',
         ]);
         if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator)->withInput()->with('error', $validator->errors()->first());
+            if ($validator->errors()->has('raw_material_ids.*')) {
+                return  Redirect::back()->withErrors($validator)->withInput()->with('error', "One of the Selected Raw Materials is invalid");
+            }
+            else {
+                return Redirect::back()->withErrors($validator)->withInput()->with('error', $validator->errors()->first());
+            }
         }
-        try {
-            $user = BuyingCenter::query()->create([
-                'region_id' => $request->region_id,
-                'name' => $request->name,
-            ]);
-
-            return Redirect::route('admin.app-buying-centre.index')->with('message','Buying Centre created Successfully');
-
-        } catch (\Exception $exception) {
-            return Redirect::route('admin.app-buying-centre.create')->with('error', 'Something went wrong');
-        }
-    }
-    public function AttachCentre(Request $request, $id)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
+        $buying_center = BuyingCenter::query()->create([
+            'name' => $request->name,
+            'region_id' => $request->region_id,
         ]);
 
-        if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator)->withInput()->with('error', $validator->errors()->first());
-        }
-        try {
-            DB::table('buying_center_raw_materials')
-                ->updateOrInsert(
-                    ['buying_center_id' => $id],
-                    ['raw_material_id' => $request->name,]
-                );
-            return Redirect::route('admin.app-buying-centre.index')->with('message','Raw Material attached Successfully');
+        $buying_center->raw_materials()->sync($request->raw_material_ids, true);
 
-        }
-        catch (\Exception $exception) {
-            return Redirect::route('admin.app-buying-centre.index')->with('error', 'Something went wrong');
-        }
-    }
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        try {
-            $id = Crypt::decrypt($id);
-            $center = BuyingCenter::findOrFail($id);
-            $regions = Region::findOrFail($id);
-
-            $buying_center = DB::table('buying_center_raw_materials')
-                ->where('buying_center_id', '=', $id)
-                ->get();
-            $materials = RawMaterial::where('id', '=', 1)->first();
-            return view('admin.buying-centre.show',compact('regions','materials','center'));
-        } catch (ModelNotFoundException $e) {
-            return $e;
-        }
+        return Redirect::route('admin.app-buying-centre.index')->with('message','Buying Centre created Successfully');
     }
 
     /**
@@ -157,16 +161,11 @@ class BuyingCentreController extends Controller
      */
     public function edit($id)
     {
-        try {
-            $id = Crypt::decrypt($id);
-            $regions = Region::all();
-            $center = Region::findOrFail($id);
-            $materials = RawMaterial::all();
-            return view('admin.buying-centre.edit',compact('center','materials','regions'));
-        } catch (ModelNotFoundException $e) {
-            return Redirect::back()->with('error', 'Farmer Not Found');
+        $center = BuyingCenter::query()->with(['region', 'raw_materials'])->findOrFail(Crypt::decrypt($id));
+        $regions = Region::all();
+        $raw_materials = RawMaterial::all();
+        return view('admin.buying-centre.edit',compact('center', 'regions', 'raw_materials'));
 
-        }
     }
 
     /**
@@ -174,11 +173,31 @@ class BuyingCentreController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'region_id' => 'required',
+            'name' =>  'required|min:4|max:20',
+            'raw_material_ids' =>  'required',
+            'raw_material_ids.*' => 'required|exists:raw_materials,id',
+        ]);
+        if ($validator->fails()) {
+            if ($validator->errors()->has('raw_material_ids.*'))
+                return  Redirect::back()->withErrors($validator)->withInput()->with('error', "One of the Selected Raw Materials is invalid");
+            else
+            return Redirect::back()->withErrors($validator)->withInput()->with('error', $validator->errors()->first());
+        }
+        $buying_center = BuyingCenter::query()->findOrFail($id);
+        $buying_center->update([
+            'name'=>$request->name,
+            'region_id'=>$request->region_id,
+        ]);
+        $buying_center->raw_materials()->sync($request->raw_material_ids, true);
+
+        return Redirect::back()->with('success', 'Buying center details updated successfully');
+
     }
 
     /**
