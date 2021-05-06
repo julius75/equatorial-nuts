@@ -192,15 +192,15 @@ class FarmerController extends Controller
                 ->pluck('id')
                 ->toArray();
 
-            if (count($orderIDs)) {
+            if (count($orderIDs) == 0) {
+                $orderData = [];
+            } else {
                 $orderData = OrderRegion::query()
                     ->whereIn('region_id', [18, 21])
                     ->with(['order', 'region', 'buying_center'])
                     ->get();
-            } else {
-                $orderData = [];
             }
-            dd($orderIDs, $orderData);
+            dd(count($orderIDs), $orderIDs, $orderData);
             $data['mapOrders'] = $orderData;
             return view('admin.farmers.show', $data);
         } catch (ModelNotFoundException $e) {
