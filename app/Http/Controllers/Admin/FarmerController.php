@@ -185,18 +185,19 @@ class FarmerController extends Controller
             $data['transactionsCount'] = $complete_orders_count;
             $data['latitude'] = 0.17687; //default set to kenya's gps coordinates
             $data['longitude'] = 37.90833;
+
             $orderIDs = Order::query()
                 ->where(['disbursed' => true, 'farmer_id'=> $farmer->id])
                 ->get()
                 ->pluck('id')
                 ->toArray();
 
-            if (count($orderIDs) > 0){
+            if (count($orderIDs)) {
                 $orderData = OrderRegion::query()
                     ->whereIn('region_id', $orderIDs)
                     ->with(['order', 'region', 'buying_center'])
                     ->get();
-            }else{
+            } else {
                 $orderData = [];
             }
             dd($orderIDs, $orderData);
