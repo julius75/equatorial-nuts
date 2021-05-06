@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\RawMaterialController;
 use App\Http\Controllers\Admin\AccountBalanceController;
 use App\Http\Controllers\Admin\UtilityBalanceController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\MpesaTransactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -80,10 +81,14 @@ Route::post('create-new-region-buying-center', [RegionController::class, 'create
 Route::resource('app-admins', AdminController::class);
 //farmers
 Route::resource('app-farmers', FarmerController::class);
+Route::post('/attach-raw-materials-to-farmer', [FarmerController::class, 'attach_raw_material'])->name('attach-raw-materials-to-farmer');
+
 //regions
 Route::resource('app-regions', RegionController::class);
 //buying centre
 Route::resource('app-buying-centre', BuyingCentreController::class)->except('show');
+//mpesa transactions
+Route::get('mpesa-transactions', [MpesaTransactionController::class, 'index'])->name('mpesa-transactions.index');
 
 //orders
 Route::prefix('orders')->group(function () {
@@ -118,6 +123,12 @@ Route::prefix('datatables')->group(function () {
     Route::get('get-buyer-orders/{encryptedID}', [UserController::class, 'get_orders'])->name('get-buyer-orders');
 
     Route::get('get-region-orders/{encryptedID}', [RegionController::class, 'get_orders'])->name('get-region-orders');
+
+    Route::get('get-farmer-orders/{encryptedID}', [FarmerController::class, 'get_orders'])->name('get-farmer-orders');
+
+    Route::get('get-farmer-raw_materials/{encryptedID}', [FarmerController::class, 'get_raw_materials'])->name('get-farmer-raw-materials');
+
+    Route::get('get-mpesa-transactions', [MpesaTransactionController::class, 'get_mpesa_transactions'])->name('get-mpesa-transactions');
 
 
 });

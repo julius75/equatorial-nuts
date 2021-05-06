@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendSMS;
 use App\Models\Admin;
+use App\Models\BuyingCenter;
 use App\Models\Farmer;
 use App\Models\FarmerVerificationCode;
+use App\Models\Order;
+use App\Models\OrderRegion;
 use App\Models\RawMaterial;
 use App\Models\Region;
 use App\Models\User;
@@ -159,15 +162,44 @@ class FarmerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $encrypted_id
      */
-    public function show($id)
+    public function show(string $encrypted_id)
     {
         try {
-            $id = Crypt::decrypt($id);
-            $user = Farmer::findOrFail($id);
-            $materials = $user->raw_materials()->first()->name ?? '--';;
-            return view('admin.farmers.show',compact('user','materials'));
+            $farmer = Farmer::query()
+                ->with('region')
+                ->findOrFail(Crypt::decrypt($encrypted_id));
+            $data['farmer'] = $farmer;
+            $data['materials'] = RawMaterial::all();
+            $data['buying_centers'] = BuyingCenter::query()
+                ->where('region_id', '=', $farmer->region_id)
+                ->get();
+            $complete_orders_amount = Order::query()
+                ->where(['disbursed' => true, 'farmer_id'=> $farmer->id])
+                ->sum('amount');
+            $complete_orders_count = Order::query()
+                ->where(['disbursed' => true, 'farmer_id'=> $farmer->id])
+                ->count();
+            $data['transactionsAmount'] = $complete_orders_amount;
+            $data['transactionsCount'] = $complete_orders_count;
+            $data['latitude'] = 0.17687; //default set to kenya's gps coordinates
+            $data['longitude'] = 37.90833;
+            $orderIDs = Order::query()
+                ->where(['disbursed' => true, 'farmer_id'=> $farmer->id])
+                ->get()
+                ->pluck('id')
+                ->toArray();
+
+            if (count($orderIDs) > 0){
+                $orderData = OrderRegion::query()
+                    ->whereIn('region_id', '=', $orderIDs)
+                    ->with(['order', 'region', 'buying_center'])->get();
+            }else{
+                $orderData = [];
+            }
+            $data['mapOrders'] = $orderData;
+            return view('admin.farmers.show', $data);
         } catch (ModelNotFoundException $e) {
             return Redirect::back()->with('error', 'Farmer Not Found');
         }
@@ -254,5 +286,110 @@ class FarmerController extends Controller
     public function destroy($id)
     {
         // do nothing
+    }
+
+    /**
+     * Get Farmer Orders
+     *
+     * @param Request $request
+     * @param string $encryptedId
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function get_orders(Request $request, string $encryptedId)
+    {
+        $farmer = Farmer::query()->find(Crypt::decrypt($encryptedId));
+        //buying_center specified rest are "all"
+        if ($request->buying_center_id != "all" and $request->raw_material_id == "all"){
+            $data = Order::query()
+                ->whereHas('order_region', function ($q) use ($request){
+                    $q->where('buying_center_id', '=', $request->buying_center_id);
+                })
+                ->where(['disbursed' => true, 'farmer_id'=> $farmer->id])
+                ->with(['order_region.buying_center', 'order_raw_material.raw_material', 'user'])
+                ->get();
+        }
+        //raw material specified rest are "all"
+        elseif ($request->raw_material_id != "all" and $request->buying_center_id == "all"){
+            $data = Order::query()
+                ->where(['disbursed' => true, 'farmer_id'=> $farmer->id])
+                ->whereHas('order_raw_material', function ($q) use ($request){
+                    $q->where('raw_material_id', '=', $request->raw_material_id);
+                })->with(['order_region.buying_center', 'order_raw_material.raw_material', 'user'])
+                ->get();
+        }
+        //region and raw material specified
+        elseif ($request->buying_center_id != "all" and $request->raw_material_id != "all"){
+            $data = Order::query()
+                ->where(function($query) use($request){
+                    $query->whereHas('order_raw_material', function ($q) use ($request){
+                        $q->where('raw_material_id', '=', $request->raw_material_id);
+                    });
+                    $query->whereHas('order_region', function ($q) use ($request){
+                        $q->where('buying_center_id', '=', $request->buying_center_id);
+                    });
+                })
+                ->where(['disbursed' => true, 'farmer_id'=> $farmer->id])
+                ->with(['order_region.buying_center', 'order_raw_material.raw_material', 'user'])
+                ->get();
+        }
+        else{
+            $data = Order::query()
+                ->where(['disbursed' => true, 'farmer_id'=> $farmer->id])
+                ->with(['order_region.buying_center', 'order_raw_material.raw_material', 'user'])
+                ->get();
+        }
+        return Datatables::of($data)
+            ->addColumn('action', function ($data) {
+                return '<a href="'.route('admin.orders.show', $data->ref_number).'" class="btn btn-secondary btn-sm">
+                            <i class="flaticon2-pie-chart"></i> View
+                        </a>
+						';
+            })
+            ->make(true);
+    }
+
+    /**
+     * Get Farmer Raw Materials
+     *
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function get_raw_materials(int $id)
+    {
+        $farmer = Farmer::query()->with('raw_materials')->find($id);
+        $data = $farmer->raw_materials;
+        return Datatables::of($data)
+            ->make(true);
+    }
+
+    /**
+     * Get Farmer Raw Materials
+     *
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function attach_raw_material(Request $request)
+    {
+        $validator = Validator::make($request->all(),
+            [
+                'farmer_id' => 'required|exists:farmers,id',
+                'raw_material_ids' =>  'required',
+                'raw_material_ids.*' => 'required|exists:raw_materials,id',
+            ]);
+        if ($validator->fails()) {
+            if ($validator->errors()->has('raw_material_ids.*')) {
+                return  Redirect::back()->withErrors($validator)->withInput()->with('error', "One of the Selected Raw Materials is invalid");
+            }
+            else {
+                return Redirect::back()->withErrors($validator)->withInput()->with('error', $validator->errors()->first());
+            }
+        }
+        try{
+            $farmer = Farmer::query()->find($request->farmer_id);
+            $farmer->raw_materials()->sync($request->raw_material_ids, true);
+            return Redirect::back()->with('message',"$farmer->full_name's raw materials have been synced successfully");
+        }catch (\Exception $e){
+            return Redirect::back()->with('error', 'Something went wrong');
+        }
     }
 }

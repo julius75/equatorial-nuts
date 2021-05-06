@@ -1,286 +1,493 @@
 @extends('admin.layout.master')
-@section('content')
-    <!--begin::Card-->
-    <div class="d-flex flex-row" style="margin-top: -5%;">
-        <!--begin::Aside-->
-        <div class="flex-row-auto offcanvas-mobile w-300px w-xl-325px" id="kt_profile_aside">
-            <!--begin::Nav Panel Widget 2-->
-            <div class="card card-custom gutter-b">
-                <!--begin::Body-->
-                <div class="card-body">
-                    <!--begin::Wrapper-->
-                    <div class="d-flex justify-content-between flex-column pt-4 h-100">
-                        <!--begin::Container-->
-                        <div class="pb-5">
-                            <!--begin::Header-->
-                            <div class="d-flex flex-column flex-center">
-                                <!--begin::Symbol-->
-                                <div class="symbol symbol-120 symbol-circle symbol-success overflow-hidden">
-                                    <span class="symbol-label">
-                                        <img src="{{asset('assets/media/svg/avatars/007-boy-2.svg')}}" class="h-75 align-self-end" alt="" />
-                                    </span>
-                                </div>
-                                <!--end::Symbol-->
-                                <!--begin::Username-->
-                                <!--end::Username-->
-                                <!--begin::Info-->
-                                <div class="card-title font-weight-bolder text-dark-75 text-hover-primary font-size-h4 m-0 pt-7 pb-1">Name: {{$user->full_name}}</div>
-                                <!--end::Info-->
-                            </div>
-                            <!--end::Header-->
-                            <!--begin::Body-->
-                            <div class="pt-1">
-                                <!--begin::Text-->
-{{--                                <p class="text-dark-75 font-weight-nirmal font-size-lg m-0 pb-7">Occupation Held: <span class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bolder bg-success">Farmer</span></p>--}}
-                                <!--end::Text-->
-                                <!--begin::Item-->
-                                <div class="d-flex align-items-center pb-9">
-                                    <!--begin::Symbol-->
-                                    <div class="symbol symbol-45 symbol-light mr-4">
-																	<span class="symbol-label">
-																		<span class="svg-icon svg-icon-2x svg-icon-dark-50">
-																			<!--begin::Svg Icon | path:assets/media/svg/icons/Media/Equalizer.svg-->
-																			<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-																				<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-																					<rect x="0" y="0" width="24" height="24" />
-																					<rect fill="#000000" opacity="0.3" x="13" y="4" width="3" height="16" rx="1.5" />
-																					<rect fill="#000000" x="8" y="9" width="3" height="11" rx="1.5" />
-																					<rect fill="#000000" x="18" y="11" width="3" height="9" rx="1.5" />
-																					<rect fill="#000000" x="3" y="13" width="3" height="7" rx="1.5" />
-																				</g>
-																			</svg>
-                                                                            <!--end::Svg Icon-->
-																		</span>
-																	</span>
-                                    </div>
-                                    <!--end::Symbol-->
-                                    <!--begin::Text-->
-                                    <div class="d-flex flex-column flex-grow-1">
-                                        <a href="#" class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bolder">Ricky Hunt</a>
-                                        <span class="text-muted font-weight-bold">PHP, SQLite, Artisan CLI</span>
-                                    </div>
-                                    <!--end::Text-->
-                                    <!--begin::label-->
-                                    <span class="font-weight-bolder label label-xl label-light-success label-inline px-3 py-5 min-w-45px">2.8</span>
-                                    <!--end::label-->
-                                </div>
-                                <!--end::Item-->
-                                <!--begin::Item-->
-                                <div class="d-flex align-items-center pb-9">
-                                    <!--begin::Symbol-->
-                                    <div class="symbol symbol-45 symbol-light mr-4">
-																	<span class="symbol-label">
-																		<span class="svg-icon svg-icon-2x svg-icon-dark-50">
-																			<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->
-																			<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-																				<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-																					<rect x="0" y="0" width="24" height="24" />
-																					<rect fill="#000000" x="4" y="4" width="7" height="7" rx="1.5" />
-																					<path d="M5.5,13 L9.5,13 C10.3284271,13 11,13.6715729 11,14.5 L11,18.5 C11,19.3284271 10.3284271,20 9.5,20 L5.5,20 C4.67157288,20 4,19.3284271 4,18.5 L4,14.5 C4,13.6715729 4.67157288,13 5.5,13 Z M14.5,4 L18.5,4 C19.3284271,4 20,4.67157288 20,5.5 L20,9.5 C20,10.3284271 19.3284271,11 18.5,11 L14.5,11 C13.6715729,11 13,10.3284271 13,9.5 L13,5.5 C13,4.67157288 13.6715729,4 14.5,4 Z M14.5,13 L18.5,13 C19.3284271,13 20,13.6715729 20,14.5 L20,18.5 C20,19.3284271 19.3284271,20 18.5,20 L14.5,20 C13.6715729,20 13,19.3284271 13,18.5 L13,14.5 C13,13.6715729 13.6715729,13 14.5,13 Z" fill="#000000" opacity="0.3" />
-																				</g>
-																			</svg>
-                                                                            <!--end::Svg Icon-->
-																		</span>
-																	</span>
-                                    </div>
-                                    <!--end::Symbol-->
-                                    <!--begin::Text-->
-                                    <div class="d-flex flex-column flex-grow-1">
-                                        <a href="#" class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bolder">Modules</a>
-                                        <span class="text-muted font-weight-bold">Successful Fellas</span>
-                                    </div>
-                                    <!--end::Text-->
-                                    <!--begin::label-->
-                                    <span class="font-weight-bolder label label-xl label-light-danger label-inline px-3 py-5 min-w-45px">7</span>
-                                    <!--end::label-->
-                                </div>
-                                <!--end::Item-->
-                            </div>
-                            <!--end::Body-->
-                        </div>
-                        <!--eng::Container-->
-                        <!--begin::Footer-->
-                        <div class="d-flex flex-center" id="kt_sticky_toolbar_chat_toggler_1" data-toggle="tooltip" title="" data-placement="right" data-original-title="Chat Example">
-                        </div>
-                        <!--end::Footer-->
-                    </div>
-                    <!--end::Wrapper-->
-                </div>
-                <!--end::Body-->
+@section('sub-header')
+    <!--begin::Subheader-->
+    <div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+        <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+            <!--begin::Info-->
+            <div class="d-flex align-items-center flex-wrap mr-2">
+                <!--begin::Page Title-->
+                <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Farmer Details</h5>
+                <!--end::Page Title-->
+                <!--begin::Actions-->
+                <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+                <!--end::Actions-->
             </div>
-            <!--end::Nav Panel Widget 2-->
         </div>
-        <!--end::Aside-->
-        <!--begin::Content-->
-        <div class="flex-row-fluid ml-lg-8">
-            <!--begin::Card-->
-            <div class="card card-custom gutter-bs">
-                <!--Begin::Header-->
-                <div class="card-header card-header-tabs-line">
-                    <div class="card-toolbar">
-                        <ul class="nav nav-tabs nav-tabs-space-lg nav-tabs-line nav-tabs-bold nav-tabs-line-3x" role="tablist">
-                            <li class="nav-item mr-3">
-                                <a class="nav-link active" data-toggle="tab" href="#kt_apps_contacts_view_tab_2">
-																<span class="nav-icon mr-2">
-																	<span class="svg-icon mr-3">
-																		<!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Chat-check.svg-->
-																		<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-																			<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-																				<rect x="0" y="0" width="24" height="24" />
-																				<path d="M4.875,20.75 C4.63541667,20.75 4.39583333,20.6541667 4.20416667,20.4625 L2.2875,18.5458333 C1.90416667,18.1625 1.90416667,17.5875 2.2875,17.2041667 C2.67083333,16.8208333 3.29375,16.8208333 3.62916667,17.2041667 L4.875,18.45 L8.0375,15.2875 C8.42083333,14.9041667 8.99583333,14.9041667 9.37916667,15.2875 C9.7625,15.6708333 9.7625,16.2458333 9.37916667,16.6291667 L5.54583333,20.4625 C5.35416667,20.6541667 5.11458333,20.75 4.875,20.75 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" />
-																				<path d="M2,11.8650466 L2,6 C2,4.34314575 3.34314575,3 5,3 L19,3 C20.6568542,3 22,4.34314575 22,6 L22,15 C22,15.0032706 21.9999948,15.0065399 21.9999843,15.009808 L22.0249378,15 L22.0249378,19.5857864 C22.0249378,20.1380712 21.5772226,20.5857864 21.0249378,20.5857864 C20.7597213,20.5857864 20.5053674,20.4804296 20.317831,20.2928932 L18.0249378,18 L12.9835977,18 C12.7263047,14.0909841 9.47412135,11 5.5,11 C4.23590829,11 3.04485894,11.3127315 2,11.8650466 Z M6,7 C5.44771525,7 5,7.44771525 5,8 C5,8.55228475 5.44771525,9 6,9 L15,9 C15.5522847,9 16,8.55228475 16,8 C16,7.44771525 15.5522847,7 15,7 L6,7 Z" fill="#000000" />
-																			</g>
-																		</svg>
-                                                                        <!--end::Svg Icon-->
-																	</span>
-																</span>
-                                    <span class="nav-text font-weight-bold">Personal</span>
-                                </a>
-                            </li>
-                            <li class="nav-item mr-3">
-                                <a class="nav-link" data-toggle="tab" href="#kt_apps_contacts_view_tab_3">
-																<span class="nav-icon mr-2">
-																	<span class="svg-icon mr-3">
-																		<!--begin::Svg Icon | path:assets/media/svg/icons/Devices/Display1.svg-->
-																		<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-																			<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-																				<rect x="0" y="0" width="24" height="24" />
-																				<path d="M11,20 L11,17 C11,16.4477153 11.4477153,16 12,16 C12.5522847,16 13,16.4477153 13,17 L13,20 L15.5,20 C15.7761424,20 16,20.2238576 16,20.5 C16,20.7761424 15.7761424,21 15.5,21 L8.5,21 C8.22385763,21 8,20.7761424 8,20.5 C8,20.2238576 8.22385763,20 8.5,20 L11,20 Z" fill="#000000" opacity="0.3" />
-																				<path d="M3,5 L21,5 C21.5522847,5 22,5.44771525 22,6 L22,16 C22,16.5522847 21.5522847,17 21,17 L3,17 C2.44771525,17 2,16.5522847 2,16 L2,6 C2,5.44771525 2.44771525,5 3,5 Z M4.5,8 C4.22385763,8 4,8.22385763 4,8.5 C4,8.77614237 4.22385763,9 4.5,9 L13.5,9 C13.7761424,9 14,8.77614237 14,8.5 C14,8.22385763 13.7761424,8 13.5,8 L4.5,8 Z M4.5,10 C4.22385763,10 4,10.2238576 4,10.5 C4,10.7761424 4.22385763,11 4.5,11 L7.5,11 C7.77614237,11 8,10.7761424 8,10.5 C8,10.2238576 7.77614237,10 7.5,10 L4.5,10 Z" fill="#000000" />
-																			</g>
-																		</svg>
-                                                                        <!--end::Svg Icon-->
-																	</span>
-																</span>
-                                    <span class="nav-text font-weight-bold">Account</span>
-                                </a>
-                            </li>
-                            <li class="nav-item mr-3">
-                                <a class="nav-link" data-toggle="tab" href="#kt_apps_contacts_view_tab_4">
-																<span class="nav-icon mr-2">
-																	<span class="svg-icon mr-3">
-																		<!--begin::Svg Icon | path:assets/media/svg/icons/Home/Globe.svg-->
-																		<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-																			<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-																				<rect x="0" y="0" width="24" height="24" />
-																				<path d="M13,18.9450712 L13,20 L14,20 C15.1045695,20 16,20.8954305 16,22 L8,22 C8,20.8954305 8.8954305,20 10,20 L11,20 L11,18.9448245 C9.02872877,18.7261967 7.20827378,17.866394 5.79372555,16.5182701 L4.73856106,17.6741866 C4.36621808,18.0820826 3.73370941,18.110904 3.32581341,17.7385611 C2.9179174,17.3662181 2.88909597,16.7337094 3.26143894,16.3258134 L5.04940685,14.367122 C5.46150313,13.9156769 6.17860937,13.9363085 6.56406875,14.4106998 C7.88623094,16.037907 9.86320756,17 12,17 C15.8659932,17 19,13.8659932 19,10 C19,7.73468744 17.9175842,5.65198725 16.1214335,4.34123851 C15.6753081,4.01567657 15.5775721,3.39010038 15.903134,2.94397499 C16.228696,2.49784959 16.8542722,2.4001136 17.3003976,2.72567554 C19.6071362,4.40902808 21,7.08906798 21,10 C21,14.6325537 17.4999505,18.4476269 13,18.9450712 Z" fill="#000000" fill-rule="nonzero" />
-																				<circle fill="#000000" opacity="0.3" cx="12" cy="10" r="6" />
-																			</g>
-																		</svg>
-                                                                        <!--end::Svg Icon-->
-																	</span>
-																</span>
-                                    <span class="nav-text font-weight-bold">Settings</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#kt_apps_contacts_view_tab_1">
-																<span class="nav-icon mr-2">
-																	<span class="svg-icon mr-3">
-																		<!--begin::Svg Icon | path:assets/media/svg/icons/General/Notification2.svg-->
-																		<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-																			<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-																				<rect x="0" y="0" width="24" height="24" />
-																				<path d="M13.2070325,4 C13.0721672,4.47683179 13,4.97998812 13,5.5 C13,8.53756612 15.4624339,11 18.5,11 C19.0200119,11 19.5231682,10.9278328 20,10.7929675 L20,17 C20,18.6568542 18.6568542,20 17,20 L7,20 C5.34314575,20 4,18.6568542 4,17 L4,7 C4,5.34314575 5.34314575,4 7,4 L13.2070325,4 Z" fill="#000000" />
-																				<circle fill="#000000" opacity="0.3" cx="18.5" cy="5.5" r="2.5" />
-																			</g>
-																		</svg>
-                                                                        <!--end::Svg Icon-->
-																	</span>
-																</span>
-                                    <span class="nav-text font-weight-bold">Notes</span>
-                                </a>
-                            </li>
-                        </ul>
+    </div>
+    <!--end::Subheader-->
+@endsection
+@section('content')
+    <div class="card card-custom gutter-b">
+        <div class="card-body">
+            <!--begin::Top-->
+            <div class="d-flex">
+                <!--begin::Pic-->
+                <div class="flex-shrink-0 mr-7">
+                    <div class="symbol symbol-50 symbol-lg-120 symbol-light-danger">
+                        <span class="font-size-h3 symbol-label font-weight-boldest">{{ucfirst(substr($farmer->full_name, 0, 2))}}</span>
                     </div>
                 </div>
+                <!--end::Pic-->
+                <!--begin: Info-->
+                <div class="flex-grow-1">
+                    <!--begin::Title-->
+                    <div class="d-flex align-items-center justify-content-between flex-wrap mt-2">
+                        <!--begin::User-->
+                        <div class="">
+                            <!--begin::Name-->
+                            <a href="#" class="d-flex align-items-center text-dark text-hover-primary font-size-h5 font-weight-bold mr-3">
+                                {{$farmer->full_name}}
+                                <i class="flaticon2-correct text-success icon-md ml-2"></i></a>
+                            <!--end::Name-->
+                        </div>
+                        <!--begin::User-->
+                    </div>
+                    <!--end::Title-->
+                    <!--begin::Content-->
+                    <div class="d-flex align-items-center flex-wrap justify-content-between">
+                        <!--begin::Description-->
+                        <div class="flex-grow-1 font-weight-bold text-dark-50 py-2 py-lg-2">
+                            <p>Phone Number: {{$farmer->phone_number}}</p>
+                            <p>ID Number: {{$farmer->id_number}}</p>
+                            <p>Gender: {{$farmer->gender}}</p>
+                            <p>Current Region: {{$farmer->region->name}}</p>
+                        </div>
+                        <!--end::Description-->
+                        <div class="my-lg-0 my-1">
+                            <a class="mb-3 btn  btn-sm  btn-warning font-weight-bolder text-uppercase" href="{{route('admin.app-farmers.edit', \Illuminate\Support\Facades\Crypt::encrypt($farmer->id))}}">
+                                Edit Farmer Details
+                            </a>
+                            <br>
+                            @if($farmer->status == true)
+                                <span class="btn btn-sm btn-success font-weight-bolder text-uppercase" disabled>Farmer status: Active</span>
+                            @else
+                                <span class="btn btn-sm btn-danger font-weight-bolder text-uppercase" disabled>Farmer status: Suspended</span>
+                            @endif
+                        </div>
+                    </div>
+                    <!--end::Content-->
+                </div>
+                <!--end::Info-->
+            </div>
+            <!--end::Top-->
+            <!--begin::Separator-->
+            <div class="separator separator-solid my-7"></div>
+            <!--end::Separator-->
+            <!--begin::Bottom-->
+            <div class="d-flex align-items-center flex-wrap">
+                <!--begin: Item-->
+                <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
+												<span class="mr-4">
+													<i class="flaticon-piggy-bank icon-2x text-muted font-weight-bold"></i>
+												</span>
+                    <div class="d-flex flex-column text-dark-75">
+                        <span class="font-weight-bolder font-size-sm">Total Number of Complete Orders (Purchases)</span>
+                        <span class="font-weight-bolder font-size-h5">
+                                <span class="text-dark-50 font-weight-bold"></span>{{number_format($transactionsCount)}}</span>
+                    </div>
+                </div>
+                <!--end: Item-->
+                <!--begin: Item-->
+                <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
+												<span class="mr-4">
+													<i class="flaticon-pie-chart icon-2x text-muted font-weight-bold"></i>
+												</span>
+                    <div class="d-flex flex-column text-dark-75">
+                        <span class="font-weight-bolder font-size-sm">Total Amount of Complete Orders (Purchases)</span>
+                        <span class="font-weight-bolder font-size-h5">
+							<span class="text-dark-50 font-weight-bold"></span>Ksh. {{number_format($transactionsAmount)}}</span>
+                    </div>
+                </div>
+                <!--end: Item-->
+                <!--begin: Item-->
+            </div>
+            <!--end::Bottom-->
+        </div>
+    </div>
+
+    <!--- Order Data Table -->
+    <div class="card card-custom">
+        <div class="card-header flex-wrap border-0 pt-6 pb-0">
+            <div class="card-title">
+                <h3 class="card-label">{{$farmer->full_name}} Orders (Purchases)</h3>
+            </div>
+            <div class="card-toolbar">
+
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <form id="filter_form_orders" method="post" action="">
+                        @csrf
+                        <div class="form-group row">
+                            <label class="col-md-2 col-form-label text-lg-right font-weight-bolder" for="region_id">Buying Center:</label>
+                            <div class="col-md-2" style="margin-left: -20px;">
+                                <select class="js-example-basic-single form-control{{ $errors->has('buying_center_id') ? ' is-invalid' : '' }}" name="buying_center_id" required>
+                                    <option value="all">All</option>
+                                    @foreach($buying_centers as $center)
+                                        <option  value="{{$center->id}}">{{ucfirst($center->name)}}</option>
+                                    @endforeach
+
+                                </select>
+                            </div>
+                            <label class="col-md-2 col-form-label text-lg-right font-weight-bolder" for="material">Raw Materials:</label>
+                            <div class="col-md-2" style="margin-left: -20px;">
+                                <select class="js-example-basic-single form-control" name="raw_material_id" required>
+                                    <option value="all">All</option>
+                                    @foreach($materials as $raw_material)
+                                        <option value="{{$raw_material->id}}">{{ucfirst($raw_material->name)}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-1">
+                                <button class="btn btn-success font-weight-bolder mr-2" id="">Filter</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!--begin: Datatable-->
+            <table class="table table-bordered table-hover table-checkable mt-10" id="kt_datatable_orders" style="margin-top: 13px !important">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Ref Number</th>
+                    <th>Buyer</th>
+                    <th>Buying Center</th>
+                    <th>Amount</th>
+                    <th>Raw Material</th>
+                    <th>Bags</th>
+                    <th>Net Weight</th>
+                    <th>Disbursed</th>
+                    <th>Date Disbursed</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+            </table>
+            <!--end: Datatable-->
+        </div>
+    </div>
+
+    <!--begin::Content-->
+    <div class="mt-5 row">
+        <div class="col-md-5">
+            <!--begin::Card-->
+            <div class="card card-custom">
+                <!--Begin::Header-->
                 <!--end::Header-->
                 <!--Begin::Body-->
-                <div class="card-body px-0">
-                    <div class="tab-content pt-5">
-                        <!--begin::Tab Content-->
-                        <div class="tab-pane active" id="kt_apps_contacts_view_tab_2" role="tabpanel">
-                            <form class="form">
-                                <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 text-right col-form-label">Full Name</label>
-                                    <div class="col-lg-9 col-xl-6">
-                                        <input class="form-control form-control-lg form-control-solid" type="text" value="{{$user->full_name}}" readonly/>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 text-right col-form-label">Id Number</label>
-                                    <div class="col-lg-9 col-xl-6">
-                                        <input class="form-control form-control-lg form-control-solid" type="text" value="{{$user->id_number}}" readonly/>
-                                    </div>
-                                </div>
-                                <div class="separator separator-dashed my-10"></div>
-                                <!--begin::Heading-->
-                                <div class="row">
-                                    <div class="col-lg-9 col-xl-6 offset-xl-3">
-                                        <h3 class="font-size-h6 mb-5">Contact Info:</h3>
-                                    </div>
-                                </div>
-                                <!--end::Heading-->
-                                <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 text-right col-form-label">Phone</label>
-                                    <div class="col-lg-9 col-xl-6">
-                                        <div class="input-group input-group-lg input-group-solid">
-                                            <div class="input-group-prepend">
-																			<span class="input-group-text">
-																				<i class="la la-phone"></i>
-																			</span>
-                                            </div>
-                                            <input type="text" class="form-control form-control-lg form-control-solid" value="{{$user->phone_number}}" readonly />
-                                        </div>
-                                        <span class="form-text text-muted">We'll never share your phone number with anyone else.</span>
-                                    </div>
-                                </div>
-                                <div class="separator separator-dashed my-10"></div>
-                            </form>
-                        </div>
-                        <!--end::Tab Content-->
-                        <!--begin::Tab Content-->
-                        <div class="tab-pane" id="kt_apps_contacts_view_tab_3" role="tabpanel">
-                            <form class="form">
-                                <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 text-right col-form-label">Gender</label>
-                                    <div class="col-lg-9 col-xl-6">
-                                        <div class="input-group input-group-lg input-group-solid">
-                                            <div class="input-group-prepend">
-																			<span class="input-group-text">
-																				<i class="la la-at"></i>
-																			</span>
-                                            </div>
-                                            <input type="text" class="form-control form-control-lg form-control-solid" value="{{$user->gender}}" readonly/>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 text-right col-form-label">Materials</label>
-                                    <div class="col-lg-9 col-xl-6">
-                                        <div class="input-group input-group-lg input-group-solid">
-                                            <input type="text" class="form-control form-control-lg form-control-solid" value="{{$user->materials}}" readonly/>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row align-items-center">
-                                    <label class="col-xl-3 col-lg-3 col-form-label text-right">Status :<span class="label label-lg label-inline label-light-primary">Active</span></label>
-                                </div>
-                                <div class="separator separator-dashed my-10"></div>
-                                <!--begin::Heading-->
-                            </form>
-                        </div>
+                <div class="card-header flex-wrap border-0 pt-6 pb-0">
+                    <div class="card-title">
+                        <h3 class="card-label">Farmer's Offered Raw Materials
+                        </h3>
                     </div>
+                    <div class="card-toolbar">
+                        <!--begin::Button-->
+                        <!--begin::Button-->
+                        <button data-toggle="modal" data-target="#exampleModalLong" type="button" class="btn btn-secondary font-weight-bolder">
+                    <span class="svg-icon svg-icon-md">
+                        <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <rect x="0" y="0" width="24" height="24" />
+                                <circle fill="#000000" cx="9" cy="15" r="6" />
+                                <path d="M8.8012943,7.00241953 C9.83837775,5.20768121 11.7781543,4 14,4 C17.3137085,4 20,6.6862915 20,10 C20,12.2218457 18.7923188,14.1616223 16.9975805,15.1987057 C16.9991904,15.1326658 17,15.0664274 17,15 C17,10.581722 13.418278,7 9,7 C8.93357256,7 8.86733422,7.00080962 8.8012943,7.00241953 Z" fill="#000000" opacity="0.3" />
+                            </g>
+                        </svg>
+                        <!--end::Svg Icon-->
+                    </span> Edit Raw Materials offered
+                        </button>
+                        <!--end::Button-->
+                        <!--end::Button-->
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-hover table-checkable mt-10 datatable" id="kt_datatable" style="margin-top: 13px !important">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Raw Material</th>
+                        </tr>
+                        </thead>
+                    </table>
                 </div>
                 <!--end::Body-->
             </div>
             <!--end::Card-->
         </div>
-        <!--end::Content-->
+        <div class="col-md-7">
+            <div class="card card-custom">
+                <div class="card-header">
+                    <div class="card-title">
+                        <h3 class="card-label"> {{$farmer->full_name}} Map Overview</h3>
+                    </div>
+                    <div class="card-toolbar">
+
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h6>Map</h6>
+                    <p>Coordinates at which the transactions were initiated</p>
+                    <div id="map-canvas" style="min-height: 425px; width: 100%; position: relative; overflow: hidden;">
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <!--end::Education-->
+    <!--end::Content-->
+    <div id="exampleModalLong" class="modal fade" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+        <div class="modal-dialog  modal-lg">
+            <div class="modal-content">
+                <form method="POST" action="{{route('admin.attach-raw-materials-to-farmer')}}" id="editStatus">
+                    <input type="hidden" name="farmer_id" value="{{$farmer->id}}" >
+                    {{csrf_field()}}
+                    <div class="modal-header">
+                        <div class="modal-title h4">Add new Raw Material to {{$farmer->full_name}}</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label class="col-form-label col-xl-3 col-lg-3">Raw Materials Offered: </label>
+                            <div class="col-xl-9 col-lg-9">
+                                <div class="checkbox-list">
+                                    @foreach($materials as $material)
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="raw_material_ids[]" value="{{ $material->id }}" {{ $farmer->raw_materials->contains($material->id) ? 'checked' : '' }}>
+                                            <span></span>
+                                            {{ $material->name }}
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-lg-4"></div>
+                            <div class="col-lg-8">
+                                <button type="button" class="btn btn-danger font-weight-bolder border-top px-9 py-4" data-dismiss="modal">Cancel</button>
+                                <button id="ok_button" type="submit" class="btn btn-success font-weight-bolder border-top px-9 py-4">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 @endsection
 @section('scripts')
-    <script src="{{asset('assets/js/pages/custom/education/student/profile.js')}}"></script>
+    <!--raw_materials data table-->
+    <script>
+        'use strict';
+        var KTDatatablesDataSourceAjaxClient = function() {
+            var initTable1 = function() {
+                var table = $('#kt_datatable');
+                // begin first table
+                table.DataTable({
+                    responsive: true,
+                    searching:false,
+
+                    ajax: {
+                        url: '{{route('admin.get-farmer-raw-materials', $farmer->id)}}',
+                        type: 'GET',
+                    },
+                    columns: [
+                        {data: 'id', name: 'id'},
+                        {data: 'name', name: 'name'},
+                    ],
+                    columnDefs: [
+                    ],
+                });
+
+            };
+
+            return {
+
+                //main function to initiate the module
+                init: function() {
+                    initTable1();
+                },
+
+            };
+
+        }();
+
+        jQuery(document).ready(function() {
+            KTDatatablesDataSourceAjaxClient.init();
+        });
+
+    </script>
+    <!--order data table-->
+    <script>
+        'use strict';
+        var KTDatatablesDataSourceAjaxClient2 = function() {
+            var initTable2 = function() {
+                var table2 = $('#kt_datatable_orders').DataTable({
+                    dom: 'Bfrtip',
+                    "processing": true,
+                    "serverSide": true,
+                    buttons: [{extend: 'copyHtml5'}, {
+                        extend: 'excelHtml5',
+                        exportOptions: {columns: ':visible'},
+                    },
+                        {
+                            extend: 'pdfHtml5',
+                            exportOptions: {columns: ':visible'},
+                            orientation: 'landscape',
+                            pageSize: 'TABLOID'
+                        },
+                        'colvis','pageLength'],
+                    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                    responsive: true,
+                    ajax: {
+                        url: '{!! route('admin.get-farmer-orders', \Illuminate\Support\Facades\Crypt::encrypt($farmer->id)) !!}',
+                        data: function (d) {
+                            d.buying_center_id = $('select[name=buying_center_id]').val();
+                            d.raw_material_id = $('select[name=raw_material_id]').val();
+                        }
+                    },
+                    order:[0, 'desc'],
+                    columns: [
+                        {data: 'id', name: 'id'},
+                        {data: 'ref_number', name: 'ref_number'},
+                        {data: 'user.full_name', name: 'buyer'},
+                        {data: 'order_region.buying_center.name', name: 'buying_center'},
+                        {data: 'amount', name: 'amount'},
+                        {data: 'order_raw_material.raw_material.name', name: 'raw_material'},
+                        {data: 'order_raw_material.bags', name: 'bags'},
+                        {data: 'order_raw_material.net_weight', name: 'net_weight'},
+                        {data: 'disbursed', name: 'disbursed'},
+                        {data: 'disbursed_at', name: 'disbursed_at'},
+                        {data: 'action', name: 'action', searchable:false, orderable:false},
+                    ],
+                    columnDefs: [
+                        {
+                            width: '75px',
+                            targets: -3,
+                            render: function(data) {
+                                var disbursed = {
+                                    false: {'title': 'Pending Disbursal', 'state': 'warning'},
+                                    true: {'title': 'Disbursed', 'state': 'success'}
+                                };
+                                if (typeof disbursed[data] === 'undefined') {
+                                    return data;
+                                }
+                                return '<span class="label label-' + disbursed[data].state + ' label-dot mr-2"></span>' +
+                                    '<span class="font-weight-bold text-' + disbursed[data].state + '">' + disbursed[data].title + '</span>';
+                            },
+                        }
+                    ],
+                });
+                $('#filter_form_orders').on('submit', function(e) {
+                    table2.draw();
+                    e.preventDefault();
+                });
+            };
+            return {
+                //main function to initiate the module
+                init: function() {
+                    initTable2();
+                },
+            };
+        }();
+        jQuery(document).ready(function() {
+            KTDatatablesDataSourceAjaxClient2.init();
+        });
+    </script>
+    <!--map-->
+    <script type='text/javascript' src='https://maps.google.com/maps/api/js?language=en&key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places&region=GB'></script>
+    <script defer>
+        function initialize() {
+            var mapOptions = {
+                zoom: 5,
+                minZoom: 6,
+                maxZoom: 17,
+                zoomControl:true,
+                zoomControlOptions: {
+                    style:google.maps.ZoomControlStyle.DEFAULT
+                },
+                center: new google.maps.LatLng({{ $latitude }}, {{ $longitude }}),
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                scrollwheel: true,
+                panControl:false,
+                mapTypeControl:false,
+                scaleControl:false,
+                overviewMapControl:false,
+                rotateControl:false
+            }
+            var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+            var image = new google.maps.MarkerImage("{{ asset('assets/media/pin.png') }}", null, null, null, new google.maps.Size(40,52));
+            var places = @json($mapOrders);
+            console.log(places);
+            for(place in places)
+            {
+                place = places[place];
+                if(place.latitude && place.longitude)
+                {
+                    var marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(place.latitude, place.longitude),
+                        icon:image,
+                        map: map,
+                        title: place.name
+                    });
+                    var infowindow = new google.maps.InfoWindow();
+                    google.maps.event.addListener(marker, 'click', (function (marker, place) {
+                        return function () {
+                            infowindow.setContent(generateContent(place))
+                            infowindow.open(map, marker);
+                        }
+                    })(marker, place));
+                }
+            }
+        }
+        google.maps.event.addDomListener(window, 'load', initialize);
+
+        function generateContent(place)
+        {
+            var content = `
+            <div class="gd-bubble" style="">
+                <div class="gd-bubble-inside">
+                    <div class="geodir-bubble_desc">
+                    <div class="geodir-bubble_image">
+                        <div class="geodir-post-slider">
+                            <div class="geodir-image-container geodir-image-sizes-medium_large ">
+                                <div id="geodir_images_5de53f2a45254_189" class="geodir-image-wrapper" data-controlnav="1">
+                                    <ul class="geodir-post-image geodir-images clearfix">
+                                        <li>
+                                            <div class="geodir-post-title">
+                                                <h4 class="geodir-entry-title">
+                                                    <a href="{{ route('admin.orders.show', '') }}/`+place.order.ref_number+`" title="View: `+place.order.ref_number+`">`+place.order.ref_number+`</a>
+                                                </h4>
+                                            </div>
+                                            <a href="{{ route('admin.orders.show', '') }}/`+place.order.ref_number+`"><img src="{{ asset('logo.jpeg') }}" alt="`+place.order.ref_number+`" class="align size-medium_large" width="120" height="120"></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <div class="geodir-bubble-meta-side">
+                    <div class="geodir-output-location">
+                    <div class="geodir-output-location geodir-output-location-mapbubble">
+                        <div class="geodir_post_meta  geodir-field-post_title"><span class="geodir_post_meta_icon geodir-i-text">
+                            <i class="fas fa-minus" aria-hidden="true"></i>
+                            <span class="geodir_post_meta_title">Order Ref Number: </span></span>`+place.order.ref_number+`</div>
+                        <div class="geodir_post_meta  geodir-field-address" itemscope="" itemtype="http://schema.org/PostalAddress">
+                            <span class="geodir_post_meta_icon geodir-i-address"><i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                            <span class="geodir_post_meta_title">Buying Center Tag: </span></span><span itemprop="streetAddress">`+place.buying_center.name+`</span>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            </div>`;
+
+            return content;
+
+        }
+    </script>
 @endsection
 
