@@ -190,10 +190,9 @@ class FarmerController extends Controller
                 ->get()
                 ->pluck('id')
                 ->toArray();
-
             if (count($orderIDs) > 0){
                 $orderData = OrderRegion::query()
-                    ->whereIn('region_id', '=', $orderIDs)
+                    ->whereIn('region_id', $orderIDs)
                     ->with(['order', 'region', 'buying_center'])->get();
             }else{
                 $orderData = [];

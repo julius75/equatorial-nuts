@@ -88,6 +88,7 @@ class MpesaTransactionController extends Controller
                     ->first()
                     ->ReceiverPartyPublicName;
             })
+            ->rawColumns(['order_ref'])
             ->make(true);
     }
 }
