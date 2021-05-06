@@ -186,21 +186,11 @@ class FarmerController extends Controller
             $data['latitude'] = 0.17687; //default set to kenya's gps coordinates
             $data['longitude'] = 37.90833;
 
-            $orderIDs = Order::query()
+            $orderData = Order::query()
                 ->where(['disbursed' => true, 'farmer_id'=> $farmer->id])
-                ->get()
-                ->pluck('id')
-                ->toArray();
+                ->with(['order_region', 'order_region.region', 'order_region.buying_center'])
+                ->get();
 
-            if (count($orderIDs) == 0) {
-                $orderData = [];
-            } else {
-                $orderData = OrderRegion::query()
-                    ->whereIn('region_id', [18, 21])
-                    ->with(['order', 'region', 'buying_center'])
-                    ->get();
-            }
-            dd(count($orderIDs), $orderIDs, $orderData);
             $data['mapOrders'] = $orderData;
             return view('admin.farmers.show', $data);
         } catch (ModelNotFoundException $e) {

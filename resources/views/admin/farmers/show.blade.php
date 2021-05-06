@@ -423,10 +423,10 @@
             for(place in places)
             {
                 place = places[place];
-                if(place.latitude && place.longitude)
+                if(place.order_region.latitude && place.order_region.longitude)
                 {
                     var marker = new google.maps.Marker({
-                        position: new google.maps.LatLng(place.latitude, place.longitude),
+                        position: new google.maps.LatLng(place.order_region.latitude, place.order_region.longitude),
                         icon:image,
                         map: map,
                         title: place.name
@@ -457,10 +457,10 @@
                                         <li>
                                             <div class="geodir-post-title">
                                                 <h4 class="geodir-entry-title">
-                                                    <a href="{{ route('admin.orders.show', '') }}/`+place.order.ref_number+`" title="View: `+place.order.ref_number+`">`+place.order.ref_number+`</a>
+                                                    <a href="{{ route('admin.orders.show', '') }}/`+place.ref_number+`" title="View: `+place.ref_number+`">`+place.ref_number+`</a>
                                                 </h4>
                                             </div>
-                                            <a href="{{ route('admin.orders.show', '') }}/`+place.order.ref_number+`"><img src="{{ asset('logo.jpeg') }}" alt="`+place.order.ref_number+`" class="align size-medium_large" width="120" height="120"></a>
+                                            <a href="{{ route('admin.orders.show', '') }}/`+place.ref_number+`"><img src="{{ asset('logo.jpeg') }}" alt="`+place.ref_number+`" class="align size-medium_large" width="120" height="120"></a>
                                         </li>
                                     </ul>
                                 </div>
@@ -474,10 +474,10 @@
                     <div class="geodir-output-location geodir-output-location-mapbubble">
                         <div class="geodir_post_meta  geodir-field-post_title"><span class="geodir_post_meta_icon geodir-i-text">
                             <i class="fas fa-minus" aria-hidden="true"></i>
-                            <span class="geodir_post_meta_title">Order Ref Number: </span></span>`+place.order.ref_number+`</div>
+                            <span class="geodir_post_meta_title">Order Ref Number: </span></span>`+place.ref_number+`</div>
                         <div class="geodir_post_meta  geodir-field-address" itemscope="" itemtype="http://schema.org/PostalAddress">
                             <span class="geodir_post_meta_icon geodir-i-address"><i class="fas fa-map-marker-alt" aria-hidden="true"></i>
-                            <span class="geodir_post_meta_title">Buying Center Tag: </span></span><span itemprop="streetAddress">`+place.buying_center.name+`</span>
+                            <span class="geodir_post_meta_title">Buying Center Tag: </span></span><span itemprop="streetAddress">`+place.order_region.buying_center.name+`</span>
                         </div>
                     </div>
                     </div>
