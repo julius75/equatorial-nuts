@@ -86,7 +86,7 @@ class MpesaTransactionController extends Controller
                 return MpesaDisbursementResponse::query()
                     ->where('TransactionID', '=', $data->transaction_receipt)
                     ->first()
-                    ->B2CRecipientIsRegisteredCustomer;
+                    ->ReceiverPartyPublicName;
             })
             ->make(true);
     }

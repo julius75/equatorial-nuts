@@ -38,7 +38,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            
+
                             <div class="col-md-1">
                                 <button class="btn btn-success font-weight-bolder mr-2" id="">Filter</button>
                             </div>
@@ -96,28 +96,13 @@
                     order:[0, 'desc'],
                     columns: [
                         {data: 'id', name: 'id'},
-                        {data: 'order_ref', name: 'order_ref'},
+                        {data: 'order_ref', name: 'order_ref',searchable:false, orderable:false},
                         {data: 'transaction_receipt', name: 'transaction_receipt'},
                         {data: 'amount', name: 'amount'},
                         {data: 'mpesa_recipient', name: 'mpesa_recipient'},
                         {data: 'disbursed_at', name: 'disbursed_at'},
                     ],
                     columnDefs: [
-                        {
-                            width: '75px',
-                            targets: -3,
-                            render: function(data) {
-                                var disbursed = {
-                                    false: {'title': 'Pending Disbursal', 'state': 'warning'},
-                                    true: {'title': 'Disbursed', 'state': 'success'}
-                                };
-                                if (typeof disbursed[data] === 'undefined') {
-                                    return data;
-                                }
-                                return '<span class="label label-' + disbursed[data].state + ' label-dot mr-2"></span>' +
-                                    '<span class="font-weight-bold text-' + disbursed[data].state + '">' + disbursed[data].title + '</span>';
-                            },
-                        }
                     ],
                 });
                 $('#filter_form').on('submit', function(e) {
