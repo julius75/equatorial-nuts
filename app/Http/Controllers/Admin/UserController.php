@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendSMS;
 use App\Mail\BuyerCreated;
 use App\Models\Admin;
 use App\Models\BuyingCenter;
@@ -85,7 +86,8 @@ class UserController extends Controller
     public function create()
     {
         $regions = Region::all();
-        return view('admin.users.create', compact('regions'));
+        $raw_materials = RawMaterial::all();
+        return view('admin.users.create', compact('regions', 'raw_materials'));
     }
 
     /**
@@ -118,7 +120,7 @@ class UserController extends Controller
         if ($check_phone_number){
             return Redirect::back()->withInput()->with('error', 'Phone Number already exists');
         }
-        // remove non digits including spaces, - and +
+
         try {
 
             $user = User::query()->create([
@@ -144,9 +146,13 @@ class UserController extends Controller
             $details = [
                 'name'=>$user->first_name.' '.$user->last_name,
                 'email'=>$user->email,
+                'phone_number'=>$user->phone_number,
                 'password'=>$password
             ];
            Mail::send(new BuyerCreated($details));
+
+           $message = "Hello $user->full_name, your ENP Buyer Account has been registered successfully. Credentials are as follows:\nMobile: $user->phone_number\nPassword: $password";
+           SendSMS::dispatch($user->phone_number, $message);
 
             return Redirect::route('admin.app-users.index')->with('message','Buyer created Successfully');
 

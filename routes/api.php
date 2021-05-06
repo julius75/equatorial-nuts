@@ -62,6 +62,7 @@ Route::prefix('v1')->group(function () {
 
         Route::post('/orders', [OrderController::class, 'list_orders']);
         Route::post('/orders-create-new', [OrderController::class, 'create_order']);
+        Route::post('/order-reports', [OrderController::class, 'order_reports']);
 
         Route::post('/initiate-mpesa-disbursement', [DisbursementController::class, 'post_disbursement']);
     });

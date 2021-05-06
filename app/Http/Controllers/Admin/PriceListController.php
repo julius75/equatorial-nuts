@@ -241,6 +241,7 @@ class PriceListController extends Controller
             $pricelist->update([
                 'current'=>true,
                 'approved'=>true,
+                'status'=>true,
                 'approved_by'=>Auth::id()
             ]);
             return Redirect::back()->with('success', 'Price Approved Successfully');
