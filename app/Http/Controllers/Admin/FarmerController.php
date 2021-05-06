@@ -194,7 +194,7 @@ class FarmerController extends Controller
 
             if (count($orderIDs)) {
                 $orderData = OrderRegion::query()
-                    ->whereIn('region_id', $orderIDs)
+                    ->whereIn('region_id', [18, 21])
                     ->with(['order', 'region', 'buying_center'])
                     ->get();
             } else {
