@@ -59,17 +59,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group row">
-                                                    <label class="col-form-label col-xl-3 col-lg-3">Region</label>
-                                                    <div class="col-xl-9 col-lg-9">
-                                                        <select required class="form-control form-control-lg form-control-solid" name="region_id" >
-                                                            <option selected disabled value="">Select Region</option>
-                                                            @foreach($regions as $region)
-                                                                <option  value="{{$region->id}}">{{ucfirst($region->name)}}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
                                                 <!--end::Group-->
                                                 <!--begin::Group-->
                                                 <div class="form-group row">
@@ -84,6 +73,28 @@
                                                           </span>
                                                             @enderror
                                                         </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-form-label col-xl-3 col-lg-3">Assigned Region</label>
+                                                    <div class="col-xl-9 col-lg-9">
+                                                        <select required class="form-control form-control-lg form-control-solid" name="region_id" >
+                                                            <option selected disabled value="">Select Region</option>
+                                                            @foreach($regions as $region)
+                                                                <option  value="{{$region->id}}">{{ucfirst($region->name)}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="raw_material_id" class="col-form-label col-xl-3 col-lg-3">Assigned Raw Material</label>
+                                                    <div class="col-xl-9 col-lg-9">
+                                                        <select id="raw_material_id" required class="form-control form-control-lg form-control-solid" name="raw_material_id" >
+                                                            <option selected disabled value="">Select Raw Material</option>
+                                                            @foreach($raw_materials as $material)
+                                                                <option  value="{{$material->id}}">{{ucfirst($material->name)}}</option>
+                                                            @endforeach
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <!--end::Group-->

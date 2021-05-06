@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\BuyingCenter;
 use App\Models\Order;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -101,6 +102,7 @@ class OrderController extends Controller
                 'bags'=>$request->get('bags'),
                 'gross_weight'=>$request->get('gross_weight'),
                 'net_weight'=>$request->get('net_weight'),
+                'bag_type_id'=>$request->get('bag_type_id'),
             ]);
             DB::commit();
             return response()->json(['message' =>"Order Details Recorded Successfully!",'order'=>$order->load(['order_region','order_raw_material'])], Response::HTTP_OK);
@@ -109,6 +111,7 @@ class OrderController extends Controller
             return response()->json(['message' =>"Order failed tobe recorded", 'exception'=>$exception], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
     /**
      * @return string
      */
@@ -120,6 +123,7 @@ class OrderController extends Controller
         }
         return $ref_number;
     }
+
     /**
      * @param string $ref_number
      * @return mixed
@@ -127,5 +131,96 @@ class OrderController extends Controller
     protected function check_RefNumber_exists(string $ref_number)
     {
         return Order::query()->where('ref_number','=',$ref_number)->exists();
+    }
+
+    /**
+     * Buyer Order Reports
+     * @authenticated
+     *
+     * @bodyParam period string required Specified period: accepts weekly, monthly, yearly.
+     * @bodyParam month string optional If monthly is specified in the period, pass the exact month and year you would want to receive dara for eg. 05-2021  defaults to the current month
+     * @bodyParam year string optional If yearly is specified in the period, pass the exact month and year you would want to receive dara for eg. 2021 defaults to the current year
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function order_reports(Request $request) {
+        $validator = Validator::make($request->all(),
+            [
+                'period'=>'required|string|in:weekly,monthly,yearly'
+            ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first()], Response::HTTP_BAD_REQUEST);
+        }
+        if ($request->period == 'weekly'){
+            $orders = Order::query()
+                ->where('user_id', '=', Auth::id())
+                ->where('disbursed', '=', true)
+                ->whereBetween('disbursed_at', [Carbon::now()->startOfWeek(Carbon::SUNDAY), Carbon::now()])
+                ->with(['order_region','order_raw_material', 'farmer'])
+                ->get();
+
+            $specified_period = Carbon::now()->startOfWeek(Carbon::SUNDAY)->format('d-m-Y')." - ".Carbon::now()->format('d-m-Y');
+
+        } elseif ($request->period == 'monthly') {
+            if ($request->has('month')){
+                $month = Carbon::parse($request->month)->format('m');
+                $year = Carbon::parse($request->month)->format('Y');
+            }else {
+                $month = Carbon::now()->format('m');
+                $year = Carbon::now()->format('Y');
+            }
+            $orders = Order::query()
+                ->where('user_id', '=', Auth::id())
+                ->where('disbursed', '=', true)
+                ->whereMonth('disbursed_at', $month)
+                ->whereYear('disbursed_at', $year)
+                ->with(['order_region','order_raw_material', 'farmer'])
+                ->get();
+
+            $specified_period = "$month - $year";
+
+        } elseif ($request->period == 'yearly') {
+            if ($request->has('year')){
+                $year = Carbon::parse($request->year)->format('Y');
+            }else {
+                $year = Carbon::now()->format('Y');
+            }
+            $orders = Order::query()
+                ->where('user_id', '=', Auth::id())
+                ->where('disbursed', '=', true)
+                ->whereYear('disbursed_at', $year)
+                ->with(['order_region','order_raw_material', 'farmer'])
+                ->get();
+
+            $specified_period = $year;
+
+        }
+        else {
+            return response()->json(['message' => 'Invalid period submitted kindly specify whether yearly, monthly or weekly.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $totalAmount = 0;
+        $stats = [];
+        if (count($orders) > 0){
+            foreach ($orders as $order){
+                $totalAmount += $order->amount;
+                $stat = [
+                    'ref_number'=>$order->ref_number,
+                    'farmer'=>$order->farmer->full_name,
+                    'amount'=>$order->amount,
+                    'disbursed_at'=>$order->disbursed_at,
+                ];
+                array_push($stats, $stat);
+            }
+        }
+
+        return response()->json(
+            [
+            'message' =>ucfirst($request->period).' report fetched successfully',
+            'specified_period'=>$specified_period,
+            'total_amount'=>$totalAmount,
+            'stats'=>$stats,
+            ], Response::HTTP_OK);
     }
 }

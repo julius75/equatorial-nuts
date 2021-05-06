@@ -3,7 +3,7 @@
 Hello {{$data['name']}},
 Use the credentials below to access the ENP Buyer's Application.
 
-Email: {{$data['email']}}
+Phone Number: {{$data['phone_number']}}
 Password: {{$data['password']}}
 
 Regards,<br>
