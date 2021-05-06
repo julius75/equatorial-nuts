@@ -166,12 +166,12 @@ class RegionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $encrypted_id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(string $encrypted_id)
     {
-        $data['region'] = Region::query()->withCount('buying_centers')->findOrFail(Crypt::decrypt($id));
+        $data['region'] = Region::query()->withCount('buying_centers')->findOrFail(Crypt::decrypt($encrypted_id));
         $data['materials'] = RawMaterial::all();
         $data['buying_centers'] = BuyingCenter::query()->where('region_id', '=', $data['region']->id)->get();
         $complete_orders_amount = Order::query()->where(['disbursed' => true])
