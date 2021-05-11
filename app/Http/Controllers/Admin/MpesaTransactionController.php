@@ -72,7 +72,7 @@ class MpesaTransactionController extends Controller
         }
         else{
             $data = MpesaDisbursementTransaction::query()
-                ->with(['order'])
+                ->with(['order','order.user'])
                 ->get();
         }
         return Datatables::of($data)
@@ -88,7 +88,13 @@ class MpesaTransactionController extends Controller
                     ->first()
                     ->ReceiverPartyPublicName;
             })
-            ->rawColumns(['order_ref'])
+            ->addColumn('buyer_details', function ($data) {
+                return  '<a href="'.route('admin.app-users.show', Crypt::encrypt($data->order->user->id)).'" class="text-success font-weight-boldest text-uppercase">
+                            '. $data->order->user->full_name.' <br> '.$data->order->user->phone_number.'
+                        </a>
+						';
+            })
+            ->rawColumns(['order_ref', 'buyer_details'])
             ->make(true);
     }
 }

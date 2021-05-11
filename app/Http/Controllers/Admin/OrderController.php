@@ -240,11 +240,67 @@ class OrderController extends Controller
             ->first();
         if (!$order)
             return Redirect::back()->with('error', "Order Ref: $ref_number not found!");
-//        dd($order);
         $data['order'] = $order;
         $data['page_title'] = $order->ref_number;
         $data['page_description'] = "Order Details";
+        $data['raw_material_requirement_submissions_data'] = $this->get_order_raw_material_requirement_submissions_graph($order->ref_number);
+//        echo $data['raw_material_requirement_submissions_data'];die();
         return view('admin.orders.show', $data);
+    }
+
+    public function get_order_raw_material_requirement_submissions_graph($ref_number){
+        $order = Order::query()->where('ref_number', '=', $ref_number)->first();
+        $data = $order->raw_material_requirement_submissions()
+            ->whereHas('active_raw_material_requirement', function ($q){
+                $q->where('type', '!=' , 'text');
+            })
+            ->with(['active_raw_material_requirement', 'raw_material_requirement_review'])
+            ->get();
+        $labels = [];
+        $required = [];
+        $submissions = [];
+        $evaluations = [];
+        foreach ($data as $req) {
+            if ($req->active_raw_material_requirement->type != "text") {
+                array_push($labels, $req->active_raw_material_requirement->parameter.'-'.$req->active_raw_material_requirement->value);
+                array_push($required, $req->active_raw_material_requirement->requirement);
+                array_push($submissions, $req->value);
+                if ($req->raw_material_requirement_review) {
+                    array_push($submissions, $req->active_raw_material_requirement->value);
+                }
+            }
+        }
+
+        $max_figures_array = [];
+        if (!empty($required)){
+            $max_required = max( $required );
+            $max_required = round(( $max_required + 10/2 ) / 10 ) * 10;
+            array_push($max_figures_array, $max_required);
+        }
+        if (!empty($submissions)){
+            $max_submission = max( $submissions );
+            $max_submission = round(( $max_submission + 10/2 ) / 10 ) * 10;
+            array_push($max_figures_array, $max_submission);
+        }
+        if (!empty($evaluations)){
+            $max_evaluation = max( $required );
+            $max_evaluation = round(( $max_evaluation + 10/2 ) / 10 ) * 10;
+            array_push($max_figures_array, $max_evaluation);
+        }
+        if (!empty($max_figures_array)){
+            $max_figure = max( $required );
+            $max_figure = round(( $max_figure + 10/2 ) / 10 ) * 10;
+        } else {
+            $max_figure = 0;
+        }
+
+        return json_encode(array(
+            'labels' => $labels,
+            'required_values' => $required,
+            'submitted_values' => $submissions,
+            'evaluation_values' => $evaluations,
+            'max_value' => $max_figure,
+        ));
     }
 
     public function get_order_raw_material_requirement_submissions($ref_number){

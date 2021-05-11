@@ -55,6 +55,7 @@
                     <th>Transaction Receipt</th>
                     <th>Amount</th>
                     <th>Recipient Details</th>
+                    <th>Buyer Details</th>
                     <th>Date Disbursed</th>
                 </tr>
                 </thead>
@@ -100,6 +101,7 @@
                         {data: 'transaction_receipt', name: 'transaction_receipt'},
                         {data: 'amount', name: 'amount'},
                         {data: 'mpesa_recipient', name: 'mpesa_recipient'},
+                        {data: 'buyer_details', name: 'buyer_details'},
                         {data: 'disbursed_at', name: 'disbursed_at'},
                     ],
                     columnDefs: [

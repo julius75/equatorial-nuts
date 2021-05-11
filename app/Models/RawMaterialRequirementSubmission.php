@@ -25,6 +25,10 @@ class RawMaterialRequirementSubmission extends Model
     {
         return $this->belongsTo(RawMaterialRequirement::class);
     }
+    public function raw_material_requirement_review()
+    {
+        return $this->hasOne(RawMaterialRequirementReview::class);
+    }
     public function active_raw_material_requirement()
     {
         return $this->raw_material_requirement()->where('status', '=', true);
