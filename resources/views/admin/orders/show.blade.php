@@ -172,6 +172,17 @@
                     <div class="mt-5 card card-custom">
                         <div class="card-header flex-wrap border-0 pt-6 pb-0">
                             <div class="card-title">
+                                <h3 class="card-label">Order Quality Submission Overview</h3>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="orderQualitySubmissionsChart" width="100%" height="45"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="mt-5 card card-custom">
+                        <div class="card-header flex-wrap border-0 pt-6 pb-0">
+                            <div class="card-title">
                                 <h3 class="card-label">Order Quality Requirement Submission</h3>
                             </div>
                         </div>
@@ -255,7 +266,6 @@
             KTDatatablesDataSourceAjaxClient.init();
         });
     </script>
-
     <script>
         'use strict';
         var KTDatatablesDataSourceAjaxClient2 = function() {
@@ -385,5 +395,123 @@
         google.maps.event.addDomListener(window, 'load', initialize);
     </script>
     @endif
+    <script src="{{asset('assets/js/charts/Chart.min.js')}}"></script>
+    <script>
+        ( function ( $ ) {
+            var repaymentsChart = {
+                init: function () {
+                    // -- Set new default font family and font color to mimic Bootstrap's default styling
+                    Chart.defaults.global.defaultFontFamily = 'Poppins';
+                    Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+                    Chart.defaults.global.defaultFontColor = '#292b2c';
+                    this.ajaxGetPaymentsMonthlyData();
+                },
+
+                ajaxGetPaymentsMonthlyData: function () {
+                    var data_array = <?php echo $raw_material_requirement_submissions_data ; ?>;
+                    console.log( data_array );
+                    repaymentsChart.createCompletedPaymentsChart( data_array );
+                },
+
+                /**
+                 * Created the Completed Payments Chart
+                 */
+                createCompletedPaymentsChart: function ( data_array ) {
+                    var ctx = document.getElementById("orderQualitySubmissionsChart");
+                    var myLineChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: data_array.labels, // The response got from the ajax request containing all month names in the database
+                            datasets: [
+                                {
+                                label: "Buyer Submissions",
+                                type: 'line',
+                                lineTension: 0.3,
+                                backgroundColor: "rgba(219,141,13, 0.4)",
+                                borderColor: "rgba(244,176,64,0.78)",
+                                pointBorderColor: "#fff",
+                                pointBackgroundColor: "rgba(219,141,13, 0.8)",
+                                pointRadius: 5,
+                                pointHoverRadius: 5,
+                                pointHoverBackgroundColor: "rgba(219,141,13, 0.8)",
+                                pointHitRadius: 20,
+                                pointBorderWidth: 2,
+                                yAxisID: 'A',
+                                data: data_array.submitted_values // The response got from the ajax request containing data for the completed jobs in the corresponding months
+                            },
+                                {
+                                    label: "Required Values",
+                                    type: 'line',
+                                    lineTension: 0.3,
+                                    backgroundColor: "rgba(66,209,66, 0.3)",
+                                    borderColor: "rgba(66,209,66, 0.8)",
+                                    pointRadius: 5,
+                                    pointBackgroundColor: "rgba(66,209,66, 0.8)",
+                                    pointBorderColor: "rgba(255,255,255,0.8)",
+                                    pointHoverRadius: 5,
+                                    pointHoverBackgroundColor: "rgba(66,209,66, 0.8)",
+                                    pointHitRadius: 20,
+                                    pointBorderWidth: 2,
+                                    yAxisID: 'A',
+                                    data: data_array.required_values // The response got from the ajax request containing data for the completed jobs in the corresponding months
+                                },
+
+                                {
+                                    // rgb(66,209,66)
+                                    label: "Quality Manager Submissions",
+                                    type: 'line',
+                                    lineTension: 0.3,
+                                    backgroundColor: "rgba(162,31,37, 0.3)",
+                                    borderColor: "rgba(162,31,37, 0.8)",
+                                    pointRadius: 5,
+                                    pointBackgroundColor: "rgba(171,53,58, 0.8)",
+                                    pointBorderColor: "rgba(255,255,255,0.8)",
+                                    pointHoverRadius: 5,
+                                    pointHoverBackgroundColor: "rgba(171,53,58, 0.8)",
+                                    pointHitRadius: 20,
+                                    pointBorderWidth: 2,
+                                    yAxisID: 'A',
+                                    data: data_array.evaluation_values // The response got from the ajax request containing data for the completed jobs in the corresponding months
+                                }
+
+                            ],
+                        },
+                        options: {
+                            scales: {
+                                xAxes: [{
+                                    time: {
+                                        unit: 'string'
+                                    },
+                                    gridLines: {
+                                        display: true
+                                    },
+                                    ticks: {
+                                        maxTicksLimit: 7
+                                    }
+                                }],
+                                yAxes: [{
+                                    id:'A',
+                                    position: 'left',
+                                    ticks: {
+                                        min: 0,
+                                        max: data_array.max_value, // The response got from the ajax request containing max limit for y axis
+                                        maxTicksLimit: 5
+                                    },
+                                    gridLines: {
+                                        display:true
+                                    }
+                                }],
+                            },
+                            legend: {
+                                display: true
+                            }
+                        }
+                    });
+                }
+            };
+            repaymentsChart.init();
+        } )( jQuery );
+    </script>
+
 @endsection
 
