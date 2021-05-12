@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use App\Models\Order;
 use App\Models\OrderRegion;
 use App\Models\RawMaterial;
@@ -266,7 +267,7 @@ class OrderController extends Controller
                 array_push($required, $req->active_raw_material_requirement->requirement);
                 array_push($submissions, $req->value);
                 if ($req->raw_material_requirement_review) {
-                    array_push($submissions, $req->active_raw_material_requirement->value);
+                    array_push($evaluations, $req->raw_material_requirement_review->value);
                 }
             }
         }
@@ -283,12 +284,12 @@ class OrderController extends Controller
             array_push($max_figures_array, $max_submission);
         }
         if (!empty($evaluations)){
-            $max_evaluation = max( $required );
+            $max_evaluation = max( $evaluations );
             $max_evaluation = round(( $max_evaluation + 10/2 ) / 10 ) * 10;
             array_push($max_figures_array, $max_evaluation);
         }
         if (!empty($max_figures_array)){
-            $max_figure = max( $required );
+            $max_figure = max( $max_figures_array );
             $max_figure = round(( $max_figure + 10/2 ) / 10 ) * 10;
         } else {
             $max_figure = 0;
@@ -308,8 +309,33 @@ class OrderController extends Controller
         $data = $order->raw_material_requirement_submissions()
             ->whereHas('active_raw_material_requirement')
             ->with('active_raw_material_requirement')
+            ->with('raw_material_requirement_review')
             ->get();
-        return Datatables::of($data)->make(true);
+        return Datatables::of($data)
+            ->addColumn('review', function ($data){
+                if(isset($data->raw_material_requirement_review->value)) {
+                    return $data->raw_material_requirement_review->value;
+                }else{
+                    return   '<span class="label label-warning label-dot mr-2"></span>
+                              <span class="font-weight-bold text-warning ">Pending Review</span>';
+                }
+            })
+            ->addColumn('reviewed_by', function ($data){
+                if(isset($data->raw_material_requirement_review->admin_id)) {
+                    return Admin::query()->find($data->raw_material_requirement_review->admin_id)->full_name;
+                }else{
+                    return   '--';
+                }
+            })
+            ->addColumn('reviewed_at', function ($data){
+                if(isset($data->raw_material_requirement_review->created_at)) {
+                    return $data->raw_material_requirement_review->created_at;
+                }else{
+                    return   '--';
+                }
+            })
+            ->rawColumns(['review'])
+            ->make(true);
     }
 
     public function get_order_mpesa_transaction($ref_number){

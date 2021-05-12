@@ -8,11 +8,11 @@
             <!--begin::Info-->
             <div class="d-flex align-items-center flex-wrap mr-2">
                 <!--begin::Page Title-->
-                <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">{{$page_description}}</h5>
+                <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">{{$page_description ?? ''}}</h5>
                 <!--end::Page Title-->
                 <!--begin::Actions-->
                 <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
-                <a href="#" class="btn btn-light-warning font-weight-bolder btn-sm">Reference Number: {{$page_title}}</a>
+                <a href="#" class="btn btn-light-warning font-weight-bolder btn-sm">Reference Number: {{$page_title ?? ''}}</a>
                 @if($order->disbursed == true)
                     <a href="#" class="ml-3 btn btn-light-success font-weight-bolder btn-sm">Order Status: Complete</a>
                 @else
@@ -27,6 +27,29 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
+            <div class="row justify-content-center">
+                <div class="mb-5 card card-custom">
+                    <div class="card-header flex-wrap border-0 pt-6 pb-0">
+                        <div class="card-title">
+                            <h3 class="card-label">Order Inventory Submissions</h3>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table-hover table-checkable mt-10" id="kt_datatable" style="margin-top: 13px !important">
+                            <thead>
+                            <tr>
+                                <th>Parameter Name</th>
+                                <th>Submitted Value</th>
+                                <th>Reviewed Value</th>
+                                <th>Reviewed By</th>
+                                <th>Time Posted</th>
+                                <th>Time Reviewed</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-xl-4 col-md-4">
                     <div class="mb-3 card">
@@ -80,8 +103,20 @@
                             </ul>
                         </div>
                     </div>
+                </div>
+                <div class="col-xl-8 col-md-8">
 
                     <div class="card card-custom">
+                        <div class="card-header flex-wrap border-0 pt-6 pb-0">
+                            <div class="card-title">
+                                <h3 class="card-label">Order Inventory Submission Overview</h3>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="orderInventorySubmissionsChart" width="100%" height="45"></canvas>
+                        </div>
+                    </div>
+                    <div class="mt-5 card card-custom">
                         <div class="card-header">
                             <div class="card-title">
                                 <h3 class="card-label"> Order Region Details </h3>
@@ -147,62 +182,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-8 col-md-8">
-                    <div class="card card-custom">
-                        <div class="card-header flex-wrap border-0 pt-6 pb-0">
-                            <div class="card-title">
-                                <h3 class="card-label">Order Transaction</h3>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <table class="table table-bordered table-hover table-checkable mt-10" id="kt_datatable_02" style="margin-top: 13px !important">
-                                <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Amount</th>
-                                    <th>Date Disbursed</th>
-                                    <th>Mpesa Receipt</th>
-                                    <th>Channel</th>
-                                </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="mt-5 card card-custom">
-                        <div class="card-header flex-wrap border-0 pt-6 pb-0">
-                            <div class="card-title">
-                                <h3 class="card-label">Order Quality Submission Overview</h3>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <canvas id="orderQualitySubmissionsChart" width="100%" height="45"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="mt-5 card card-custom">
-                        <div class="card-header flex-wrap border-0 pt-6 pb-0">
-                            <div class="card-title">
-                                <h3 class="card-label">Order Quality Requirement Submission</h3>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <table class="table table-bordered table-hover table-checkable mt-10" id="kt_datatable" style="margin-top: 13px !important">
-                                <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Parameter</th>
-                                    <th>Type</th>
-                                    <th>Value</th>
-                                    <th>Required Value</th>
-                                    <th>Submitted Value</th>
-                                    <th>Time Posted</th>
-                                </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    </div>
-                </div>
             </div>
             <div class="row">
                 <div class="col-xl-4 col-md-4">
@@ -239,18 +218,16 @@
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        url: '{{route('admin.get-order-raw-material-requirement-submissions', $order->ref_number)}}',
+                        url: '{{route('admin.get-order-inventory-submissions', $order->ref_number)}}',
                         type: 'GET',
                     },
                     columns: [
-                        {data: 'id', name: 'id'},
-                        {data: 'active_raw_material_requirement.parameter', name: 'parameter'},
-                        {data: 'active_raw_material_requirement.type', name: 'type'},
-                        {data: 'active_raw_material_requirement.value', name: 'value'},
-                        {data: 'active_raw_material_requirement.requirement', name: 'requirement'},
-                        {data: 'value', name: 'value'},
+                        {data: 'name', name: 'name'},
+                        {data: 'parameters.submitted', name: 'submitted'},
+                        {data: 'parameters.reviewed', name: 'reviewed'},
+                        {data: 'reviewed_by', name: 'reviewed_by'},
                         {data: 'created_at', name: 'created_at'},
-                        // {data: 'action', name: 'action'},
+                        {data: 'reviewed_at', name: 'reviewed_at'},
                     ],
                     columnDefs: [],
                 });
@@ -264,54 +241,6 @@
         }();
         jQuery(document).ready(function() {
             KTDatatablesDataSourceAjaxClient.init();
-        });
-    </script>
-    <script>
-        'use strict';
-        var KTDatatablesDataSourceAjaxClient2 = function() {
-            var initTable2 = function() {
-                var table2 = $('#kt_datatable_02');
-                // begin first table
-                table2.DataTable({
-                    dom: 'Bfrtip',
-                    buttons: [{extend: 'copyHtml5'},
-                        {
-                        extend: 'excelHtml5',
-                        exportOptions: {columns: ':visible'},
-                    },
-                        {
-                            extend: 'pdfHtml5',
-                            exportOptions: {columns: ':visible'},
-                            orientation: 'landscape',
-                            pageSize: 'TABLOID'
-                        }],
-                    responsive: true,
-                    processing: true,
-                    serverSide: true,
-                    searching:false,
-                    ajax: {
-                        url: '{{route('admin.get-order-mpesa-transaction', $order->ref_number)}}',
-                        type: 'GET',
-                    },
-                    columns: [
-                        {data: 'id', name: 'id'},
-                        {data: 'amount', name: 'amount'},
-                        {data: 'disbursed_at', name: 'disbursed_at'},
-                        {data: 'transaction_receipt', name: 'transaction_receipt'},
-                        {data: 'channel', name: 'channel'},
-                    ],
-                    columnDefs: [],
-                });
-            };
-            return {
-                //main function to initiate the module
-                init: function() {
-                    initTable2();
-                },
-            };
-        }();
-        jQuery(document).ready(function() {
-            KTDatatablesDataSourceAjaxClient2.init();
         });
     </script>
     @if($order->order_region->latitude && $order->order_region->longitude)
@@ -350,10 +279,10 @@
                                         <li>
                                             <div class="geodir-post-title">
                                                 <h4 class="geodir-entry-title">
-                                                    <a href="{{ route('admin.orders.show', $order->ref_number) }}" title="View: {{ $order->ref_number }}">{{ $order->ref_number }}</a>
+                                                    <a href="#" title="View: {{ $order->ref_number }}">{{ $order->ref_number }}</a>
                                                 </h4>
                                             </div>
-                                            <a href="{{ route('admin.orders.show', $order->ref_number) }}"><img src="{{ asset('logo.jpeg') }}" alt="{{ $order->ref_number }}" class="align size-medium_large" width="120" height="120"></a>
+                                            <a href="#"><img src="{{ asset('logo.jpeg') }}" alt="{{ $order->ref_number }}" class="align size-medium_large" width="120" height="120"></a>
                                         </li>
                                     </ul>
                                 </div>
@@ -417,61 +346,45 @@
                  * Created the Completed Payments Chart
                  */
                 createCompletedPaymentsChart: function ( data_array ) {
-                    var ctx = document.getElementById("orderQualitySubmissionsChart");
+                    var ctx = document.getElementById("orderInventorySubmissionsChart");
                     var myLineChart = new Chart(ctx, {
                         type: 'bar',
                         data: {
                             labels: data_array.labels, // The response got from the ajax request containing all month names in the database
                             datasets: [
                                 {
-                                    label: "Buyer Submissions",
-                                    type: 'bar',
-                                    lineTension: 0.3,
-                                    backgroundColor: "rgba(219,141,13,0.9)",
-                                    borderColor: "rgba(244,176,64,0.9)",
-                                    pointBorderColor: "#fff",
-                                    pointBackgroundColor: "rgba(219,141,13,0.9)",
-                                    pointRadius: 5,
-                                    pointHoverRadius: 5,
-                                    pointHoverBackgroundColor: "rgba(219,141,13,0.9)",
-                                    pointHitRadius: 20,
-                                    pointBorderWidth: 2,
-                                    yAxisID: 'A',
-                                    data: data_array.submitted_values // The response got from the ajax request containing data for the completed jobs in the corresponding months
-                                },
+                                label: "Buyer Submission",
+                                type: 'bar',
+                                lineTension: 0.3,
+                                backgroundColor: "rgba(219,141,13, 0.9)",
+                                borderColor: "rgba(244,176,64,0.9)",
+                                pointBorderColor: "#fff",
+                                pointBackgroundColor: "rgba(219,141,13, 0.9)",
+                                pointRadius: 5,
+                                pointHoverRadius: 5,
+                                pointHoverBackgroundColor: "rgba(219,141,13, 0.9)",
+                                pointHitRadius: 20,
+                                pointBorderWidth: 2,
+                                yAxisID: 'A',
+                                data: data_array.submitted_values // The response got from the ajax request containing data for the completed jobs in the corresponding months
+                            },
                                 {
-                                    label: "Required Values",
+                                    label: "Inventory Manager Submissions",
                                     type: 'bar',
                                     lineTension: 0.3,
-                                    backgroundColor: "rgba(66,209,66)",
-                                    borderColor: "rgba(66,209,66)",
+                                    backgroundColor: "rgba(162,31,37, 0.9)",
+                                    borderColor: "rgba(162,31,37, 0.9)",
                                     pointRadius: 5,
-                                    pointBackgroundColor: "rgba(66,209,66)",
-                                    pointBorderColor: "rgba(255,255,255)",
+                                    pointBackgroundColor: "rgba(171,53,58, 0.9)",
+                                    pointBorderColor: "rgba(255,255,255,0.9)",
                                     pointHoverRadius: 5,
-                                    pointHoverBackgroundColor: "rgba(66,209,66)",
-                                    pointHitRadius: 20,
-                                    pointBorderWidth: 2,
-                                    yAxisID: 'A',
-                                    data: data_array.required_values // The response got from the ajax request containing data for the completed jobs in the corresponding months
-                                },
-                                {
-                                    // rgb(66,209,66)
-                                    label: "Quality Manager Submissions",
-                                    type: 'bar',
-                                    lineTension: 0.3,
-                                    backgroundColor: "rgba(162,31,37)",
-                                    borderColor: "rgba(162,31,37)",
-                                    pointRadius: 5,
-                                    pointBackgroundColor: "rgba(171,53,58)",
-                                    pointBorderColor: "rgba(255,255,255)",
-                                    pointHoverRadius: 5,
-                                    pointHoverBackgroundColor: "rgba(171,53,58)",
+                                    pointHoverBackgroundColor: "rgba(171,53,58, 0.9)",
                                     pointHitRadius: 20,
                                     pointBorderWidth: 2,
                                     yAxisID: 'A',
                                     data: data_array.evaluation_values // The response got from the ajax request containing data for the completed jobs in the corresponding months
                                 }
+
                             ],
                         },
                         options: {

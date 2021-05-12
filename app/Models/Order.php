@@ -50,6 +50,14 @@ class Order extends Model
     {
         return $this->hasMany(RawMaterialRequirementSubmission::class);
     }
+    public function raw_material_requirement_reviews()
+    {
+        return $this->hasMany(RawMaterialRequirementReview::class);
+    }
+    public function order_raw_material_inventory_review()
+    {
+        return $this->hasOne(OrderRawMaterialInventoryReview::class);
+    }
     public function mpesa_disbursement_request()
     {
         return $this->hasOne(MpesaDisbursementRequest::class);

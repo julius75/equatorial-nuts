@@ -13,6 +13,8 @@ use App\Http\Controllers\Admin\AccountBalanceController;
 use App\Http\Controllers\Admin\UtilityBalanceController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\MpesaTransactionController;
+use App\Http\Controllers\Admin\QualityController;
+use App\Http\Controllers\Admin\InventoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -89,6 +91,22 @@ Route::resource('app-regions', RegionController::class);
 Route::resource('app-buying-centre', BuyingCentreController::class)->except('show');
 //mpesa transactions
 Route::get('mpesa-transactions', [MpesaTransactionController::class, 'index'])->name('mpesa-transactions.index');
+//order quality management
+Route::prefix('order-quality-management')->group(function () {
+    Route::get('/', [QualityController::class, 'index'])->name('order-quality-management.index');
+    Route::get('/view-review/{ref_number}', [QualityController::class, 'view_review'])->name('order-quality-management.view-review');
+    Route::get('/make-review/{ref_number}', [QualityController::class, 'make_review'])->name('order-quality-management.make-review');
+    Route::post('/post-review/{ref_number}', [QualityController::class, 'post_review'])->name('order-quality-management.post-review');
+
+});
+//order inventory management
+Route::prefix('order-inventory-management')->group(function () {
+    Route::get('/', [InventoryController::class, 'index'])->name('order-inventory-management.index');
+    Route::get('/view-review/{ref_number}', [InventoryController::class, 'view_review'])->name('order-inventory-management.view-review');
+    Route::get('/make-review/{ref_number}', [InventoryController::class, 'make_review'])->name('order-inventory-management.make-review');
+    Route::post('/post-review/{ref_number}', [InventoryController::class, 'post_review'])->name('order-inventory-management.post-review');
+
+});
 
 //orders
 Route::prefix('orders')->group(function () {
@@ -130,6 +148,11 @@ Route::prefix('datatables')->group(function () {
 
     Route::get('get-mpesa-transactions', [MpesaTransactionController::class, 'get_mpesa_transactions'])->name('get-mpesa-transactions');
 
+    Route::get('get-quality-management-orders', [QualityController::class, 'get_orders'])->name('get-quality-management-orders');
+
+    Route::get('get-inventory-management-orders', [InventoryController::class, 'get_orders'])->name('get-inventory-management-orders');
+
+    Route::get('get-order-inventory-submissions/{ref_number}', [InventoryController::class, 'get_order_raw_material_inventory_submissions'])->name('get-order-inventory-submissions');
 
 });
 //charts routes
