@@ -92,20 +92,18 @@ Route::resource('app-buying-centre', BuyingCentreController::class)->except('sho
 //mpesa transactions
 Route::get('mpesa-transactions', [MpesaTransactionController::class, 'index'])->name('mpesa-transactions.index');
 //order quality management
-Route::prefix('order-quality-management')->group(function () {
+Route::prefix('order-quality-management')->middleware('role:admin|quality_management|management|general_management')->group(function () {
     Route::get('/', [QualityController::class, 'index'])->name('order-quality-management.index');
     Route::get('/view-review/{ref_number}', [QualityController::class, 'view_review'])->name('order-quality-management.view-review');
     Route::get('/make-review/{ref_number}', [QualityController::class, 'make_review'])->name('order-quality-management.make-review');
     Route::post('/post-review/{ref_number}', [QualityController::class, 'post_review'])->name('order-quality-management.post-review');
-
 });
 //order inventory management
-Route::prefix('order-inventory-management')->group(function () {
+Route::prefix('order-inventory-management')->middleware('role:admin|inventory|management|general_management')->group(function () {
     Route::get('/', [InventoryController::class, 'index'])->name('order-inventory-management.index');
     Route::get('/view-review/{ref_number}', [InventoryController::class, 'view_review'])->name('order-inventory-management.view-review');
     Route::get('/make-review/{ref_number}', [InventoryController::class, 'make_review'])->name('order-inventory-management.make-review');
     Route::post('/post-review/{ref_number}', [InventoryController::class, 'post_review'])->name('order-inventory-management.post-review');
-
 });
 
 //orders
