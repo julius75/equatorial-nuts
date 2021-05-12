@@ -29,9 +29,9 @@
                                 <div class="col-lg-4 col-xl-4">
                                     <input hidden value="{{ $submission->id }}"  name="submission_ids[]" />
                                     @if($submission->raw_material_requirement->type == "percentage" )
-                                        <input class="form-control form-control-solid form-control-lg @error('full_name') is-invalid @enderror" value="{{ old('value') }}"  name="value[]" type="number" step="0.01" min="0.01" max="100" autocomplete="off" required />
+                                        <input class="form-control form-control-solid form-control-lg @error('full_name') is-invalid @enderror" value="{{ old('value') }}"  name="value[]" type="number" step="0.01" min="0" max="100" autocomplete="off" required />
                                     @elseif($submission->raw_material_requirement->type == "integer")
-                                        <input class="form-control form-control-solid form-control-lg @error('full_name') is-invalid @enderror" value="{{ old('value') }}" name="value[]" type="number" step="0.01" min="0.01" max="1000000" autocomplete="off" required />
+                                        <input class="form-control form-control-solid form-control-lg @error('full_name') is-invalid @enderror" value="{{ old('value') }}" name="value[]" type="number" step="0.01" min="0" max="1000000" autocomplete="off" required />
                                     @else
                                         <input class="form-control form-control-solid form-control-lg @error('full_name') is-invalid @enderror" value="{{ old('value') }}" name="value[]" type="text" autocomplete="off" required />
                                     @endif
