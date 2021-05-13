@@ -56,10 +56,33 @@ class UserController extends Controller
      */
     public function getUsers()
     {
-        $users = User::role('buyer')->get();
-        return Datatables::of($users)
-            ->addColumn('action', function ($users) {
-                return '<div class="dropdown dropdown-inline">
+        $user = Auth::user();
+        if ($user->hasRole(['general_management','management'])) {
+            $users = User::role('buyer')->get();
+            return Datatables::of($users)
+                ->addColumn('action', function ($users) {
+                    return '<div class="dropdown dropdown-inline">
+								<a href="" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">
+	                                <i class="la la-cog"></i>
+	                            </a>
+							  	<div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+									<ul class="nav nav-hoverable flex-column">
+							    		<li class="nav-item"><a class="nav-link" href="'.route('admin.app-users.show',Crypt::encrypt($users->id)).'"><i class="nav-icon la la-user"></i><span class="nav-text">View User Details</span></a></li>
+							    		<li class="nav-item"><a class="nav-link" href="'.route('admin.view-buyer-assignments',Crypt::encrypt($users->id)).'"><i class="nav-icon la la-address-book"></i><span class="nav-text">View Assignments</span></a></li>
+							    		<li class="btn btn-light font-size-sm mr-5"data-toggle="modal"data-target="#smallModal" id="smallButton"><i class="nav-icon la la-sync-alt"></i><span class="nav-text">Update Status</span></li>
+							    	</ul>
+							  	</div>
+							</div>
+
+						';
+                })
+                ->make(true);
+        }
+        else{
+            $users = User::role('buyer')->get();
+            return Datatables::of($users)
+                ->addColumn('action', function ($users) {
+                    return '<div class="dropdown dropdown-inline">
 								<a href="" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">
 	                                <i class="la la-cog"></i>
 	                            </a>
@@ -74,8 +97,9 @@ class UserController extends Controller
 							</div>
 
 						';
-            })
-            ->make(true);
+                })
+                ->make(true);
+        }
     }
 
     /**
@@ -87,7 +111,15 @@ class UserController extends Controller
     {
         $regions = Region::all();
         $raw_materials = RawMaterial::all();
-        return view('admin.users.create', compact('regions', 'raw_materials'));
+        $user = Auth::user();
+        $user = Auth::user();
+        if ($user->hasRole(['general_management','management'])) {
+            return abort(403);
+        }
+      else{
+          return view('admin.users.create', compact('regions', 'raw_materials'));
+      }
+
     }
 
     /**
@@ -485,6 +517,10 @@ class UserController extends Controller
     {
         $id = Crypt::decrypt($id);
         $user = User::query()->findOrFail($id);
+        $user = Auth::user();
+        if ($user->hasRole(['general_management','management'])) {
+            return abort(403);
+        }
         return view('admin.users.edit',compact('user'));
     }
 

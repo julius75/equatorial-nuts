@@ -33,7 +33,12 @@ class BuyingCentreController extends Controller
     {
         $data['raw_materials'] = RawMaterial::all();
         $data['regions'] = Region::all();
-        return view('admin.buying-centre.index', $data);
+        if (Auth::user()->role != 'general_management') {
+            return view('admin.buying-centre.index', $data);
+        }
+        else{
+            return abort(403);
+        }
     }
 
     /**
@@ -118,7 +123,12 @@ class BuyingCentreController extends Controller
     {
         $regions = Region::all();
         $raw_materials = RawMaterial::all();
-        return view('admin.buying-centre.create', compact('regions', 'raw_materials'));
+        if (Auth::user()->role != 'general_management') {
+            return view('admin.buying-centre.create', compact('regions', 'raw_materials'));
+        }
+        else{
+            return abort(403);
+        }
     }
 
     /**

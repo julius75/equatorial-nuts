@@ -35,7 +35,9 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('admin.users.index-admin-user');
+        if (Auth::user()->role != 'general_management') {
+            return view('admin.users.index-admin-user');
+        }
     }
 
     /**
@@ -49,7 +51,12 @@ class AdminController extends Controller
             ->where('name', '!=', 'buyer')
             ->where('name', '!=', 'user')
             ->get();
-        return view('admin.users.create-admin-user', compact('roles'));
+        if (Auth::user()->role != 'general_management') {
+            return view('admin.users.create-admin-user', compact('roles'));
+        }
+        else{
+            return abort(403);
+        }
     }
     /**
      * Get Users DataTable
@@ -151,7 +158,12 @@ class AdminController extends Controller
         $id = Crypt::decrypt($id);
         $user = Admin::findOrFail($id);
            $role = $user->roles->first()->name;
-       return view('admin.users.show-admin',compact('user','role'));
+            if (Auth::user()->role != 'general_management') {
+                return view('admin.users.show-admin', compact('user', 'role'));
+            }
+            else{
+                return abort(403);
+            }
             }
     catch (ModelNotFoundException $e) {
         return $e;
@@ -187,12 +199,16 @@ class AdminController extends Controller
         try {
             $id = Crypt::decrypt($id);
             $user = Admin::findOrFail($id);
-            return view('admin.users.edit-admin-user',compact('user'));
+            if (Auth::user()->role != 'general_management') {
+                return view('admin.users.edit-admin-user', compact('user'));
+            }
+            else{
+                return abort(403);
+            }
         } catch (ModelNotFoundException $e) {
             return $e;
         }
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -234,7 +250,6 @@ class AdminController extends Controller
             return back()->with('flash_error', 'Admin Record Not Found');
         }
     }
-
     /**
      * Remove the specified resource from storage.
      *

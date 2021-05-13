@@ -28,43 +28,43 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        $data['user'] = Auth::guard('admin')->user();
-        $data['first_letter'] = ucfirst(substr($data['user']->first_name, 0, 1));
-        $data['page_title'] = 'Dashboard';
-        $data['regions'] = Region::all();
-        $farmers = Farmer::all();
-        $complete_orders_amount = Order::query()->where('disbursed', '=', true)->sum('amount');
-        if ($request->has('region') and $request->region != "all"){
-            $validator = Validator::make($request->all(), [
-                'region' => 'required'
-            ]);
-            if ($validator->fails()) {
-                return Redirect::back()->withErrors($validator)->withInput()->with('error', $validator->errors()->first());
-            }
-            try{
-                $region = Region::query()->find($request->region);
-                if (!$region)
+        $user = Auth::user();
+        if ($user->hasAnyRole(['general_management','management','admin'])) {
+            $data['user'] = Auth::guard('admin')->user();
+            $data['first_letter'] = ucfirst(substr($data['user']->first_name, 0, 1));
+            $data['page_title'] = 'Dashboard';
+            $data['regions'] = Region::all();
+            $farmers = Farmer::all();
+            $complete_orders_amount = Order::query()->where('disbursed', '=', true)->sum('amount');
+            if ($request->has('region') and $request->region != "all") {
+                $validator = Validator::make($request->all(), [
+                    'region' => 'required'
+                ]);
+                if ($validator->fails()) {
+                    return Redirect::back()->withErrors($validator)->withInput()->with('error', $validator->errors()->first());
+                }
+                try {
+                    $region = Region::query()->find($request->region);
+                    if (!$region)
+                        return Redirect::back()->with('warning', 'Invalid Region has been submitted, refresh page and try again');
+                } catch (\Exception $e) {
                     return Redirect::back()->with('warning', 'Invalid Region has been submitted, refresh page and try again');
-            }catch (\Exception $e){
-                return Redirect::back()->with('warning', 'Invalid Region has been submitted, refresh page and try again');
-            }
-            $complete_orders_amount = Order::query()
-                ->whereHas('order_region', function ($q) use ($region){
-                    $q->where('region_id', '=', $region->id);
-                })
-                ->where('orders.disbursed', '=', true)
-                ->sum('orders.amount');
+                }
+                $complete_orders_amount = Order::query()
+                    ->whereHas('order_region', function ($q) use ($region) {
+                        $q->where('region_id', '=', $region->id);
+                    })
+                    ->where('orders.disbursed', '=', true)
+                    ->sum('orders.amount');
 
-            $data['page_description'] = "Specified Region: $region->name";
-            $data['farmersCount'] = $region->farmers()->count();
-            $data['buyingCentersCount'] = $region->buying_centers()->count();
-            $data['transactionsAmount'] = $complete_orders_amount;
-            $data['current_region'] = $region->id;
-            $data['buyersCount'] = $region->buyers()->count();
-            $data['monthly_payments_data_array'] = $this->paymentsChartData($request);
-        }
-        else
-            {
+                $data['page_description'] = "Specified Region: $region->name";
+                $data['farmersCount'] = $region->farmers()->count();
+                $data['buyingCentersCount'] = $region->buying_centers()->count();
+                $data['transactionsAmount'] = $complete_orders_amount;
+                $data['current_region'] = $region->id;
+                $data['buyersCount'] = $region->buyers()->count();
+                $data['monthly_payments_data_array'] = $this->paymentsChartData($request);
+            } else {
                 $data['page_description'] = 'Stats for all the registered ENP Regions';
                 $data['farmersCount'] = count($farmers);
                 $data['buyingCentersCount'] = BuyingCenter::all()->count();
@@ -74,6 +74,7 @@ class HomeController extends Controller
                 $data['monthly_payments_data_array'] = $this->paymentsChartData($request);
 
             }
+        }
         return view('admin.dashboard', $data);
 
     }

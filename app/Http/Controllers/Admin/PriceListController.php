@@ -190,7 +190,14 @@ class PriceListController extends Controller
      */
     public function pending_approval()
     {
-        return view('admin.pricelists.pending_approval');
+        $user = Auth::user();
+        if ($user->hasRole('management')) {
+            return abort(403);
+        }
+        else{
+            return view('admin.pricelists.pending_approval');
+
+        }
     }
 
     /**

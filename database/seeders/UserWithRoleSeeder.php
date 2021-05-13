@@ -19,17 +19,6 @@ class UserWithRoleSeeder extends Seeder
      */
     public function run()
     {
-        $admin = Admin::firstOrCreate([
-            'first_name'=>'Deveint',
-            'last_name'=>'Admin',
-            'email'=>'admin@demo.com',
-            'phone_number'=>'254720202060',
-            'password'=>Hash::make('secretpassword'),
-            'created_at'=>Carbon::now(),
-            'updated_at'=>Carbon::now(),
-            'status'=>true
-        ]);
-        $admin->assignRole('admin');
         $inventory = Admin::firstOrCreate([
             'first_name'=>'Deveint',
             'last_name'=>'Inventory',

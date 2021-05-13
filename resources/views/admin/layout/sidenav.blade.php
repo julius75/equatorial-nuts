@@ -47,11 +47,11 @@
                         {{--                                text--}}
                     </a>
                 </li>
+                @role('admin')
                 <li class="menu-section mb-0 mt-0">
                     <h4 class="menu-text">System Users</h4>
                     <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
                 </li>
-                @role('admin')
                     <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
                         <a href="{{route('admin.app-admins.index')}}" class="menu-link menu-toggle">
                             <span class="svg-icon menu-icon"><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-02-01-052524/theme/html/demo1/dist/../src/media/svg/icons/Communication/Add-user.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -83,7 +83,6 @@
                     <h4 class="menu-text">Management</h4>
                     <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
                 </li>
-                @hasanyrole('admin|general_management')
                 <!---Farmers---->
                 <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
                     <a href="{{route('admin.app-farmers.index')}}" class="menu-link menu-toggle">
@@ -123,6 +122,7 @@
                                     <span class="menu-text">List Regions</span>
                                 </a>
                             </li>
+                            @role('admin')
                             <li class="menu-item" aria-haspopup="true">
                                 <a href="{{route('admin.app-buying-centre.index')}}" class="menu-link">
                                     <i class="menu-bullet menu-bullet-dot">
@@ -132,6 +132,7 @@
                                 </a>
                             </li>
                         </ul>
+                        @endrole
                     </div>
                 </li>
 
@@ -179,7 +180,7 @@
                                     <span class="menu-text">View Current Prices</span>
                                 </a>
                             </li>
-                            @role('admin')
+                            @hasanyrole('admin|general_management')
                                 <li class="menu-item" aria-haspopup="true">
                                     <a href="{{route('admin.price-lists.pending-approval')}}" class="menu-link">
                                         <i class="menu-bullet menu-bullet-dot">
@@ -188,7 +189,7 @@
                                         <span class="menu-text">Prices Pending Approval</span>
                                     </a>
                                 </li>
-                            @endrole
+                            @endhasanyrole
                         </ul>
                     </div>
                 </li>
@@ -219,7 +220,6 @@
                         </ul>
                     </div>
                 </li>
-                @endhasanyrole
                 <!---Orders---->
                 <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
                     <a href="javascript:;" class="menu-link menu-toggle">

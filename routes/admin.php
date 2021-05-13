@@ -57,7 +57,6 @@ Route::post('raw-material-requirements/store', [RawMaterialController::class,'st
 Route::get('edit-requirement/{id}/', [RawMaterialController::class,'edit_requirement'])->name('edit-requirement');
 Route::get('raw/{raw_material}/{id}', [RawMaterialController::class,'raw_material_requirements'])->name('raw');
 
-
 //admin status
 Route::post('update-status-admin/{id}', [AdminController::class,'statusUpdate']);
 
@@ -137,9 +136,9 @@ Route::prefix('charts')->group(function () {
     //
 });
 
-
-
 Route::get('/utility-balances', [UtilityBalanceController::class, 'index'])->name('utility-balances');
 Route::get('/mpesa-account-balance/post', [AccountBalanceController::class, 'mpesa_balance'])->name('mpesa.post-account-balance');
+
+//management
 
 require __DIR__.'/admin_auth.php';
