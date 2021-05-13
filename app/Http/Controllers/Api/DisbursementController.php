@@ -129,24 +129,40 @@ class DisbursementController extends Controller
                 ])
             ]);
             $obj = json_decode((string)$send_request->getBody());
-            if ($obj->ResponseCode == 0) {
-                $disbursement_request = new MpesaDisbursementRequest();
-                $disbursement_request->order_id = $order->id;
-                $disbursement_request->user_id = Auth::id();
-                $disbursement_request->ResponseDescription = $obj->ResponseDescription;
-                $disbursement_request->ResponseCode = $obj->ResponseCode;
-                $disbursement_request->OriginatorConversationID = $obj->OriginatorConversationID;
-                $disbursement_request->ConversationID = $obj->ConversationID;
-                $disbursement_request->issued = false;
-                $disbursement_request->response = $send_request->getBody();
-                $disbursement_request->save();
-                Log::info("response received from disbursement post =>".(string)$send_request->getBody());
-                return response()->json(['message'=>'Successfully initiated payment request. Notification SMS will be sent once complete'],Response::HTTP_OK );
-            }
-            else {
+            if (isset($obj->ResponseCode)){
+                if ($obj->ResponseCode == 0) {
+                    $disbursement_request = new MpesaDisbursementRequest();
+                    $disbursement_request->order_id = $order->id;
+                    $disbursement_request->user_id = Auth::id();
+                    $disbursement_request->ResponseDescription = $obj->ResponseDescription;
+                    $disbursement_request->ResponseCode = $obj->ResponseCode;
+                    $disbursement_request->OriginatorConversationID = $obj->OriginatorConversationID;
+                    $disbursement_request->ConversationID = $obj->ConversationID;
+                    $disbursement_request->issued = false;
+                    $disbursement_request->response = $send_request->getBody();
+                    $disbursement_request->save();
+                    Log::info("response received from disbursement post =>".(string)$send_request->getBody());
+                    return response()->json(['message'=>'Successfully initiated payment request. Notification SMS will be sent once complete'],Response::HTTP_OK );
+                }
+                else {
+                    $disbursement_request = new MpesaDisbursementRequest();
+                    $disbursement_request->order_id = $order->id;
+                    $disbursement_request->user_id = Auth::id();
+                    $disbursement_request->ResponseDescription = $obj->ResponseDescription ?? null;
+                    $disbursement_request->ResponseCode = $obj->ResponseCode ?? null;
+                    $disbursement_request->OriginatorConversationID = $obj->OriginatorConversationID ?? null;
+                    $disbursement_request->ConversationID = $obj->ConversationID ?? null;
+                    $disbursement_request->issued = false;
+                    $disbursement_request->response = $send_request->getBody();
+                    $disbursement_request->save();
+                    Log::info("failed response received from disbursement post =>".(string)$send_request->getBody());
+                    return response()->json(['message'=>'Could not complete request at this time. Please again later', 'response'=>$obj],Response::HTTP_OK );
+                }
+            } else {
                 Log::info("failed response received from disbursement post =>".(string)$send_request->getBody());
                 return response()->json(['message'=>'Could not complete request at this time. Please again later', 'response'=>$obj],Response::HTTP_OK );
             }
+
         } catch (BadResponseException $exception) {
             Log::error("guzzle exception => ". (string)$exception->getResponse()->getBody()->getContents());
             return response()->json(['message' => 'There seems to be an error connecting to the MPESA API, Try again later', 'exception'=>$exception->getResponse()->getBody()->getContents()],Response::HTTP_INTERNAL_SERVER_ERROR );
