@@ -61,6 +61,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/raw-materials-requirement-submission/view', [RawMaterialController::class, 'view_raw_material_requirements_submission']);
 
         Route::post('/orders', [OrderController::class, 'list_orders']);
+        Route::post('/orders-view', [OrderController::class, 'view_order']);
         Route::post('/orders-create-new', [OrderController::class, 'create_order']);
         Route::post('/order-reports', [OrderController::class, 'order_reports']);
 

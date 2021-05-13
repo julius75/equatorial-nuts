@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\OrderResource;
 use App\Models\BuyingCenter;
 use App\Models\Order;
 use Carbon\Carbon;
@@ -22,18 +23,47 @@ use Illuminate\Support\Facades\Validator;
 class OrderController extends Controller
 {
     /**
-     * List Buyer Orders (Unrefined)
+     * List Buyer Orders
      * @authenticated
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function list_orders(){
         $orders = Order::query()
-            ->where('user_id', '=', Auth::id())->with(['order_region','order_raw_material'])
-            ->get();
-        return response()->json(['message'=>compact('orders')], Response::HTTP_OK);
+            ->where('user_id', '=', Auth::id())
+            ->where('disbursed', '=', true)
+            ->with(['order_region.region','order_region.buying_center','order_raw_material.raw_material', 'farmer', 'price_list','raw_material_requirement_submissions.raw_material_requirement', 'raw_material_requirement_reviews', 'order_raw_material_inventory_review', 'mpesa_disbursement_transaction'])
+            ->paginate(20);
 
+        return OrderResource::collection($orders);
+
+    }
+
+    /**
+     * List a specific order
+     * @authenticated
+     *
+     * @bodyParam ref_number string required Order Ref Number.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return OrderResource| \Illuminate\Http\JsonResponse
+     */
+    public function view_order(Request $request){
+        $validator = Validator::make($request->all(),
+            [
+                'ref_number'=>'required|exists:orders,ref_number',
+            ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first()], Response::HTTP_BAD_REQUEST);
+        }
+        $order = Order::query()
+            ->where('ref_number', '=', $request->get('ref_number'))
+            ->where('user_id', '=', Auth::id())
+            ->where('disbursed', '=', true)
+            ->with(['order_region.region','order_region.buying_center','order_raw_material.raw_material', 'farmer', 'price_list','raw_material_requirement_submissions.raw_material_requirement', 'raw_material_requirement_reviews', 'order_raw_material_inventory_review', 'mpesa_disbursement_transaction'])
+            ->first();
+        return new OrderResource($order);
     }
 
     /**

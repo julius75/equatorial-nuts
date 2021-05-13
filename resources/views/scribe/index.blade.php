@@ -882,7 +882,7 @@ fetch(url, {
 <label id="auth-POSTapi-v1-user-login-resend-otp" hidden>Authorization header: <b><code>Bearer </code></b><input type="text" name="Authorization" data-prefix="Bearer " data-endpoint="POSTapi-v1-user-login-resend-otp" data-component="header"></label>
 </p>
 </form><h1>Orders</h1>
-<h2>List Buyer Orders (Unrefined)</h2>
+<h2>List Buyer Orders</h2>
 <p><small class="badge badge-darkred">requires authentication</small></p>
 <blockquote>
 <p>Example request:</p>
@@ -927,6 +927,66 @@ fetch(url, {
 <label id="auth-POSTapi-v1-orders" hidden>Authorization header: <b><code>Bearer </code></b><input type="text" name="Authorization" data-prefix="Bearer " data-endpoint="POSTapi-v1-orders" data-component="header"></label>
 </p>
 </form>
+<h2>List a specific order</h2>
+<p><small class="badge badge-darkred">requires authentication</small></p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://localhost/api/v1/orders-view" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"ref_number":"omnis"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/v1/orders-view"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "ref_number": "omnis"
+}
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre>
+<div id="execution-results-POSTapi-v1-orders-view" hidden>
+    <blockquote>Received response<span id="execution-response-status-POSTapi-v1-orders-view"></span>:</blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-orders-view"></code></pre>
+</div>
+<div id="execution-error-POSTapi-v1-orders-view" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-v1-orders-view"></code></pre>
+</div>
+<form id="form-POSTapi-v1-orders-view" data-method="POST" data-path="api/v1/orders-view" data-authed="1" data-hasfiles="0" data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}' onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-orders-view', this);">
+<h3>
+    Request&nbsp;&nbsp;&nbsp;
+        <button type="button" style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-tryout-POSTapi-v1-orders-view" onclick="tryItOut('POSTapi-v1-orders-view');">Try it out ⚡</button>
+    <button type="button" style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-canceltryout-POSTapi-v1-orders-view" onclick="cancelTryOut('POSTapi-v1-orders-view');" hidden>Cancel</button>&nbsp;&nbsp;
+    <button type="submit" style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;" id="btn-executetryout-POSTapi-v1-orders-view" hidden>Send Request 💥</button>
+    </h3>
+<p>
+<small class="badge badge-black">POST</small>
+ <b><code>api/v1/orders-view</code></b>
+</p>
+<p>
+<label id="auth-POSTapi-v1-orders-view" hidden>Authorization header: <b><code>Bearer </code></b><input type="text" name="Authorization" data-prefix="Bearer " data-endpoint="POSTapi-v1-orders-view" data-component="header"></label>
+</p>
+<h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+<p>
+<b><code>ref_number</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+<input type="text" name="ref_number" data-endpoint="POSTapi-v1-orders-view" data-component="body" required  hidden>
+<br>
+Order Ref Number.
+</p>
+
+</form>
 <h2>Store a newly created resource in storage.</h2>
 <p><small class="badge badge-darkred">requires authentication</small></p>
 <blockquote>
@@ -936,7 +996,7 @@ fetch(url, {
     "http://localhost/api/v1/orders-create-new" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"farmer_id":11,"price_list_id":2,"buying_center_id":17,"raw_material_id":12,"bag_type_id":15,"bags":1,"gross_weight":"earum","net_weight":"quas","amount":"officiis","latitude":"dolorem","longitude":"provident"}'
+    -d '{"farmer_id":20,"price_list_id":1,"buying_center_id":14,"raw_material_id":14,"bag_type_id":11,"bags":2,"gross_weight":"et","net_weight":"exercitationem","amount":"illo","latitude":"accusamus","longitude":"culpa"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/orders-create-new"
@@ -948,17 +1008,17 @@ let headers = {
 };
 
 let body = {
-    "farmer_id": 11,
-    "price_list_id": 2,
-    "buying_center_id": 17,
-    "raw_material_id": 12,
-    "bag_type_id": 15,
-    "bags": 1,
-    "gross_weight": "earum",
-    "net_weight": "quas",
-    "amount": "officiis",
-    "latitude": "dolorem",
-    "longitude": "provident"
+    "farmer_id": 20,
+    "price_list_id": 1,
+    "buying_center_id": 14,
+    "raw_material_id": 14,
+    "bag_type_id": 11,
+    "bags": 2,
+    "gross_weight": "et",
+    "net_weight": "exercitationem",
+    "amount": "illo",
+    "latitude": "accusamus",
+    "longitude": "culpa"
 }
 
 fetch(url, {
@@ -1066,7 +1126,7 @@ Current Longitude.
     "http://localhost/api/v1/order-reports" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"period":"nemo","month":"quisquam","year":"doloremque"}'
+    -d '{"period":"nostrum","month":"alias","year":"temporibus"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/v1/order-reports"
@@ -1078,9 +1138,9 @@ let headers = {
 };
 
 let body = {
-    "period": "nemo",
-    "month": "quisquam",
-    "year": "doloremque"
+    "period": "nostrum",
+    "month": "alias",
+    "year": "temporibus"
 }
 
 fetch(url, {

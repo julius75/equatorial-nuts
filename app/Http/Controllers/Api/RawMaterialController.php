@@ -57,9 +57,9 @@ class RawMaterialController extends Controller
             })->with(['currentPrice:id,raw_material_id,region_id,amount,value,unit,date,approved_at,created_at'])
             ->first();
         if ($raw_material){
-            return response()->json(['message'=> compact('raw_material', 'get_current_assignment')], Response::HTTP_OK);
+            return response()->json(['message'=> compact('raw_material')], Response::HTTP_OK);
         }else{
-            return response()->json(['message' =>  'No Raw Material Price has been listed in your region', 'current'=>$get_current_assignment], Response::HTTP_UNAUTHORIZED);
+            return response()->json(['message' =>  'No Raw Material Price has been listed in your region'], Response::HTTP_UNAUTHORIZED);
         }
 
     }
