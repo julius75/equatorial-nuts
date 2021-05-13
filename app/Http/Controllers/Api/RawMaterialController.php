@@ -52,14 +52,15 @@ class RawMaterialController extends Controller
             return response()->json(['message'=> 'You are yet to be assigned to a region/raw material contact Admin'], Response::HTTP_BAD_REQUEST);
 
         $raw_materials = RawMaterial::query()
+            ->where('id', '=', $get_current_assignment->raw_material_id)
             ->whereHas('currentPrice',function ($q) use ($get_current_assignment){
                 $q->where('region_id', '=', $get_current_assignment->region_id);
-            })->with(['currentPrice:id,raw_material_id,region_id,amount,amount,value,unit,date,approved_at,created_at'])
-            ->find($get_current_assignment->raw_material_id);
+            })->with(['currentPrice:id,raw_material_id,region_id,amount,value,unit,date,approved_at,created_at'])
+            ->first();
         if ($raw_materials){
-            return response()->json(['message'=> compact('raw_materials')], Response::HTTP_OK);
+            return response()->json(['message'=> compact('raw_materials', 'get_current_assignment')], Response::HTTP_OK);
         }else{
-            return response()->json(['message' =>  'You are yet to be assigned to a region/raw material contact admin for support'], Response::HTTP_UNAUTHORIZED);
+            return response()->json(['message' =>  'No Raw Material Price has been listed in your region'], Response::HTTP_UNAUTHORIZED);
         }
 
     }
