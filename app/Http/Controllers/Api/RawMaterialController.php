@@ -49,14 +49,13 @@ class RawMaterialController extends Controller
             ->where('user_id', '=', $buyer->id)
             ->first();
         if (!$get_current_assignment)
-            return response()->json(['message'=> 'You are yet to be assigned to a region, contact Admin'], Response::HTTP_BAD_REQUEST);
+            return response()->json(['message'=> 'You are yet to be assigned to a region/raw material contact Admin'], Response::HTTP_BAD_REQUEST);
 
         $raw_materials = RawMaterial::query()
-            ->find($get_current_assignment->raw_material_id)
             ->whereHas('currentPrice',function ($q) use ($get_current_assignment){
                 $q->where('region_id', '=', $get_current_assignment->region_id);
             })->with(['currentPrice:id,raw_material_id,region_id,amount,amount,value,unit,date,approved_at,created_at'])
-            ->first();
+            ->find($get_current_assignment->raw_material_id);
         if ($raw_materials){
             return response()->json(['message'=> compact('raw_materials')], Response::HTTP_OK);
         }else{
