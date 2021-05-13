@@ -174,97 +174,166 @@
                             <div class="card-title">
                                 <h3 class="card-label">Order Quality Submission Overview</h3>
                             </div>
+                            <div class="card-toolbar">
+                                @hasanyrole('admin|general_management')
+                                <!--begin::Button-->
+                                <a href="{{ route('admin.order-quality-management.view-review', $order->ref_number) }}" type="button" class="btn btn-secondary  font-weight-bolder">
+                            <span class="svg-icon svg-icon-md">
+                                <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <rect x="0" y="0" width="24" height="24" />
+                                        <circle fill="#000000" cx="9" cy="15" r="6" />
+                                        <path d="M8.8012943,7.00241953 C9.83837775,5.20768121 11.7781543,4 14,4 C17.3137085,4 20,6.6862915 20,10 C20,12.2218457 18.7923188,14.1616223 16.9975805,15.1987057 C16.9991904,15.1326658 17,15.0664274 17,15 C17,10.581722 13.418278,7 9,7 C8.93357256,7 8.86733422,7.00080962 8.8012943,7.00241953 Z" fill="#000000" opacity="0.3" />
+                                    </g>
+                                </svg>
+                                <!--end::Svg Icon-->
+                            </span>View Details
+                                </a>
+                                <!--end::Button-->
+                                @endhasanyrole
+                            </div>
+
                         </div>
                         <div class="card-body">
-                            <canvas id="orderQualitySubmissionsChart" width="100%" height="45"></canvas>
+                            <canvas id="orderQualitySubmissionsChart" width="100%" height="50%"></canvas>
                         </div>
                     </div>
 
                     <div class="mt-5 card card-custom">
                         <div class="card-header flex-wrap border-0 pt-6 pb-0">
                             <div class="card-title">
-                                <h3 class="card-label">Order Quality Requirement Submission</h3>
+                                <h3 class="card-label">Order Inventory Submission Overview</h3>
+                            </div>
+                            <div class="card-toolbar">
+                                @hasanyrole('admin|general_management')
+                                <!--begin::Button-->
+                                <a href="{{ route('admin.order-inventory-management.view-review', $order->ref_number) }}" type="button" class="btn btn-secondary  font-weight-bolder">
+                            <span class="svg-icon svg-icon-md">
+                                <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <rect x="0" y="0" width="24" height="24" />
+                                        <circle fill="#000000" cx="9" cy="15" r="6" />
+                                        <path d="M8.8012943,7.00241953 C9.83837775,5.20768121 11.7781543,4 14,4 C17.3137085,4 20,6.6862915 20,10 C20,12.2218457 18.7923188,14.1616223 16.9975805,15.1987057 C16.9991904,15.1326658 17,15.0664274 17,15 C17,10.581722 13.418278,7 9,7 C8.93357256,7 8.86733422,7.00080962 8.8012943,7.00241953 Z" fill="#000000" opacity="0.3" />
+                                    </g>
+                                </svg>
+                                <!--end::Svg Icon-->
+                            </span>View Details
+                                </a>
+                                <!--end::Button-->
+                                @endhasanyrole
                             </div>
                         </div>
                         <div class="card-body">
-                            <table class="table table-bordered table-hover table-checkable mt-10" id="kt_datatable" style="margin-top: 13px !important">
-                                <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Parameter</th>
-                                    <th>Type</th>
-                                    <th>Value</th>
-                                    <th>Required Value</th>
-                                    <th>Submitted Value</th>
-                                    <th>Time Posted</th>
-                                </tr>
-                                </thead>
-                            </table>
+                            <canvas id="orderInventorySubmissionsChart" width="100%" height="50%"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-xl-4 col-md-4">
-
-                </div>
-            </div>
-
         </div>
     </div>
     <!--end::Row-->
 @endsection
 @section('scripts')
+    <script src="{{asset('assets/js/charts/Chart.min.js')}}"></script>
     <script>
-        'use strict';
-        var KTDatatablesDataSourceAjaxClient = function() {
-            var initTable1 = function() {
-                var table = $('#kt_datatable');
-                // begin first table
-                table.DataTable({
-                    dom: 'Bfrtip',
-                    buttons: [{extend: 'copyHtml5'}, {
-                        extend: 'excelHtml5',
-                        exportOptions: {columns: ':visible'},
-                    },
-                        {
-                            extend: 'pdfHtml5',
-                            exportOptions: {columns: ':visible'},
-                            orientation: 'landscape',
-                            pageSize: 'TABLOID'
-                        },
-                        'colvis','pageLength'],
-                    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-                    responsive: true,
-                    processing: true,
-                    serverSide: true,
-                    ajax: {
-                        url: '{{route('admin.get-order-raw-material-requirement-submissions', $order->ref_number)}}',
-                        type: 'GET',
-                    },
-                    columns: [
-                        {data: 'id', name: 'id'},
-                        {data: 'active_raw_material_requirement.parameter', name: 'parameter'},
-                        {data: 'active_raw_material_requirement.type', name: 'type'},
-                        {data: 'active_raw_material_requirement.value', name: 'value'},
-                        {data: 'active_raw_material_requirement.requirement', name: 'requirement'},
-                        {data: 'value', name: 'value'},
-                        {data: 'created_at', name: 'created_at'},
-                        // {data: 'action', name: 'action'},
-                    ],
-                    columnDefs: [],
-                });
-            };
-            return {
-                //main function to initiate the module
-                init: function() {
-                    initTable1();
+        ( function ( $ ) {
+            var inventoryChart = {
+                init: function () {
+                    // -- Set new default font family and font color to mimic Bootstrap's default styling
+                    Chart.defaults.global.defaultFontFamily = 'Poppins';
+                    Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+                    Chart.defaults.global.defaultFontColor = '#292b2c';
+                    this.inventoryChartData();
                 },
+
+                inventoryChartData: function () {
+                    var data_array = <?php echo $raw_material_inventory_submissions_data ; ?>;
+                    console.log( data_array );
+                    inventoryChart.createInventoryChart( data_array );
+                },
+
+                /**
+                 * Created the Completed Payments Chart
+                 */
+                createInventoryChart: function ( data_array ) {
+                    var ctx = document.getElementById("orderInventorySubmissionsChart");
+                    var myLineChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: data_array.labels, // The response got from the ajax request containing all month names in the database
+                            datasets: [
+                                {
+                                    label: "Buyer Submission",
+                                    type: 'bar',
+                                    lineTension: 0.3,
+                                    backgroundColor: "rgba(219,141,13, 0.9)",
+                                    borderColor: "rgba(244,176,64,0.9)",
+                                    pointBorderColor: "#fff",
+                                    pointBackgroundColor: "rgba(219,141,13, 0.9)",
+                                    pointRadius: 5,
+                                    pointHoverRadius: 5,
+                                    pointHoverBackgroundColor: "rgba(219,141,13, 0.9)",
+                                    pointHitRadius: 20,
+                                    pointBorderWidth: 2,
+                                    yAxisID: 'A',
+                                    data: data_array.submitted_values // The response got from the ajax request containing data for the completed jobs in the corresponding months
+                                },
+                                {
+                                    label: "Inventory Manager Submissions",
+                                    type: 'bar',
+                                    lineTension: 0.3,
+                                    backgroundColor: "rgba(162,31,37, 0.9)",
+                                    borderColor: "rgba(162,31,37, 0.9)",
+                                    pointRadius: 5,
+                                    pointBackgroundColor: "rgba(171,53,58, 0.9)",
+                                    pointBorderColor: "rgba(255,255,255,0.9)",
+                                    pointHoverRadius: 5,
+                                    pointHoverBackgroundColor: "rgba(171,53,58, 0.9)",
+                                    pointHitRadius: 20,
+                                    pointBorderWidth: 2,
+                                    yAxisID: 'A',
+                                    data: data_array.evaluation_values // The response got from the ajax request containing data for the completed jobs in the corresponding months
+                                }
+
+                            ],
+                        },
+                        options: {
+                            scales: {
+                                xAxes: [{
+                                    time: {
+                                        unit: 'string'
+                                    },
+                                    gridLines: {
+                                        display: true
+                                    },
+                                    ticks: {
+                                        maxTicksLimit: 7
+                                    }
+                                }],
+                                yAxes: [{
+                                    id:'A',
+                                    position: 'left',
+                                    ticks: {
+                                        min: 0,
+                                        max: data_array.max_value, // The response got from the ajax request containing max limit for y axis
+                                        maxTicksLimit: 5
+                                    },
+                                    gridLines: {
+                                        display:true
+                                    }
+                                }],
+                            },
+                            legend: {
+                                display: true
+                            }
+                        }
+                    });
+                }
             };
-        }();
-        jQuery(document).ready(function() {
-            KTDatatablesDataSourceAjaxClient.init();
-        });
+            inventoryChart.init();
+        } )( jQuery );
     </script>
     <script>
         'use strict';
@@ -395,7 +464,7 @@
         google.maps.event.addDomListener(window, 'load', initialize);
     </script>
     @endif
-    <script src="{{asset('assets/js/charts/Chart.min.js')}}"></script>
+
     <script>
         ( function ( $ ) {
             var repaymentsChart = {

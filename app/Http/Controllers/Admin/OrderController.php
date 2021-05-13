@@ -245,6 +245,7 @@ class OrderController extends Controller
         $data['page_title'] = $order->ref_number;
         $data['page_description'] = "Order Details";
         $data['raw_material_requirement_submissions_data'] = $this->get_order_raw_material_requirement_submissions_graph($order->ref_number);
+        $data['raw_material_inventory_submissions_data'] = (new InventoryController())->get_order_raw_material_requirement_inventory_graph($order->ref_number);
 //        echo $data['raw_material_requirement_submissions_data'];die();
         return view('admin.orders.show', $data);
     }
