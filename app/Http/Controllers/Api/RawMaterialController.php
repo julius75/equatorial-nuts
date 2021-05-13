@@ -9,6 +9,7 @@ use App\Models\RawMaterialRequirementSubmission;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 /**
@@ -43,15 +44,25 @@ class RawMaterialController extends Controller
     public function fetch_price()
     {
         $buyer = Auth::user();
-        $buyerRegion = $buyer->current_region();
-        if (!$buyerRegion)
+        $get_current_assignment = DB::table('region_users')
+            ->where('current', '=', true)
+            ->where('user_id', '=', $buyer->id)
+            ->first();
+        if (!$get_current_assignment)
             return response()->json(['message'=> 'You are yet to be assigned to a region, contact Admin'], Response::HTTP_BAD_REQUEST);
 
         $raw_materials = RawMaterial::query()
-            ->whereHas('currentPrice',function ($q) use ($buyerRegion){
-                $q->where('region_id', '=', $buyerRegion->id);
-            })->with(['currentPrice:id,raw_material_id,region_id,amount,amount,value,unit,date,approved_at,created_at'])->get();
-        return response()->json(['message'=> compact('raw_materials')], Response::HTTP_OK);
+            ->find($get_current_assignment->raw_material_id)
+            ->whereHas('currentPrice',function ($q) use ($get_current_assignment){
+                $q->where('region_id', '=', $get_current_assignment->region_id);
+            })->with(['currentPrice:id,raw_material_id,region_id,amount,amount,value,unit,date,approved_at,created_at'])
+            ->first();
+        if ($raw_materials){
+            return response()->json(['message'=> compact('raw_materials')], Response::HTTP_OK);
+        }else{
+            return response()->json(['message' =>  'You are yet to be assigned to a region/raw material contact admin for support'], Response::HTTP_UNAUTHORIZED);
+        }
+
     }
 
     /**

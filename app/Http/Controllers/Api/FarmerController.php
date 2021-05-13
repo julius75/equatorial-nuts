@@ -7,9 +7,13 @@ use App\Http\Resources\FarmerResource;
 use App\Jobs\SendSMS;
 use App\Models\Farmer;
 use App\Models\FarmerVerificationCode;
+use App\Models\RawMaterial;
+use App\Models\Region;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 /**
@@ -25,15 +29,31 @@ class FarmerController extends Controller
      * Display a listing of the resource.
      * @authenticated
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection|\Illuminate\Http\JsonResponse|
+
      */
     public function index()
     {
-        $farmers = Farmer::with(['region:id,name','raw_materials:id,name'])
-            ->where('status', '=', true)
-            ->orderByDesc('created_at')
-            ->paginate(20);
-        return FarmerResource::collection($farmers);
+        $buyer = Auth::user();
+        $get_current_assignment = DB::table('region_users')
+            ->where('current', '=', true)
+            ->where('user_id', '=', $buyer->id)
+            ->first();
+        if ($get_current_assignment) {
+            $farmers = Farmer::with(['region:id,name','raw_materials:id,name'])
+                ->where('status', '=', true)
+                ->where('region_id', '=', $get_current_assignment->region_id)
+                ->whereHas('raw_materials', function ($q) use($get_current_assignment){
+                    $q->where('raw_material_id', '=', $get_current_assignment->raw_material_id);
+                })
+                ->orderByDesc('created_at')
+                ->paginate(20);
+
+            return FarmerResource::collection($farmers);
+
+        }else {
+            return response()->json(['message' =>  'You are yet to be assigned to a region/raw material contact admin for support'], Response::HTTP_UNAUTHORIZED);
+        }
     }
 
     /**
