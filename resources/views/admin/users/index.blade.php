@@ -10,6 +10,7 @@
                 <h3 class="card-label">Buyers
                 </h3>
             </div>
+            @role('admin')
             <div class="card-toolbar">
                 <!--begin::Button-->
                 <a href="{{ route('admin.app-users.create') }}" type="button" class="btn btn-primary font-weight-bolder">
@@ -27,6 +28,7 @@
                 </a>
                 <!--end::Button-->
             </div>
+            @endrole
         </div>
         <div class="card-body">
             <!--begin: Datatable-->

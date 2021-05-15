@@ -10,6 +10,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -147,16 +148,12 @@ class AdminController extends Controller
      */
     public function show($id)
     {
-        try {
         $id = Crypt::decrypt($id);
-        $user = Admin::findOrFail($id);
-           $role = $user->roles->first()->name;
+        $user = Admin::query()->findOrFail($id);
+        $role = $user->roles->first()->name;
        return view('admin.users.show-admin',compact('user','role'));
-            }
-    catch (ModelNotFoundException $e) {
-        return $e;
-         }
     }
+
     public function statusUpdate(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -165,17 +162,21 @@ class AdminController extends Controller
         if ($validator->fails()) {
             return back()->with('error', 'User Not Found');
         }
-
         try {
-            $user = Admin::findOrFail($id);
-            $user->status = $request->status;
-            $user->save();
-            return redirect()->route('admin.app-admins.index')->with('message', 'User Status Updated successfully');
+            $user = Admin::query()->findOrFail($id);
+            if ($user->id == Auth::id()) {
+                return Redirect::route('admin.app-admins.index')->with('message', 'You are not permitted to suspend yourself');
+            }else {
+                $user->status = $request->status;
+                $user->save();
+                return Redirect::route('admin.app-admins.index')->with('message', 'User Status Updated successfully');
+            }
         }
         catch (ModelNotFoundException $e) {
             return back()->with('error', 'Error Try Again...');
         }
     }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -184,15 +185,10 @@ class AdminController extends Controller
      */
     public function edit($id)
     {
-        try {
-            $id = Crypt::decrypt($id);
-            $user = Admin::findOrFail($id);
-            return view('admin.users.edit-admin-user',compact('user'));
-        } catch (ModelNotFoundException $e) {
-            return $e;
-        }
+        $id = Crypt::decrypt($id);
+        $user = Admin::query()->findOrFail($id);
+        return view('admin.users.edit-admin-user', compact('user'));
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -219,22 +215,19 @@ class AdminController extends Controller
         try {
 
             $admin = Admin::findOrFail($id);
-
             $admin->name = $request->name;
             $admin->username = $request->username;
             $admin->email = $request->email;
             $admin->phone_number = $request->name;
             $admin->password = Hash::make($request->password);
-           $admin->updated_at = Carbon::now();
-
+            $admin->updated_at = Carbon::now();
             $admin->save();
-            return redirect()->route('admin.app-admins.index')->with('flash_success', 'Admin Updated successfully');
+            return redirect()->route('admin.app-admins.index')->with('success', 'Admin Updated successfully');
         }
         catch (ModelNotFoundException $e) {
-            return back()->with('flash_error', 'Admin Record Not Found');
+            return back()->with('error', 'Admin Record Not Found');
         }
     }
-
     /**
      * Remove the specified resource from storage.
      *

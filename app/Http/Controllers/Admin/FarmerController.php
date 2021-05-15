@@ -17,6 +17,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
@@ -26,16 +27,20 @@ class FarmerController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:admin');
+        $this->middleware('role:admin')
+            ->only(['create', 'store', 'edit', 'update']);
 
     }
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function index()
     {
+        if (!Auth::user()->hasRole(['general_management','management', 'admin'])) {
+            return abort(403);
+        }
         $regions = Region::all();
         return view('admin.farmers.index',compact('regions'));
     }
@@ -43,37 +48,61 @@ class FarmerController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create()
     {
         $regions = Region::all();
         $materials = RawMaterial::all();
-
         return view('admin.farmers.create',compact('regions','materials'));
     }
 
     public function getAdminFarmers(Request $request)
     {
+        $user = Auth::user();
         //region specified
         if($request->region_id != "all") {
             $data = Farmer::with(['region:id,name','raw_materials:id,name'])
                 ->whereHas('region', function( $query ) use ( $request ){
-                $query->where('region_id', $request->region_id);
-            })
+                    $query->where('region_id', $request->region_id);
+                })
                 ->orderByDesc('created_at')->get();
         }
         //default
         else {
             $data = Farmer::with(['region:id,name','raw_materials:id,name'])
-               ->orderByDesc('created_at')->get();
+                ->orderByDesc('created_at')->get();
         }
-        return Datatables::of($data)
-            ->addColumn('region', function ($users){
-                return $users->region->name;
-            })
-            ->addColumn('action', function ($users) {
-                return '<div class="dropdown dropdown-inline">
+
+        if ($user->hasRole(['general_management','management'])) {
+            return Datatables::of($data)
+                ->addColumn('region', function ($users){
+                    return $users->region->name;
+                })
+                ->addColumn('action', function ($users) {
+                    return '<div class="dropdown dropdown-inline">
+								<a href="" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">
+	                                <i class="la la-cog"></i>
+	                            </a>
+							  	<div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+									<ul class="nav nav-hoverable flex-column">
+							    		<li class="nav-item"><a class="nav-link" href="'.route('admin.app-farmers.show',Crypt::encrypt($users->id)).'"><i class="nav-icon la la-user"></i><span class="nav-text">View Farmer Details</span></a></li>
+							    		<li class="btn btn-light font-size-sm mr-5"data-toggle="modal"data-target="#smallModal" id="smallButton"><i class="nav-icon la la-sync-alt"></i><span class="nav-text">Update Status</span></li>
+							    	</ul>
+							  	</div>
+							</div>
+
+						';
+                })
+                ->make(true);
+        }
+        else {
+            return Datatables::of($data)
+                ->addColumn('region', function ($users){
+                    return $users->region->name;
+                })
+                ->addColumn('action', function ($users) {
+                    return '<div class="dropdown dropdown-inline">
 								<a href="" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">
 	                                <i class="la la-cog"></i>
 	                            </a>
@@ -87,8 +116,10 @@ class FarmerController extends Controller
 							</div>
 
 						';
-            })
-            ->make(true);
+                })
+                ->make(true);
+        }
+
     }
 
     /**

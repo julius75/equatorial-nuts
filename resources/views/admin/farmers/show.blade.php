@@ -54,9 +54,11 @@
                         </div>
                         <!--end::Description-->
                         <div class="my-lg-0 my-1">
-                            <a class="mb-3 btn  btn-sm  btn-warning font-weight-bolder text-uppercase" href="{{route('admin.app-farmers.edit', \Illuminate\Support\Facades\Crypt::encrypt($farmer->id))}}">
-                                Edit Farmer Details
-                            </a>
+                            @role('admin')
+                                <a class="mb-3 btn  btn-sm  btn-warning font-weight-bolder text-uppercase" href="{{route('admin.app-farmers.edit', \Illuminate\Support\Facades\Crypt::encrypt($farmer->id))}}">
+                                    Edit Farmer Details
+                                </a>
+                            @endrole
                             <br>
                             @if($farmer->status == true)
                                 <span class="btn btn-sm btn-success font-weight-bolder text-uppercase" disabled>Farmer status: Active</span>

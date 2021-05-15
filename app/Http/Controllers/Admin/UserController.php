@@ -35,7 +35,7 @@ class UserController extends Controller
 
     public function __construct()
     {
-      $this->middleware('auth:admin');
+        $this->middleware('role:admin')->only(['create', 'store', 'edit', 'update']);
 
     }
 
@@ -56,10 +56,32 @@ class UserController extends Controller
      */
     public function getUsers()
     {
+        $user = Auth::user();
         $users = User::role('buyer')->get();
-        return Datatables::of($users)
-            ->addColumn('action', function ($users) {
-                return '<div class="dropdown dropdown-inline">
+        if ($user->hasRole(['admin','general_management'])) {
+            return Datatables::of($users)
+                ->addColumn('action', function ($users) {
+                    return '<div class="dropdown dropdown-inline">
+								<a href="" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">
+	                                <i class="la la-cog"></i>
+	                            </a>
+							  	<div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+									<ul class="nav nav-hoverable flex-column">
+							    		<li class="nav-item"><a class="nav-link" href="'.route('admin.app-users.show',Crypt::encrypt($users->id)).'"><i class="nav-icon la la-user"></i><span class="nav-text">View User Details</span></a></li>
+							    		<li class="nav-item"><a class="nav-link" href="'.route('admin.view-buyer-assignments',Crypt::encrypt($users->id)).'"><i class="nav-icon la la-address-book"></i><span class="nav-text">View Assignments</span></a></li>
+							    		<li class="btn btn-light font-size-sm mr-5"data-toggle="modal"data-target="#smallModal" id="smallButton"><i class="nav-icon la la-sync-alt"></i><span class="nav-text">Update Status</span></li>
+							    	</ul>
+							  	</div>
+							</div>
+
+						';
+                })
+                ->make(true);
+        }
+        else {
+            return Datatables::of($users)
+                ->addColumn('action', function ($users) {
+                    return '<div class="dropdown dropdown-inline">
 								<a href="" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">
 	                                <i class="la la-cog"></i>
 	                            </a>
@@ -68,14 +90,14 @@ class UserController extends Controller
 							    		<li class="nav-item"><a class="nav-link" href="'.route('admin.app-users.show',Crypt::encrypt($users->id)).'"><i class="nav-icon la la-user"></i><span class="nav-text">View User Details</span></a></li>
 							    		<li class="nav-item"><a class="nav-link" href="'.route('admin.app-users.edit',Crypt::encrypt($users->id)).'"><i class="nav-icon la la-edit"></i><span class="nav-text">Edit Details</span></a></li>
 							    		<li class="nav-item"><a class="nav-link" href="'.route('admin.view-buyer-assignments',Crypt::encrypt($users->id)).'"><i class="nav-icon la la-address-book"></i><span class="nav-text">View Assignments</span></a></li>
-							    		<li class="btn btn-light font-size-sm mr-5"data-toggle="modal"data-target="#smallModal" id="smallButton"><i class="nav-icon la la-sync-alt"></i><span class="nav-text">Update Status</span></li>
 							    	</ul>
 							  	</div>
 							</div>
 
 						';
-            })
-            ->make(true);
+                })
+                ->make(true);
+        }
     }
 
     /**

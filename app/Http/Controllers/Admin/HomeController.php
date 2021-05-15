@@ -28,12 +28,14 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        if (Auth::user()->hasRole('quality_management')){
+        $user = Auth::user();
+        if ($user->hasRole('quality_management')){
             return Redirect::route('admin.order-quality-management.index');
         }
-        elseif (Auth::user()->hasRole('inventory')) {
+        elseif ($user->hasRole('inventory')) {
             return Redirect::route('admin.order-inventory-management.index');
-        }else {
+        }
+        elseif ($user->hasAnyRole(['general_management','management','admin'])) {
             $data['user'] = Auth::guard('admin')->user();
             $data['first_letter'] = ucfirst(substr($data['user']->first_name, 0, 1));
             $data['page_title'] = 'Dashboard';
@@ -54,13 +56,13 @@ class HomeController extends Controller
                 }catch (\Exception $e){
                     return Redirect::back()->with('warning', 'Invalid Region has been submitted, refresh page and try again');
                 }
+
                 $complete_orders_amount = Order::query()
-                    ->whereHas('order_region', function ($q) use ($region){
+                    ->whereHas('order_region', function ($q) use ($region) {
                         $q->where('region_id', '=', $region->id);
                     })
                     ->where('orders.disbursed', '=', true)
                     ->sum('orders.amount');
-
                 $data['page_description'] = "Specified Region: $region->name";
                 $data['farmersCount'] = $region->farmers()->count();
                 $data['buyingCentersCount'] = $region->buying_centers()->count();
@@ -70,6 +72,7 @@ class HomeController extends Controller
                 $data['monthly_payments_data_array'] = $this->paymentsChartData($request);
             }
             else {
+
                 $data['page_description'] = 'Stats for all the registered ENP Regions';
                 $data['farmersCount'] = count($farmers);
                 $data['buyingCentersCount'] = BuyingCenter::all()->count();
@@ -80,6 +83,9 @@ class HomeController extends Controller
 
             }
             return view('admin.dashboard', $data);
+        }
+        else{
+            abort(403);
         }
     }
 

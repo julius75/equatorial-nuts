@@ -16,6 +16,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -27,7 +28,7 @@ class RegionController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:admin');
+        $this->middleware('role:admin');
 
     }
     /**
@@ -42,20 +43,51 @@ class RegionController extends Controller
 
     public function getAdminRegions()
     {
-        $users = Region::with(['county:id,name', 'sub_county:id,name','buying_centers'])
-            ->orderByDesc('created_at')->get();
-        return Datatables::of($users)
-            ->addColumn('county', function ($users){
-                return $users->county->name;
-            })
-            ->addColumn('sub_county', function ($users){
-                return $users->sub_county->name;
-            })
-            ->editColumn('buying_center_count', function ($users){
-                return $users->buying_centers->count() ?? '--';
-            })
-            ->addColumn('action', function ($users) {
-                return '<div class="dropdown dropdown-inline">
+        $user = Auth::user();
+        if ($user->hasRole(['general_management','management'])) {
+            $users = Region::with(['county:id,name', 'sub_county:id,name','buying_centers'])
+                ->orderByDesc('created_at')->get();
+            return Datatables::of($users)
+                ->addColumn('county', function ($users){
+                    return $users->county->name;
+                })
+                ->addColumn('sub_county', function ($users){
+                    return $users->sub_county->name;
+                })
+                ->editColumn('buying_center_count', function ($users){
+                    return $users->buying_centers->count() ?? '--';
+                })
+                ->addColumn('action', function ($users) {
+                    return '<div class="dropdown dropdown-inline">
+								<a href="" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">
+	                                <i class="la la-cog"></i>
+	                            </a>
+							  	<div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+									<ul class="nav nav-hoverable flex-column">
+							    		<li class="nav-item"><a class="nav-link" href="'.route('admin.app-regions.show',Crypt::encrypt($users->id)).'"><i class="nav-icon la la-user"></i><span class="nav-text">View Region Details</span></a></li>
+							    	</ul>
+							  	</div>
+							</div>
+
+						';
+                })
+                ->make(true);
+        }
+        else{
+            $users = Region::with(['county:id,name', 'sub_county:id,name','buying_centers'])
+                ->orderByDesc('created_at')->get();
+            return Datatables::of($users)
+                ->addColumn('county', function ($users){
+                    return $users->county->name;
+                })
+                ->addColumn('sub_county', function ($users){
+                    return $users->sub_county->name;
+                })
+                ->editColumn('buying_center_count', function ($users){
+                    return $users->buying_centers->count() ?? '--';
+                })
+                ->addColumn('action', function ($users) {
+                    return '<div class="dropdown dropdown-inline">
 								<a href="" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">
 	                                <i class="la la-cog"></i>
 	                            </a>
@@ -68,8 +100,10 @@ class RegionController extends Controller
 							</div>
 
 						';
-            })
-            ->make(true);
+                })
+                ->make(true);
+        }
+
     }
 
     /**
@@ -81,7 +115,7 @@ class RegionController extends Controller
     {
         $regions = Region::all();
         $materials = RawMaterial::all();
-        $departmentData = County::orderby("name","asc")->select('id','name')->get();
+        $departmentData = County::query()->orderby("name","asc")->select('id','name')->get();
         $sub_county = SubCounty::all();
         return view('admin.regions.create',compact('regions','materials','sub_county','departmentData'));
     }
