@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\MpesaDisbursementRequest;
+use App\Models\MpesaDisbursementTransaction;
 use App\Models\Order;
 use App\Models\OrderRegion;
 use App\Models\RawMaterial;
@@ -11,17 +13,87 @@ use App\Models\RawMaterialRequirementSubmission;
 use App\Models\Region;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 class OrderController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:admin')
+            ->only(['order_disbursement_reconciliation', 'get_order_disbursement_reconciliation', 'order_disbursement_reconciliation_form']);
+
+    }
     public function index()
     {
         $data['regions'] = Region::all();
         $data['raw_materials'] = RawMaterial::all();
         $data['buyers'] = User::query()->where('status', '=', true)->get();
         return view('admin.orders.index', $data);
+    }
+
+    public function order_disbursement_reconciliation()
+    {
+        $data['regions'] = Region::all();
+        $data['raw_materials'] = RawMaterial::all();
+        $data['buyers'] = User::query()->where('status', '=', true)->get();
+        return view('admin.orders.order_disbursement_reconciliation', $data);
+    }
+
+    public function order_disbursement_reconciliation_form($ref_number)
+    {
+        $order = Order::query()->where('ref_number', '=', $ref_number)->firstOrFail();
+        if ($order->disbursed == true){
+            return Redirect::back()->with('warning', "Order $ref_number has already been marked as Disbursed");
+        }
+        $data['order'] = $order;
+        return view('admin.orders.reconcile_form', $data);
+    }
+
+    public function order_reconciliation_post(Request $request, $ref_number){
+        $validator = Validator::make($request->all(), [
+            'date_disbursed' => 'required|date',
+            'transaction_receipt' => 'required|unique:mpesa_disbursement_transactions,transaction_receipt',
+            'channel' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return Redirect::back()->withErrors($validator)->withInput()->with('error', $validator->errors()->first());
+        }
+        $order = Order::query()->where('ref_number', '=', $ref_number)->first();
+        if(!$order){
+            return Redirect::back()->withInput()->with('error', "Order $ref_number Not Found!");
+        }
+        if ($order->disbursed == true){
+            return Redirect::back()->withInput()->with('warning', "Order $ref_number was already marked as disbursed");
+        }
+        DB::beginTransaction();
+        try {
+            $transaction = new MpesaDisbursementTransaction();
+            $transaction->order_id = $order->id;
+            $transaction->transaction_receipt = $request->get('transaction_receipt');
+            $transaction->amount = $order->amount;
+            $transaction->channel = $request->get('channel');
+            $transaction->disbursed_at = $request->get('date_disbursed');
+            $transaction->save();
+
+            $order->update([
+                "disbursed" => true,
+                "completed" => true,
+                "disbursed_at"=> $request->get('date_disbursed')
+            ]);
+
+            $disbursement_request = MpesaDisbursementRequest::query()->where('order_id', '=', $order->id)->first();
+            if ($disbursement_request){
+                $disbursement_request->update(['issued'=>true]);
+            }
+            DB::commit();
+            return Redirect::route('admin.orders.show', $order->ref_number)->with('success', "$order->ref_number has been reconciled successfully");
+        }catch (\Exception $exception){
+            return Redirect::back()->with('error', "$order->ref_number reconciliation failed, refresh page and try again");
+        }
     }
 
     public function map(Request $request)
@@ -219,6 +291,136 @@ class OrderController extends Controller
                             <i class="flaticon2-pie-chart"></i> View
                         </a>
 						';
+            })
+            ->make(true);
+    }
+
+    public function get_order_disbursement_reconciliation(Request $request)
+    {
+        //region specified rest are "all"
+        if ($request->region_id and $request->region_id != "all" and $request->buyer_id == "all" and $request->raw_material_id == "all"){
+            $data = Order::query()
+                ->where(['disbursed'=> false, 'completed'=> false])
+                ->whereHas('mpesa_disbursement_request', function ($q) use ($request){
+                    $q->where('issued', '=', false);
+                })
+                ->whereHas('order_region', function ($q) use ($request){
+                    $q->where('region_id', '=', $request->region_id);
+                })
+                ->with(['order_region.region', 'order_raw_material.raw_material', 'user'])
+                ->get();
+        }
+        //raw material specified rest are "all"
+        elseif ($request->raw_material_id and $request->raw_material_id != "all" and $request->buyer_id == "all" and $request->region_id == "all"){
+            $data = Order::query()
+                ->where(['disbursed'=> false, 'completed'=> false])
+                ->whereHas('mpesa_disbursement_request', function ($q) use ($request){
+                    $q->where('issued', '=', false);
+                })
+                ->whereHas('order_raw_material', function ($q) use ($request){
+                    $q->where('raw_material_id', '=', $request->raw_material_id);
+                })->with(['order_region.region', 'order_raw_material.raw_material', 'user'])
+                ->get();
+        }
+        //buyer specified
+        elseif ($request->buyer_id and $request->buyer_id != "all" and $request->raw_material_id == "all" and $request->region_id == "all"){
+            $data = Order::query()
+                ->where(['disbursed'=> false, 'completed'=> false])
+                ->whereHas('mpesa_disbursement_request', function ($q) use ($request){
+                    $q->where('issued', '=', false);
+                })
+                ->where('user_id', '=', $request->buyer_id)
+                ->with(['order_region.region', 'order_raw_material.raw_material', 'user'])
+                ->get();
+        }
+        //region and raw material specified
+        elseif ($request->region_id != "all" and $request->raw_material_id != "all" and $request->buyer_id == "all"){
+            $data = Order::query()
+                ->where(['disbursed'=> false, 'completed'=> false])
+                ->whereHas('mpesa_disbursement_request', function ($q) use ($request){
+                    $q->where('issued', '=', false);
+                })
+                ->where(function($q) use($request){
+                    $q->whereHas('order_raw_material', function ($q) use ($request){
+                        $q->where('raw_material_id', '=', $request->raw_material_id);
+                    });
+                    $q->whereHas('order_region', function ($q) use ($request){
+                        $q->where('region_id', '=', $request->region_id);
+                    });
+                })
+                ->with(['order_region.region', 'order_raw_material.raw_material', 'user'])
+                ->get();
+        }
+        //region and buyer specified
+        elseif ($request->region_id != "all" and $request->buyer_id != "all" and $request->raw_material_id == "all"){
+            $data = Order::query()
+                ->where(['disbursed'=> false, 'completed'=> false])
+                ->whereHas('mpesa_disbursement_request', function ($q) use ($request){
+                    $q->where('issued', '=', false);
+                })
+                 ->whereHas('order_region', function ($q) use ($request){
+                     $q->where('region_id', '=', $request->region_id);
+                 })
+                ->where('user_id', '=', $request->buyer_id)
+                ->with(['order_region.region', 'order_raw_material.raw_material', 'user'])
+                ->get();
+        }
+        //raw material and buyer specified
+        elseif ($request->region_id == "all" and $request->buyer_id != "all" and $request->raw_material_id != "all"){
+            $data = Order::query()
+                ->where(['disbursed'=> false, 'completed'=> false])
+                ->whereHas('mpesa_disbursement_request', function ($q) use ($request){
+                    $q->where('issued', '=', false);
+                })
+                ->whereHas('order_raw_material', function ($q) use ($request){
+                    $q->where('raw_material_id', '=', $request->raw_material_id);
+                })
+                ->where('user_id', '=', $request->buyer_id)
+                ->with(['order_region.region', 'order_raw_material.raw_material', 'user'])
+                ->get();
+        }
+        //everything specified
+        elseif ($request->region_id != "all" and $request->buyer_id != "all" and $request->raw_material_id != "all"){
+            $data = Order::query()
+                ->where(['disbursed'=> false, 'completed'=> false])
+                ->whereHas('mpesa_disbursement_request', function ($q) use ($request){
+                    $q->where('issued', '=', false);
+                })
+                ->where(function($q) use($request){
+                    $q->whereHas('order_raw_material', function ($query) use ($request){
+                        $query->where('raw_material_id', '=', $request->raw_material_id);
+                    });
+                    $q->whereHas('order_region', function ($query) use ($request){
+                        $query->where('region_id', '=', $request->region_id);
+                    });
+                })
+                ->where('user_id', '=', $request->buyer_id)
+                ->with(['order_region.region', 'order_raw_material.raw_material', 'user'])
+                ->get();
+        }
+        else{
+            $data = Order::query()
+                ->where(['disbursed'=> false, 'completed'=> false])
+                ->whereHas('mpesa_disbursement_request', function ($q) use ($request){
+                    $q->where('issued', '=', false);
+                })
+                ->with(['order_region.region', 'order_raw_material.raw_material', 'user'])
+                ->get();
+        }
+        return Datatables::of($data)
+            ->addColumn('action', function ($data) {
+                return '
+                <div class="dropdown dropdown-inline">
+								<a href="" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">
+	                                <i class="la la-cog"></i>
+	                            </a>
+							  	<div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+									<ul class="nav nav-hoverable flex-column">
+							    		<li class="nav-item"><a class="nav-link" href="'.route('admin.orders.show', $data->ref_number).'"><i class="nav-icon la la-user"></i><span class="nav-text">View Order Details</span></a></li>
+							    		<li class="nav-item"><a class="nav-link" href="'.route('admin.orders.order_disbursement_reconciliation_form', $data->ref_number).'"><i class="nav-icon la la-folder"></i><span class="nav-text">Reconcile Order</span></a></li>
+							    	</ul>
+							  	</div>
+							</div>';
             })
             ->make(true);
     }

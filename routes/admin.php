@@ -112,7 +112,12 @@ Route::prefix('orders')->group(function () {
     Route::get('/map', [OrderController::class, 'map'])->name('orders.map');
     Route::post('/map', [OrderController::class, 'map'])->name('orders.map.post');
     Route::get('/{ref_number}', [OrderController::class, 'show'])->name('orders.show');
+    Route::get('/{ref_number}', [OrderController::class, 'show'])->name('orders.show');
 });
+Route::get('/order-disbursement-reconciliation', [OrderController::class, 'order_disbursement_reconciliation'])->name('orders.order_disbursement_reconciliation');
+Route::get('/order-disbursement-reconciliation/{ref_number}', [OrderController::class, 'order_disbursement_reconciliation_form'])->name('orders.order_disbursement_reconciliation_form');
+Route::post('/order-disbursement-reconciliation/{ref_number}', [OrderController::class, 'order_reconciliation_post'])->name('orders.reconciliation.post');
+
 
 
 
@@ -151,6 +156,8 @@ Route::prefix('datatables')->group(function () {
     Route::get('get-inventory-management-orders', [InventoryController::class, 'get_orders'])->name('get-inventory-management-orders');
 
     Route::get('get-order-inventory-submissions/{ref_number}', [InventoryController::class, 'get_order_raw_material_inventory_submissions'])->name('get-order-inventory-submissions');
+
+    Route::get('/get-order-disbursement-reconciliation', [OrderController::class, 'get_order_disbursement_reconciliation'])->name('orders.get_order_disbursement_reconciliation');
 
 });
 //charts routes
