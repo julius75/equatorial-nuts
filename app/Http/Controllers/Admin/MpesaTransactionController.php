@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Farmer;
 use App\Models\MpesaDisbursementResponse;
 use App\Models\MpesaDisbursementTransaction;
 use App\Models\Order;
@@ -83,10 +84,15 @@ class MpesaTransactionController extends Controller
 						';
             })
             ->addColumn('mpesa_recipient', function ($data) {
-                return MpesaDisbursementResponse::query()
+                $mpesa_recipient =  MpesaDisbursementResponse::query()
                     ->where('TransactionID', '=', $data->transaction_receipt)
-                    ->first()
-                    ->ReceiverPartyPublicName;
+                    ->first();
+                if ($mpesa_recipient){
+                    return $mpesa_recipient->ReceiverPartyPublicName;
+                } else {
+                    $farmer = Farmer::query()->find($data->order->farmer_id);
+                    return $farmer->phone_number."-".$farmer->full_name;
+                }
             })
             ->addColumn('buyer_details', function ($data) {
                 return  '<a href="'.route('admin.app-users.show', Crypt::encrypt($data->order->user->id)).'" class="text-success font-weight-boldest text-uppercase">
