@@ -33,7 +33,17 @@ class OrderController extends Controller
         $orders = Order::query()
             ->where('user_id', '=', Auth::id())
             ->where('disbursed', '=', true)
-            ->with(['order_region.region','order_region.buying_center','order_raw_material.raw_material', 'farmer', 'price_list','raw_material_requirement_submissions.raw_material_requirement', 'raw_material_requirement_reviews', 'order_raw_material_inventory_review', 'mpesa_disbursement_transaction'])
+            ->with([
+                'order_region.region',
+                'order_region.buying_center',
+                'order_raw_material.raw_material',
+                'farmer',
+                'price_list',
+                'raw_material_requirement_submissions.raw_material_requirement',
+                'raw_material_requirement_reviews.reviewer',
+                'order_raw_material_inventory_review',
+                'mpesa_disbursement_transaction'
+            ])
             ->paginate(20);
 
         return OrderResource::collection($orders);
@@ -61,7 +71,17 @@ class OrderController extends Controller
             ->where('ref_number', '=', $request->get('ref_number'))
             ->where('user_id', '=', Auth::id())
             ->where('disbursed', '=', true)
-            ->with(['order_region.region','order_region.buying_center','order_raw_material.raw_material', 'farmer', 'price_list','raw_material_requirement_submissions.raw_material_requirement', 'raw_material_requirement_reviews', 'order_raw_material_inventory_review', 'mpesa_disbursement_transaction'])
+            ->with([
+                'order_region.region',
+                'order_region.buying_center',
+                'order_raw_material.raw_material',
+                'farmer',
+                'price_list',
+                'raw_material_requirement_submissions.raw_material_requirement',
+                'raw_material_requirement_reviews.reviewer',
+                'order_raw_material_inventory_review.reviewer',
+                'mpesa_disbursement_transaction'
+            ])
             ->first();
         return new OrderResource($order);
     }
@@ -211,8 +231,8 @@ class OrderController extends Controller
             $specified_period = "$month - $year";
 
         } elseif ($request->period == 'yearly') {
-            if ($request->has('year')){
-                $year = Carbon::parse($request->year)->format('Y');
+            if ($request->has('specified_year')) {
+                $year = Carbon::parse($request->specified_year)->format('Y');
             }else {
                 $year = Carbon::now()->format('Y');
             }
