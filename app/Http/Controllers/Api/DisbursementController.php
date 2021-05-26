@@ -28,6 +28,32 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class DisbursementController extends Controller
 {
+    protected function get_production_access_token()
+    {
+        $disbursement_settings = MpesaDisbursementSetting::query()
+            ->where('environment', '=', 'production')
+            ->first();
+        if (!$disbursement_settings){
+            return response()->json(['message' => 'Production Disbursement settings not found'], Response::HTTP_NOT_FOUND);
+        }
+        $consumer_key = decrypt($disbursement_settings->consumer_key);
+        $consumer_secret = decrypt($disbursement_settings->consumer_secret);
+        if (!isset($consumer_key) or !isset($consumer_secret)){
+            return response()->json(['message' => 'Invalid Consumer Key / Consumer secret'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        $client = new Client();
+        $credentials = base64_encode($consumer_key.':'.$consumer_secret);
+        $send_request = $client->request('get', 'https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials',[
+            'verify'=>false,
+            'http_errors' => false,
+            'headers'=>[
+                'Authorization'=>'Basic '.$credentials
+            ]
+        ]);
+        $obj = json_decode($send_request->getBody());
+        return $obj->access_token;
+    }
+
     protected function get_sandbox_access_token()
     {
         $disbursement_settings = MpesaDisbursementSetting::query()
@@ -72,7 +98,7 @@ class DisbursementController extends Controller
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()->first()], Response::HTTP_BAD_REQUEST);
         }
-        $order = Order::query()->find($request->get('order_id'));
+        $order = Order::query()->with('farmer')->find($request->get('order_id'));
         if ($order->disbursed == true){
             return response()->json(['message' => 'The selected Order has already been disbursed'], Response::HTTP_BAD_REQUEST);
         }
@@ -98,7 +124,21 @@ class DisbursementController extends Controller
             $partyB = $recipient_phone;
         }
         elseif ($environment == 'production') {
-            return response()->json(['message' => 'Production Disbursement settings not found'], Response::HTTP_NOT_FOUND);
+            $disbursement_settings = MpesaDisbursementSetting::query()
+                ->where('environment', '=', 'production')
+                ->first();
+            if (!$disbursement_settings){
+                return response()->json(['message' => 'Production Disbursement settings not found'], Response::HTTP_NOT_FOUND);
+            }
+            $url = 'https://api.safaricom.co.ke/mpesa/b2c/v1/paymentrequest';
+            $token = self::get_production_access_token();
+            $recipient_phone =  $order->farmer->phone_number;
+            $initiator_name = decrypt($disbursement_settings->initiator_name);
+            $security_credentials = decrypt($disbursement_settings->security_credential);
+            $command_id = config('app.mpesa_disbursement_command_id');
+            $amount = 10;//$order->amount;
+            $partyA = decrypt($disbursement_settings->paybill);
+            $partyB = $recipient_phone;
         }else {
             return response()->json(['message' => 'Invalid Application Status'], Response::HTTP_UNAUTHORIZED);
         }
