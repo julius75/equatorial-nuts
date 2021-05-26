@@ -15,11 +15,32 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AccountBalanceController extends Controller
 {
-    /**
-     *
-     * Get Access Token
-     * @return void
-     */
+    protected function get_production_access_token()
+    {
+        $disbursement_settings = MpesaDisbursementSetting::query()
+            ->where('environment', '=', 'production')
+            ->first();
+        if (!$disbursement_settings){
+            return response()->json(['message' => 'Production Disbursement settings not found'], Response::HTTP_NOT_FOUND);
+        }
+        $consumer_key = decrypt($disbursement_settings->consumer_key);
+        $consumer_secret = decrypt($disbursement_settings->consumer_secret);
+        if (!isset($consumer_key) or !isset($consumer_secret)){
+            return response()->json(['message' => 'Invalid Consumer Key / Consumer secret'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        $client = new Client();
+        $credentials = base64_encode($consumer_key.':'.$consumer_secret);
+        $send_request = $client->request('get', 'https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials',[
+            'verify'=>false,
+            'http_errors' => false,
+            'headers'=>[
+                'Authorization'=>'Basic '.$credentials
+            ]
+        ]);
+        $obj = json_decode($send_request->getBody());
+        return $obj->access_token;
+    }
+
     protected function get_sandbox_access_token()
     {
         $disbursement_settings = MpesaDisbursementSetting::query()
@@ -57,7 +78,7 @@ class AccountBalanceController extends Controller
         }
         if ($environment == "production") {
             $url = 'https://api.safaricom.co.ke/mpesa/accountbalance/v1/query';
-            $token = self::generateLiveToken();
+            $token = self::get_production_access_token();
         } elseif ($environment == "sandbox") {
             $url = 'https://sandbox.safaricom.co.ke/mpesa/accountbalance/v1/query';
             $token = self::get_sandbox_access_token();
@@ -114,7 +135,7 @@ class AccountBalanceController extends Controller
         $callbackData = json_decode($callbackJSONData);
         $resultCode = $callbackData->Result->ResultCode;
         $environment = config('app.mpesa_environment');
-        Log::info("Account-Balance Result Url => ".(string)$callbackJSONData);
+        Log::info("Account-Balance Result => ".(string)$callbackJSONData);
         if ($resultCode == 0) {
             $ar = explode('&', $callbackData->Result->ResultParameters->ResultParameter[0]->Value);
             $disbursement_settings = MpesaDisbursementSetting::query()
