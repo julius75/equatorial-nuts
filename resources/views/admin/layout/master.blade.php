@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <base href="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Equatorial Nuts</title>
+    <title>Equatorial Nut</title>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="description" content="Metronic admin dashboard live demo. Check out all the features of the admin panel. A large number of settings, additional services and widgets." />
     <!--begin::Fonts-->
@@ -111,7 +111,7 @@
                     <!--begin::Copyright-->
                     <div class="text-dark order-2 order-md-1">
                         <span class="text-muted font-weight-bold mr-2">2021©</span>
-                        <span class="text-muted  font-weight-bold mr-2">Equatorial Nuts</span>
+                        <span class="text-muted  font-weight-bold mr-2">Equatorial Nut</span>
                     </div>
                     <!--end::Copyright-->
                 </div>

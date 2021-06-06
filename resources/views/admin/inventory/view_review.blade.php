@@ -100,6 +100,14 @@
                                     <b>Gross Weight:</b>
                                     {{$order->order_raw_material->gross_weight}} Kg
                                 </li>
+                                <li class="list-group-item justify-content-between">
+                                    <b>Accepted Net Weight:</b>
+                                    {{$order->order_raw_material->accepted_net_weight ?? '--'}} Kg
+                                </li>
+                                <li class="list-group-item justify-content-between">
+                                    <b>Gross Weight:</b>
+                                    {{$order->order_raw_material->accepted_gross_weight ?? '--'}} Kg
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -113,7 +121,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <canvas id="orderInventorySubmissionsChart" width="100%" height="45"></canvas>
+                            <canvas id="orderInventorySubmissionsChart" width="100%" height="100%"></canvas>
                         </div>
                     </div>
                     <div class="mt-5 card card-custom">
@@ -337,7 +345,7 @@
                 },
 
                 ajaxGetPaymentsMonthlyData: function () {
-                    var data_array = <?php echo $raw_material_requirement_submissions_data ; ?>;
+                    var data_array = <?php echo $raw_material_requirement_inventory_submissions_data ; ?>;
                     console.log( data_array );
                     repaymentsChart.createCompletedPaymentsChart( data_array );
                 },
@@ -353,26 +361,42 @@
                             labels: data_array.labels, // The response got from the ajax request containing all month names in the database
                             datasets: [
                                 {
-                                label: "Buyer Submission",
-                                type: 'bar',
-                                lineTension: 0.3,
-                                backgroundColor: "rgba(219,141,13, 0.9)",
-                                borderColor: "rgba(244,176,64,0.9)",
-                                pointBorderColor: "#fff",
-                                pointBackgroundColor: "rgba(219,141,13, 0.9)",
-                                pointRadius: 5,
-                                pointHoverRadius: 5,
-                                pointHoverBackgroundColor: "rgba(219,141,13, 0.9)",
-                                pointHitRadius: 20,
-                                pointBorderWidth: 2,
-                                yAxisID: 'A',
-                                data: data_array.submitted_values // The response got from the ajax request containing data for the completed jobs in the corresponding months
+                                    label: "Buyer Submission",
+                                    type: 'bar',
+                                    lineTension: 0.3,
+                                    backgroundColor: "rgba(219,141,13, 0.8)",
+                                    borderColor: "rgba(244,176,64,0.9)",
+                                    pointBorderColor: "#fff",
+                                    pointBackgroundColor: "rgba(219,141,13, 0.9)",
+                                    pointRadius: 5,
+                                    pointHoverRadius: 5,
+                                    pointHoverBackgroundColor: "rgba(219,141,13, 0.9)",
+                                    pointHitRadius: 20,
+                                    pointBorderWidth: 2,
+                                    yAxisID: 'A',
+                                    data: data_array.submitted_values // The response got from the ajax request containing data for the completed jobs in the corresponding months
                             },
                                 {
                                     label: "Inventory Manager Submissions",
                                     type: 'bar',
                                     lineTension: 0.3,
-                                    backgroundColor: "rgba(162,31,37, 0.9)",
+                                    backgroundColor: "rgba(66,209,66,0.8)",
+                                    borderColor: "rgba(66,209,66)",
+                                    pointRadius: 5,
+                                    pointBackgroundColor: "rgba(66,209,66)",
+                                    pointBorderColor: "rgba(255,255,255)",
+                                    pointHoverRadius: 5,
+                                    pointHoverBackgroundColor: "rgba(66,209,66)",
+                                    pointHitRadius: 20,
+                                    pointBorderWidth: 2,
+                                    yAxisID: 'A',
+                                    data: data_array.evaluation_values // The response got from the ajax request containing data for the completed jobs in the corresponding months
+                                },
+                                {
+                                    label: "Weight Variance",
+                                    type: 'line',
+                                    lineTension: 0.3,
+                                    backgroundColor: "rgba(162,31,37, 0.4)",
                                     borderColor: "rgba(162,31,37, 0.9)",
                                     pointRadius: 5,
                                     pointBackgroundColor: "rgba(171,53,58, 0.9)",
@@ -381,10 +405,9 @@
                                     pointHoverBackgroundColor: "rgba(171,53,58, 0.9)",
                                     pointHitRadius: 20,
                                     pointBorderWidth: 2,
-                                    yAxisID: 'A',
-                                    data: data_array.evaluation_values // The response got from the ajax request containing data for the completed jobs in the corresponding months
+                                    yAxisID: 'B',
+                                    data: data_array.variance_values // The response got from the ajax request containing data for the completed jobs in the corresponding months
                                 }
-
                             ],
                         },
                         options: {
@@ -400,18 +423,32 @@
                                         maxTicksLimit: 7
                                     }
                                 }],
-                                yAxes: [{
-                                    id:'A',
-                                    position: 'left',
-                                    ticks: {
-                                        min: 0,
-                                        max: data_array.max_value, // The response got from the ajax request containing max limit for y axis
-                                        maxTicksLimit: 5
+                                yAxes: [
+                                    {
+                                        id:'A',
+                                        position: 'left',
+                                        ticks: {
+                                            min: 0,
+                                            max: data_array.max_value, // The response got from the ajax request containing max limit for y axis
+                                            maxTicksLimit: 5
+                                        },
+                                        gridLines: {
+                                            display:true
+                                        }
                                     },
-                                    gridLines: {
-                                        display:true
-                                    }
-                                }],
+                                    {
+                                        id:'B',
+                                        position: 'right',
+                                        ticks: {
+                                            // min: 0,
+                                            max: data_array.max_variance, // The response got from the ajax request containing max limit for y axis
+                                            maxTicksLimit: 5
+                                        },
+                                        gridLines: {
+                                            display:true
+                                        }
+                                    },
+                                ],
                             },
                             legend: {
                                 display: true

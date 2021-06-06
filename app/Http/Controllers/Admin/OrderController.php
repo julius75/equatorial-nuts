@@ -23,10 +23,11 @@ class OrderController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('role:admin')
+        $this->middleware('role:admin|general_management')
             ->only(['order_disbursement_reconciliation', 'get_order_disbursement_reconciliation', 'order_disbursement_reconciliation_form']);
 
     }
+
     public function index()
     {
         $data['regions'] = Region::all();

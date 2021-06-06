@@ -3,7 +3,7 @@
 <!--begin::Head-->
 <head><base href="../../../">
     <meta charset="utf-8" />
-    <title>Equatorial Nuts Login</title>
+    <title>Equatorial Nut</title>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="description" content="Login page example" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -70,7 +70,7 @@
             <div class="d-flex justify-content-lg-start justify-content-center align-items-end py-7 py-lg-0">
                 <div class="text-dark-50 font-size-lg font-weight-bolder mr-10">
                     <span class="mr-1">2021©</span>
-                    <span class="text-dark-75 text-hover-primary">Equatorial Nuts</span>
+                    <span class="text-dark-75 text-hover-primary">Equatorial Nut</span>
                 </div>
             </div>
             <!--end::Content footer-->

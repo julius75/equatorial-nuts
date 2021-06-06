@@ -174,6 +174,7 @@
                             <th>Net Weight</th>
                             <th>Reviewed</th>
                             <th>Reviewed By</th>
+                            <th>Created At</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -228,12 +229,13 @@
                         {data: 'order_raw_material.net_weight', name: 'net_weight'},
                         {data: 'reviewed', name: 'reviewed'},
                         {data: 'reviewed_by', name: 'reviewed_by'},
+                        {data: 'created_at', name: 'created_at'},
                         {data: 'action', name: 'action', searchable:false, orderable:false},
                     ],
                     columnDefs: [
                         {
                             width: '75px',
-                            targets: -3,
+                            targets: -4,
                             render: function(data) {
                                 var disbursed = {
                                     false: {'title': 'Pending Review', 'state': 'warning'},
