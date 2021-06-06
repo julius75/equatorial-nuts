@@ -14,6 +14,37 @@
                 </div>
                 <div class="card-body">
                     <form id="filter_form" method="post" action="{{route('admin.order-inventory-management.post-review', $order->ref_number)}}">
+                        <div class="form-group row">
+                            <label class="col-xl-2 col-lg-2 col-form-label">Accepted Gross Weight (QM Submission)</label>
+                            <div class="col-lg-4 col-xl-4">
+                                <div class="input-group bg-secondary">
+                                    <input readonly class="bg-secondary form-control" value="{{ $order->order_raw_material->accepted_gross_weight ?? '--' }}" type="text"  autocomplete="off"/>
+                                    <div class="input-group-append"><span class="input-group-text">kg</span></div>
+                                </div>
+                            </div>
+                            <label class="col-xl-2 col-lg-2 col-form-label">Accepted Net Weight (QM Submission)</label>
+                            <div class="col-lg-4 col-xl-4">
+                                <div class="input-group bg-secondary">
+                                    <input readonly class="bg-secondary form-control" value="{{ $order->order_raw_material->accepted_net_weight ?? '--' }}" type="text"  autocomplete="off"/>
+                                    <div class="input-group-append"><span class="input-group-text">kg</span></div>
+                                </div>
+                            </div>
+                            <label class="col-xl-2 col-lg-2 col-form-label">Rejected Gross Weight (QM Submission)</label>
+                            <div class="col-lg-4 col-xl-4">
+                                <div class="input-group bg-secondary">
+                                    <input readonly class="bg-secondary form-control" value="{{ $order->order_raw_material->rejected_gross_weight ?? '--'}}" type="text"  autocomplete="off"/>
+                                    <div class="input-group-append"><span class="input-group-text">kg</span></div>
+                                </div>
+                            </div>
+                            <label class="col-xl-2 col-lg-2 col-form-label">Rejected Net Weight (QM Submission)</label>
+                            <div class="col-lg-4 col-xl-4">
+                                <div class="input-group bg-secondary">
+                                    <input readonly class="bg-secondary form-control" value="{{ $order->order_raw_material->rejected_net_weight ?? '--'}}" type="text"  autocomplete="off"/>
+                                    <div class="input-group-append"><span class="input-group-text">kg</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
                         @csrf
                         <div class="form-group row">
                             <label class="col-xl-2 col-lg-2 col-form-label">Raw Material (Buyer Submission)</label>
@@ -130,8 +161,6 @@
             </div>
         </div>
     </div>
-
-
 @endsection
 @section('scripts')
 

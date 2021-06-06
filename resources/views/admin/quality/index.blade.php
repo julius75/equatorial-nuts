@@ -168,12 +168,12 @@
                             <th>Ref Number</th>
                             <th>Buyer</th>
                             <th>Region</th>
-                            <th>Amount</th>
                             <th>Raw Material</th>
                             <th>Bags</th>
                             <th>Net Weight</th>
                             <th>Reviewed</th>
                             <th>Reviewed By</th>
+                            <th>Created At</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -222,18 +222,18 @@
                         {data: 'ref_number', name: 'ref_number'},
                         {data: 'user.full_name', name: 'buyer'},
                         {data: 'order_region.region.name', name: 'region'},
-                        {data: 'amount', name: 'amount'},
                         {data: 'order_raw_material.raw_material.name', name: 'raw_material'},
                         {data: 'order_raw_material.bags', name: 'bags'},
                         {data: 'order_raw_material.net_weight', name: 'net_weight'},
                         {data: 'reviewed', name: 'reviewed'},
                         {data: 'reviewed_by', name: 'reviewed_by'},
+                        {data: 'created_at', name: 'created_at'},
                         {data: 'action', name: 'action', searchable:false, orderable:false},
                     ],
                     columnDefs: [
                         {
                             width: '75px',
-                            targets: -3,
+                            targets: -4,
                             render: function(data) {
                                 var disbursed = {
                                     false: {'title': 'Pending Review', 'state': 'warning'},

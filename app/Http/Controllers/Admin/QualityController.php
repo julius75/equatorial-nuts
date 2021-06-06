@@ -9,18 +9,20 @@ use App\Models\RawMaterial;
 use App\Models\RawMaterialRequirementSubmission;
 use App\Models\Region;
 use App\Models\User;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use phpseclib3\Crypt\DSA\Formats\Keys\Raw;
 use Yajra\DataTables\Facades\DataTables;
+use function PHPUnit\Framework\isEmpty;
 
 class QualityController extends Controller
 {
     /**
      * View the Quality Management Dashboard
-     * @return array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse|mixed
+     * @return array|Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse|mixed
      */
     public function index()
     {
@@ -50,7 +52,7 @@ class QualityController extends Controller
     /**
      * Load Data Table
      * @param Request $request
-     * @return array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse|mixed
+     * @return array|Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse|mixed
      * @throws \Exception
      */
     public function get_orders(Request $request)
@@ -173,7 +175,7 @@ class QualityController extends Controller
     /**
      * View Review
      * @param $ref_number
-     * @return array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse|mixed
+     * @return array|Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse|mixed
      */
     public function view_review($ref_number) {
         $order = Order::query()
@@ -200,10 +202,16 @@ class QualityController extends Controller
             ->whereDoesntHave('raw_material_requirement_reviews')
             ->with([
                 'raw_material_requirement_submissions.raw_material_requirement',
+                'order_raw_material',
+                'price_list',
             ])
             ->first();
         if (!$order)
             return Redirect::back()->with('error', "Order Ref: $ref_number not found!");
+
+        if (count($order->raw_material_requirement_submissions) == 0) {
+            return Redirect::route('admin.order-quality-management.index')->with('warning', "Order $ref_number does not have any quality submissions made by the buyer!");
+        }
         $data['order'] = $order;
         return view('admin.quality.make_review', $data);
     }
@@ -212,7 +220,7 @@ class QualityController extends Controller
      * Submit a Review
      * @param Request $request
      * @param $ref_number
-     * @return array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse|mixed
+     * @return array|Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse|mixed
      */
     public function post_review(Request $request, $ref_number) {
         $order = Order::query()
@@ -222,7 +230,6 @@ class QualityController extends Controller
                 'raw_material_requirement_submissions',
             ])
             ->first();
-
         if (!$order)
             return Redirect::back()->with('error', "Order Ref: $ref_number not found!");
 
@@ -231,6 +238,10 @@ class QualityController extends Controller
             'value' =>  'required',
             'submission_ids.*' => 'required|exists:raw_material_requirement_submissions,id',
             'value.*' => 'required',
+            'accepted_gross_weight' => 'required|numeric',
+            'accepted_net_weight' => 'required|numeric',
+            'rejected_gross_weight' => 'required|numeric',
+            'rejected_net_weight' => 'required|numeric',
         ]);
 
         if ($validator->fails()) {
@@ -259,6 +270,15 @@ class QualityController extends Controller
                 'value'=>$values[$k],
             ]);
         }
+        //add reviewed weights
+        $order->order_raw_material()->update([
+            'admin_id'=>Auth::guard('admin')->id(),
+            'accepted_gross_weight'=>$request->get('accepted_gross_weight'),
+            'accepted_net_weight'=>$request->get('accepted_net_weight'),
+            'rejected_gross_weight'=>$request->get('rejected_gross_weight'),
+            'rejected_net_weight'=>$request->get('rejected_net_weight'),
+            'weight_reviewed'=>true,
+        ]);
         return Redirect::route('admin.order-quality-management.index')->with('success', "Review for order $order->ref_number has been submitted successfully.");
     }
 }

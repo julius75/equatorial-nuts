@@ -61,6 +61,7 @@ class InventoryController extends Controller
                 ->whereHas('order_region', function ($q) use ($request){
                     $q->where('region_id', '=', $request->region_id);
                 })
+                ->whereHas('raw_material_requirement_reviews')
                 ->with(['order_region.region', 'order_raw_material.raw_material', 'user', 'order_raw_material_inventory_review'])
                 ->get();
         }
@@ -70,6 +71,7 @@ class InventoryController extends Controller
                 ->whereHas('order_raw_material', function ($q) use ($request){
                     $q->where('raw_material_id', '=', $request->raw_material_id);
                 })
+                ->whereHas('raw_material_requirement_reviews')
                 ->with(['order_region.region', 'order_raw_material.raw_material', 'user', 'order_raw_material_inventory_review'])
                 ->get();
         }
@@ -77,6 +79,7 @@ class InventoryController extends Controller
         elseif ($request->buyer_id and $request->buyer_id != "all" and $request->raw_material_id == "all" and $request->region_id == "all"){
             $data = Order::query()->where('disbursed', '=', true)
                 ->where('user_id', '=', $request->buyer_id)
+                ->whereHas('raw_material_requirement_reviews')
                 ->with(['order_region.region', 'order_raw_material.raw_material', 'user', 'order_raw_material_inventory_review'])
                 ->get();
         }
@@ -91,6 +94,7 @@ class InventoryController extends Controller
                         $q->where('region_id', '=', $request->region_id);
                     });
                 })
+                ->whereHas('raw_material_requirement_reviews')
                 ->with(['order_region.region', 'order_raw_material.raw_material', 'user', 'order_raw_material_inventory_review'])
                 ->get();
         }
@@ -100,6 +104,7 @@ class InventoryController extends Controller
                 ->whereHas('order_region', function ($q) use ($request){
                     $q->where('region_id', '=', $request->region_id);
                 })
+                ->whereHas('raw_material_requirement_reviews')
                 ->where('user_id', '=', $request->buyer_id)
                 ->with(['order_region.region', 'order_raw_material.raw_material', 'user', 'order_raw_material_inventory_review'])
                 ->get();
@@ -110,6 +115,7 @@ class InventoryController extends Controller
                 ->whereHas('order_raw_material', function ($q) use ($request){
                     $q->where('raw_material_id', '=', $request->raw_material_id);
                 })
+                ->whereHas('raw_material_requirement_reviews')
                 ->where('user_id', '=', $request->buyer_id)
                 ->with(['order_region.region', 'order_raw_material.raw_material', 'user', 'order_raw_material_inventory_review'])
                 ->get();
@@ -125,6 +131,7 @@ class InventoryController extends Controller
                         $query->where('region_id', '=', $request->region_id);
                     });
                 })
+                ->whereHas('raw_material_requirement_reviews')
                 ->where('user_id', '=', $request->buyer_id)
                 ->with(['order_region.region', 'order_raw_material.raw_material', 'user', 'order_raw_material_inventory_review'])
                 ->get();
@@ -132,6 +139,7 @@ class InventoryController extends Controller
         else{
             $data = Order::query()->where('disbursed', '=', true)
                 ->with(['order_region.region', 'order_raw_material.raw_material', 'user', 'order_raw_material_inventory_review'])
+                ->whereHas('raw_material_requirement_reviews')
                 ->get();
         }
         return Datatables::of($data)
@@ -187,7 +195,7 @@ class InventoryController extends Controller
         if (!$order)
             return Redirect::back()->with('error', "Order Ref: $ref_number not found!");
         $data['order'] = $order;
-        $data['raw_material_requirement_submissions_data'] = $this->get_order_raw_material_requirement_inventory_graph($ref_number);
+        $data['raw_material_requirement_inventory_submissions_data'] = $this->get_order_raw_material_requirement_inventory_graph($ref_number);
         return view('admin.inventory.view_review', $data);
     }
 
@@ -334,6 +342,15 @@ class InventoryController extends Controller
         } else {
             $evaluations = [];
         }
+        $accepted_net = $order->order_raw_material->accepted_net_weight ?? null;
+        $accepted_gross = $order->order_raw_material->accepted_gross_weight ?? null;
+        $net_variance = 0;
+        $gross_variance = 0;
+        if ($accepted_net != null)
+            $net_variance = $order->order_raw_material->net_weight - $accepted_net;
+        if ($accepted_gross != null)
+            $gross_variance = $order->order_raw_material->gross_weight - $accepted_net;
+        $variances = [$gross_variance, $net_variance];
 
         $max_figures_array = [];
         if (!empty($submissions)){
@@ -346,6 +363,12 @@ class InventoryController extends Controller
             $max_evaluation = round(( $max_evaluation + 10/2 ) / 10 ) * 10;
             array_push($max_figures_array, $max_evaluation);
         }
+        if (!empty($variances)){
+            $max_variance = max( $variances );
+            $max_variance = round(( $max_variance + 10/2 ) / 10 ) * 10;
+        }else{
+            $max_variance = 0;
+        }
         if (!empty($max_figures_array)){
             $max_figure = max( $max_figures_array );
             $max_figure = round(( $max_figure + 10/2 ) / 10 ) * 10;
@@ -357,7 +380,9 @@ class InventoryController extends Controller
             'labels' => $labels,
             'submitted_values' => $submissions,
             'evaluation_values' => $evaluations,
+            'variance_values' => $variances,
             'max_value' => $max_figure,
+            'max_variance' => $max_variance,
         ));
     }
 
