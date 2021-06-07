@@ -105,7 +105,7 @@
                                     {{$order->order_raw_material->accepted_net_weight ?? '--'}} Kg
                                 </li>
                                 <li class="list-group-item justify-content-between">
-                                    <b>Gross Weight:</b>
+                                    <b>Accepted Gross Weight:</b>
                                     {{$order->order_raw_material->accepted_gross_weight ?? '--'}} Kg
                                 </li>
                             </ul>

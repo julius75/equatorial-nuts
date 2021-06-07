@@ -37,9 +37,12 @@ class UtilityBalanceController extends Controller
 
         if ($disbursement_settings->utility_balance != null) {
             $exp = explode('|', $disbursement_settings->utility_balance);
+            $work = explode('|', $disbursement_settings->mmf_balance);
             $data['mpesa_paybill_balance'] = 'KES ' . number_format($exp[2], 2) . ' as at ' . $disbursement_settings->last_updated_at;
+            $data['mpesa_paybill_working_balance'] = 'KES ' . number_format($work[2], 2) . ' as at ' . $disbursement_settings->last_updated_at;
         } else {
             $data['mpesa_paybill_balance'] = '--';
+            $data['mpesa_paybill_working_balance'] = '--';
         }
         return view('admin.utilities.index', $data);
     }
