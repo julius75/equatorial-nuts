@@ -349,7 +349,7 @@ class InventoryController extends Controller
         if ($accepted_net != null)
             $net_variance = $order->order_raw_material->net_weight - $accepted_net;
         if ($accepted_gross != null)
-            $gross_variance = $order->order_raw_material->gross_weight - $accepted_net;
+            $gross_variance = $order->order_raw_material->gross_weight - $accepted_gross;
         $variances = [$gross_variance, $net_variance];
 
         $max_figures_array = [];
