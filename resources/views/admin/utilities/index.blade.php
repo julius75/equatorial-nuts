@@ -22,7 +22,8 @@
                 </div>
                 <div class="separator separator-solid separator-white opacity-20"></div>
                 <div class="card-body text-white">
-                    <h3 class="font-weight-boldest"> Utility Balance: {{$mpesa_paybill_balance}} </h3>
+                    <h4 class="font-weight-boldest"> Utility Balance: {{$mpesa_paybill_balance}} </h4>
+                    <h4 class="font-weight-boldest"> Working Account Balance: {{$mpesa_paybill_working_balance}} </h4>
                 </div>
             </div>
         </div>

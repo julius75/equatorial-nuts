@@ -88,7 +88,7 @@ class MpesaTransactionController extends Controller
                     ->where('TransactionID', '=', $data->transaction_receipt)
                     ->first();
                 if ($mpesa_recipient){
-                    return $mpesa_recipient->ReceiverPartyPublicName;
+                    return $mpesa_recipient->B2CRecipientIsRegisteredCustomer;
                 } else {
                     $farmer = Farmer::query()->find($data->order->farmer_id);
                     return $farmer->phone_number."-".$farmer->full_name;
